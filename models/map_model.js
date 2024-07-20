@@ -92,6 +92,8 @@ const mapModel = {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
+        // Find other map "skins" here: https://leaflet-extras.github.io/leaflet-providers/preview/
+
         return map;
     }
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-import positionModel from "./position.js";
+import positionModel from "./positioning_model.js";
 import apiModel from "./api_model.js";
 import mapModel from "./map_model.js";
 import locationModel from "./location_model.js";
@@ -89,7 +89,10 @@ const mapEventModel = {
             // Get the current position using the locationModel.
             const position = locationModel.getCurrentPosition(); // Uses watchPosition in location_model.js.
             const zoomLevel = 17; // Set the zoom level.
-            map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel);
+            map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
+                animate: true,
+                duration: 1
+            });
         })
     }
 }
