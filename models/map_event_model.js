@@ -11,7 +11,7 @@ const mapEventModel = {
      * When the event is triggered, a search button will appear at the top of the screen.
      * @param {Object} map The Leaflet map object (this.map in map_view.js).
      */
-    addSearchAreaEventOnMove: async function addSearchAreaEventOnMove(map) {
+    addSearchAreaOnMoveEvent: async function addSearchAreaOnMoveEvent(map) {
         map.on("moveend", (e) => { // Triggers at the end of the movement. Other options are "movestart" and "move".
             // TODO Make sure the event is only triggered once for a unique set of bounds.
             if (!this.searchButtonEventTriggered) {
@@ -83,7 +83,7 @@ const mapEventModel = {
      * The button centers the map around the user's position and zooms in.
      * @param {Object} map The Leaflet map object (this.map in map_view.js).
      */
-    flyToUserButtonEvent: async function flyToUserButtonEvent(map) {
+    addFlyToUserButtonEvent: async function addFlyToUserButtonEvent(map) {
         const flyToUserButton = document.getElementById("flyToUserButton");
         flyToUserButton.addEventListener("click", (e) => {
             // Get the current position using the locationModel.

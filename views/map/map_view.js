@@ -20,8 +20,8 @@ export default class MapView extends HTMLElement {
     }
     async connectedCallback() {
         await this.render();
-        await mapEventModel.addSearchAreaEventOnMove(this.map);
-        await mapEventModel.flyToUserButtonEvent(this.map)
+        await mapEventModel.addSearchAreaOnMoveEvent(this.map);
+        await mapEventModel.addFlyToUserButtonEvent(this.map)
     }
 
     async render() {
@@ -31,12 +31,17 @@ export default class MapView extends HTMLElement {
             <div id="flyToUserButton" class="flyToUserButton"><i class="fa-solid fa-crosshairs"></i></div>
         </main>`;
 
+        // Create the map.
+        this.map = mapModel.initMap(59.334591, 18.063240, 6);
+
         try {
             const position = await locationModel.getInitialPosition();
             const zoomLevel = 15; // Default is 13.
 
-            // Create the map.
-            this.map = mapModel.initMap(position.coords.latitude, position.coords.longitude, zoomLevel);
+            await this.map.setView([position.coords.latitude, position.coords.longitude], zoomLevel, {
+                animate: true,
+                duration: 1
+            });
 
             // Create marker for the user's location.
             let locationMarkerIcon = L.icon({
@@ -83,7 +88,7 @@ export default class MapView extends HTMLElement {
                 this.map = mapModel.initMap(stockholmLat, stockholmLon, zoomLevel);
             }
             else if (error.code === 3 && error.message === "Timeout expired") {
-                location.reload();
+                // location.reload();
                 this.map = mapModel.initMap(stockholmLat, stockholmLon, zoomLevel);
             };
         }
