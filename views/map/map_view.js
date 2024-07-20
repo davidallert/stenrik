@@ -1,7 +1,5 @@
 "use strict";
 
-// map: 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
-
 import mapModel from '../../models/map_model.js';
 import getCoordinates from '../../models/nominatim.js';
 import parseGml from '../../models/gml.js';
