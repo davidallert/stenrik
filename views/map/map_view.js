@@ -38,12 +38,19 @@ export default class MapView extends HTMLElement {
             const position = await locationModel.getInitialPosition();
             const zoomLevel = 15; // Default is 13.
 
-            await this.map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
+            // this.map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
+            //     animate: true,
+            //     duration: 1
+            // });
+
+            // this.map.setView([position.coords.latitude, position.coords.longitude], zoomLevel);
+
+            await this.flyToAsync(this.map, [position.coords.latitude, position.coords.longitude], zoomLevel, {
                 animate: true,
                 duration: 1
             });
-
-            await this.map.setView([position.coords.latitude, position.coords.longitude], zoomLevel);
+    
+            await this.setViewAsync(this.map, [position.coords.latitude, position.coords.longitude], zoomLevel);
 
             // Create marker for the user's location.
             let locationMarkerIcon = L.icon({
@@ -110,6 +117,5 @@ export default class MapView extends HTMLElement {
             resolve(); // Immediately resolve, as setView does not animate by default
         });
     }
-    
 
 }
