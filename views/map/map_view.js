@@ -43,7 +43,7 @@ export default class MapView extends HTMLElement {
                 duration: 1
             });
 
-            await this.map.setView([position.coords.latitude, position.coords.longitude], zoomLevel)
+            await this.map.setView([position.coords.latitude, position.coords.longitude], zoomLevel);
 
             // Create marker for the user's location.
             let locationMarkerIcon = L.icon({
@@ -96,5 +96,20 @@ export default class MapView extends HTMLElement {
         }
 
     }
+
+    flyToAsync(map, latlng, zoomLevel, options) {
+        return new Promise((resolve) => {
+            map.flyTo(latlng, zoomLevel, options);
+            map.once('moveend', resolve); // Resolve when the animation ends
+        });
+    }
+    
+    setViewAsync(map, latlng, zoomLevel) {
+        return new Promise((resolve) => {
+            map.setView(latlng, zoomLevel);
+            resolve(); // Immediately resolve, as setView does not animate by default
+        });
+    }
+    
 
 }

@@ -95,7 +95,7 @@ const mapModel = {
         // Find other map "skins" here: https://leaflet-extras.github.io/leaflet-providers/preview/
 
         return map;
-    }
+    },
 }
 
 export default mapModel;
