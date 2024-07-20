@@ -45,12 +45,12 @@ export default class MapView extends HTMLElement {
 
             // this.map.setView([position.coords.latitude, position.coords.longitude], zoomLevel);
 
-            await this.flyToAsync(this.map, [position.coords.latitude, position.coords.longitude], zoomLevel, {
+            await mapModel.flyToAsync(this.map, [position.coords.latitude, position.coords.longitude], zoomLevel, {
                 animate: true,
                 duration: 1
             });
-    
-            await this.setViewAsync(this.map, [position.coords.latitude, position.coords.longitude], zoomLevel);
+
+            await mapModel.setViewAsync(this.map, [position.coords.latitude, position.coords.longitude], zoomLevel);
 
             // Create marker for the user's location.
             let locationMarkerIcon = L.icon({
@@ -94,28 +94,14 @@ export default class MapView extends HTMLElement {
 
             if (error.code === 1 && error.message === "User denied Geolocation") {
                 // Create the map and center it on Stockholm.
-                this.map = mapModel.initMap(stockholmLat, stockholmLon, zoomLevel);
+                console.log(error);
             }
             else if (error.code === 3 && error.message === "Timeout expired") {
                 // location.reload();
-                this.map = mapModel.initMap(stockholmLat, stockholmLon, zoomLevel);
+                console.log(error);
             };
         }
 
-    }
-
-    flyToAsync(map, latlng, zoomLevel, options) {
-        return new Promise((resolve) => {
-            map.flyTo(latlng, zoomLevel, options);
-            map.once('moveend', resolve); // Resolve when the animation ends
-        });
-    }
-    
-    setViewAsync(map, latlng, zoomLevel) {
-        return new Promise((resolve) => {
-            map.setView(latlng, zoomLevel);
-            resolve(); // Immediately resolve, as setView does not animate by default
-        });
     }
 
 }
