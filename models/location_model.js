@@ -22,7 +22,7 @@ const locationModel = {
         const geolocationOptions = {
             enableHighAccuracy: true,
             maximumAge: 0, // Ensures that the position is always updated, never using a cached one.
-            timeout: 5000,
+            timeout: 10000,
           };
 
         // Uses navigator.geolocation.watchPosition().
