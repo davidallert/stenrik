@@ -1,0 +1,1 @@
+# Stenrik - en karta över svenska fornminnen
