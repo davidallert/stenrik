@@ -10,9 +10,13 @@ export default class AppRouter extends HTMLElement {
                 view: '<map-view></map-view>',
                 name: 'Karta'
             },
-            about: {
+            'logga-in': {
+                view: '<login-view></login-view>',
+                name: 'Logga in'
+            },
+            'om-oss': {
                 view: '<about-view></about-view>',
-                name: 'Om mig'
+                name: 'Om oss'
             },
         };
     }
@@ -42,7 +46,9 @@ export default class AppRouter extends HTMLElement {
         this.currentRoute = cleanHash;
 
         this.render();
+
     }
+
 
     render() {
         let html = '<not-found-view></not-found-view>';

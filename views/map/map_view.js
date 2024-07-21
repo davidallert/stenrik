@@ -17,6 +17,7 @@ export default class MapView extends HTMLElement {
         //     longitude: 18.063240
         // };
         this.searchEventTriggered = false;
+        this.watchId = null;
     }
     async connectedCallback() {
         await this.render();
@@ -29,8 +30,6 @@ export default class MapView extends HTMLElement {
         <main id="mapOverlay" class="map-overlay">
             <div id="map" class="map" style="height: 100vh; width: 100%;"></div>
             <div id="flyToUserButton" class="icon-button fly-to-user-button"><i class="fa-solid fa-crosshairs"></i></div>
-
-            <nav-component></nav-component>
         </main>`;
 
         // Create the map.
@@ -83,8 +82,8 @@ export default class MapView extends HTMLElement {
 
             // Start watching the user's position for changes. Update when changed.
             locationModel.watchPosition((position) => {
-            locationModel.updatePosition(position, this.locationMarker);
-        });
+                locationModel.updatePosition(position, this.locationMarker);
+            });
 
         } catch (error) {
             console.error("Error getting geolocation:", error);

@@ -1,9 +1,12 @@
 import positioningModel from "../../models/positioning_model.js";
+import locationModel from "../../models/location_model.js";
 
 export default class NavComponent extends HTMLElement {
     constructor() {
         super();
+    }
 
+    connectedCallback() {
         this.render();
     }
 
@@ -11,24 +14,28 @@ export default class NavComponent extends HTMLElement {
         this.innerHTML = `
             <div id="navPopup" class="nav-popup">
                 <ul class="nav-wrapper">
-                    <li class="nav-item">Karta</li>
-                    <li class="nav-item">Kunskap</li>
-                    <li class="nav-item">Om oss</li>
-                    <li class="nav-item">Logga in</li>
+                    <a href="#"><li class="nav-item">Hem</li></a>
+                    <a href=""><li class="nav-item">Karta</li></a>
+                    <a href="#"><li class="nav-item">Kunskap</li></a>
+                    <a href="#om-oss"><li class="nav-item">Om oss</li></a>
+                    <a href="#logga-in"><li class="nav-item">Logga in</li></a>
                 </ul>
             </div>
             <div id="hamburgerMenuBtn" class="icon-button hamburger-menu-btn"><i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon noselect fa-solid fa-bars"></i></div>`
+
         this.addHamburgerMenuEvent();
-
-        const navPopup = document.getElementById("navPopup");
-
-        positioningModel.addCenterElementEvent(navPopup);
-        positioningModel.centerElement(navPopup);
+        this.addCloseNavPopupOnClickEvent();
 
     }
 
     addHamburgerMenuEvent() {
+        const navPopup = document.getElementById("navPopup");
         const hamburgerMenu = document.getElementById('hamburgerMenuBtn');
+
+        // Center the popup menu/nav.
+        positioningModel.addCenterElementEvent(navPopup);
+        positioningModel.centerElement(navPopup);
+
         hamburgerMenu.addEventListener("click", (e) => {
             const navPopup = document.getElementById("navPopup");
 
@@ -77,6 +84,25 @@ export default class NavComponent extends HTMLElement {
             })
 
         }, 300);
+    }
+
+    // TODO this code isn't DRY. It hides the menu when the links are clicked.
+    addCloseNavPopupOnClickEvent() {
+        let navItems = document.getElementsByClassName('nav-item');
+        for (let item of navItems) {
+            item.addEventListener("click", (e) => {
+                let navPopup = document.getElementById("navPopup");
+
+                // Nav popup animation from visible to hidden.
+                navPopup.style.transition = 'opacity 0.3s';
+                navPopup.style.opacity = 0;
+                setTimeout(() => {
+                    navPopup.style.visibility = 'hidden';
+                }, 300);
+
+                this.switchIcon('fa-solid fa-bars');
+            })
+        }
     }
 
 }

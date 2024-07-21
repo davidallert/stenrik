@@ -1,0 +1,11 @@
+@media screen and (min-width: 767px) {
+    .hamburger-menu-btn {
+        top: 20px;
+        right: 20px;
+    }
+
+    .fly-to-user-button {
+        top: 20px;
+        right: 80px;
+    }
+}

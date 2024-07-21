@@ -29,7 +29,7 @@ const locationModel = {
         // This ensures the position is efficiently handled. Saves battery compared to setInterval.
         // Only gets updated when the user's position changes.
         if ("geolocation" in navigator) {
-            return navigator.geolocation.watchPosition(
+            this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
                     this.currentPosition = position;
                     callback(position);
@@ -50,6 +50,10 @@ const locationModel = {
 
     getCurrentPosition: function getCurrentPosition() {
         return this.currentPosition;
+    },
+
+    getWatchId: function getWatchId() {
+        return this.watchId;
     }
 }
 
