@@ -17,7 +17,7 @@ export default class NavComponent extends HTMLElement {
                     <li class="nav-item">Logga in</li>
                 </ul>
             </div>
-            <div id="hamburgerMenuBtn" class="icon-button hamburger-menu-btn"><i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon fa-solid fa-bars"></i></div>`
+            <div id="hamburgerMenuBtn" class="icon-button hamburger-menu-btn"><i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon noselect fa-solid fa-bars"></i></div>`
         this.addHamburgerMenuEvent();
 
         const navPopup = document.getElementById("navPopup");
@@ -65,7 +65,7 @@ export default class NavComponent extends HTMLElement {
         hamburgerMenuBtnIcon.style.opacity = 0;
         setTimeout(() => {
             // Replace the icon after the fade out is completed.
-            hamburgerMenuBtn.innerHTML = `<i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon ${icon}"></i>`;
+            hamburgerMenuBtn.innerHTML = `<i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon noselect ${icon}"></i>`;
 
             // The previous icon has been replaced. Get the new icon.
             hamburgerMenuBtnIcon = document.getElementById("hamburgerMenuBtnIcon");

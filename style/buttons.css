@@ -37,7 +37,7 @@
     transition-duration: 0.3s;
 }
 
-.icon-button:hover {
+/* .icon-button:hover {
     background-color: var(--base-transparent-color);
     transition-duration: 0.3s;
     cursor: pointer;
@@ -46,7 +46,7 @@
 .icon-button:active {
     background-color: var(--base-transparent-color);
     transition-duration: 0.3s;
-}
+} */
 
 .fly-to-user-button {
     bottom: 90px;
