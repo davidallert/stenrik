@@ -1,6 +1,6 @@
 "use strict";
 
-import positionModel from "./positioning_model.js";
+import positioningModel from "./positioning_model.js";
 import apiModel from "./raa_model.js";
 import mapModel from "./map_model.js";
 import locationModel from "./location_model.js";
@@ -23,19 +23,17 @@ const mapEventModel = {
 
                 // Add style to the search box.
                 searchButton.textContent = "Sök i området";
-                searchButton.classList.add("searchButton");
+                searchButton.classList.add("search-button");
                 searchButton.id = "searchButton";
 
                 // Append to the wrapper element.
                 mapOverlay.append(searchButton);
 
                 // Initial centering of the search box.
-                positionModel.centerElementHorizontally(searchButton);
+                positioningModel.centerElementHorizontally(searchButton);
 
                 // Add continuous centering of the search box if the window is changed/resized.
-                window.addEventListener("resize", (e) => {
-                    positionModel.centerElementHorizontally(searchButton);
-                });
+                positioningModel.addCenterElementHorizontallyEvent(searchButton);
 
                 searchButton.addEventListener("click", () => {
                     this.searchButtonClickEvent(map);

@@ -26,9 +26,11 @@ export default class MapView extends HTMLElement {
 
     async render() {
         this.innerHTML = `
-        <main id="mapOverlay" class="mapOverlay">
+        <main id="mapOverlay" class="map-overlay">
             <div id="map" class="map" style="height: 100vh; width: 100%;"></div>
-            <div id="flyToUserButton" class="flyToUserButton"><i class="fa-solid fa-crosshairs"></i></div>
+            <div id="flyToUserButton" class="icon-button fly-to-user-button"><i class="fa-solid fa-crosshairs"></i></div>
+
+            <nav-component></nav-component>
         </main>`;
 
         // Create the map.
