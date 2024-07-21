@@ -5,7 +5,7 @@ import getCoordinates from '../../models/nominatim.js';
 import parseGml from '../../models/gml.js';
 import locationModel from '../../models/location_model.js';
 import mapEventModel from '../../models/map_event_model.js';
-import apiModel from '../../models/api_model.js';
+import apiModel from '../../models/raa_model.js';
 
 export default class MapView extends HTMLElement {
     constructor() {

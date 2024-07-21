@@ -1,7 +1,7 @@
 "use strict";
 
 import positionModel from "./positioning_model.js";
-import apiModel from "./api_model.js";
+import apiModel from "./raa_model.js";
 import mapModel from "./map_model.js";
 import locationModel from "./location_model.js";
 

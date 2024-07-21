@@ -1,3 +1,11 @@
+"use strict";
+
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://tpjfocufiqqszdsrhfig.supabase.co';
+const supabaseKey = 'your-public-supabase-key';  // Use public keys for client-side
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 import AppRouter    from "./components/router/router.js";
 
 import AboutView    from "./views/misc/about_view.js";

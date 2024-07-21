@@ -1,4 +1,4 @@
-import apiModel from "./api_model.js";
+import apiModel from "./raa_model.js";
 
 const mapModel = {
     getBoundingBoxCoords: async function getBoundingBoxCoords(map) {
