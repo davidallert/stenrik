@@ -7,6 +7,7 @@
     z-index: 400;
     position: absolute;
     opacity: 0;
+    visibility: hidden;
 }
 
 .nav-wrapper {
