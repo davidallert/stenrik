@@ -34,15 +34,15 @@
 }
 
 .image-div::after {
-    width: 75px;
-    height: 75px;
+    width: 100px;
+    height: 100px;
     position: absolute;
     top: 50%;
     left: 50%;
     content: '';
     border-radius: 100%;
     background-color: #ffffff;
-    margin: -75px 0 0 0;
+    margin: -75px 0 0 -25px;
 
 }
 
