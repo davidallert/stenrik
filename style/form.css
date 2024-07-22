@@ -83,6 +83,14 @@
     transform: translateY(10%);
 }
 
+.left-button:hover ~ .arrow-down {
+    border-top-color: var(--color-alt-green);
+}
+
+.right-button:hover ~ .arrow-down {
+    border-top-color: var(--color-alt-blue);
+}
+
 .left-button:hover, .right-button:hover {
     transition-duration: 0.3s;
     cursor: pointer;
