@@ -1,7 +1,7 @@
 .pin-and-buttons-wrapper {
     width: 80%;
     height: 100%;
-    overflow: hidden;  /* Ensures the background image does not overflow */
+    /* overflow: hidden;  Ensures the background image does not overflow */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,15 +76,29 @@
     white-space: nowrap;
 }
 
-.left-button:hover, .right-button:hover {
-    filter: drop-shadow(1px 1px 10px #00000068);
+.left-button:hover ~ .arrow-down, .right-button:hover ~ .arrow-down {
+    filter: drop-shadow(1px 1px 10px #00000039);
     transition-duration: 0.3s;
     cursor: pointer;
+    transform: translateY(10%);
+}
+
+.left-button:hover, .right-button:hover {
+    transition-duration: 0.3s;
+    cursor: pointer;
+    filter: drop-shadow(1px 1px 10px #00000039);
+}
+
+.right-button:hover {
+    background-color: var(--color-alt-blue);
+}
+
+.left-button:hover {
+    background-color: var(--color-alt-green);
 }
 
 .left-button {
-    background-color: #ACD09E;
-
+    background-color: var(--color-alt-beige);
 }
 
 .left-button-text, .right-button-text {
@@ -106,3 +120,16 @@
     background-color: #F2EFE8;
 }
 
+.arrow-down {
+    width: 0; 
+    height: 0;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: -1;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 150px solid #F2EFE8;
+    margin: 0 0 0 -150px;
+    transition-duration: 0.3s;
+  }

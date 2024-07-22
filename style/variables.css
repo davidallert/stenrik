@@ -3,6 +3,10 @@
     --base-transparent-color: #ffffffb6;
     --base-text-color: #444444;
 
+    --color-alt-green: #acd09e;
+    --color-alt-blue: #abd2df;
+    --color-alt-beige: #f2efe8;
+
     --base-border-radius: 20px;
     --border-radius-light: 5px;
 }

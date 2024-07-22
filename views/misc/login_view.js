@@ -16,12 +16,13 @@ export default class LoginView extends HTMLElement {
             </div>
 
             <div class="buttons-wrapper">
-                <div class="left-button">
+                <div id="leftButton" class="left-button">
                     <h2 class="left-button-text noselect">Logga in</h2>
                 </div>
-                <div class="right-button">
+                <div id="rightButton" class="right-button">
                     <h2 class="right-button-text noselect">Registrera</h2>
                 </div>
+                <div id="arrowDown" class="arrow-down"></div>
             </div>
 
         </div>
