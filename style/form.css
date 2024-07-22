@@ -25,7 +25,7 @@
     top: 50%;
     left: 50%;
     content: '';
-    background-image: url('/assets/images/playground-runestone.jpeg');
+    background-image: url('../assets/images/playground-runestone.jpeg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
