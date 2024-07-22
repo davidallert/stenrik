@@ -1,0 +1,61 @@
+.double-buttons-wrapper {
+    width: 80%;
+    height: auto;
+    overflow: hidden;  /* Ensures the background image does not overflow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.image-div {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1000px 1000px 1000px 0;
+    transform: rotate(-45deg);
+}
+
+.image-div::before {
+    width: 424px;
+    height: 424px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    content: '';
+    background-image: url('/assets/images/playground-runestone.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    transform: rotate(45deg);
+    margin: -185px 0 0 -205px; /* Center the image: -212px 0 0 -212px; (Half of 424). */
+}
+
+.image-div::after {
+    width: 75px;
+    height: 75px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    content: '';
+    border-radius: 100%;
+    background-color: #ffffff;
+    margin: -75px 0 0 0;
+
+}
+
+.left-button, .right-button {
+    height: 50px;
+    width: 50px;
+}
+
+.left-button {
+    background-color: #ACD09E;
+
+}
+
+.right-button {
+    background-color: #F2EFE8;
+}
