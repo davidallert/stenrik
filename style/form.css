@@ -1,6 +1,6 @@
-.double-buttons-wrapper {
+.pin-and-buttons-wrapper {
     width: 80%;
-    height: auto;
+    height: 100%;
     overflow: hidden;  /* Ensures the background image does not overflow */
     display: flex;
     justify-content: center;
@@ -16,6 +16,8 @@
     overflow: hidden;
     border-radius: 1000px 1000px 1000px 0;
     transform: rotate(-45deg);
+    animation: bobUpDown 10s infinite;
+    z-index: 1;
 }
 
 .image-div::before {
@@ -33,6 +35,15 @@
     margin: -185px 0 0 -205px; /* Center the image: -212px 0 0 -212px; (Half of 424). */
 }
 
+@keyframes bobUpDown {
+    0% {
+        transform: translateY(0%) rotate(-45deg);
+    }
+    50% {
+        transform: translateY(8%) rotate(-45deg);
+    }
+}
+
 .image-div::after {
     width: 100px;
     height: 100px;
@@ -46,9 +57,29 @@
 
 }
 
+.buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    position: relative;
+    bottom: 140px;
+}
+
 .left-button, .right-button {
-    height: 50px;
-    width: 50px;
+    height: 202px;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    transition-duration: 0.3s;
+    white-space: nowrap;
+}
+
+.left-button:hover, .right-button:hover {
+    filter: drop-shadow(1px 1px 10px #00000068);
+    transition-duration: 0.3s;
+    cursor: pointer;
 }
 
 .left-button {
@@ -56,6 +87,22 @@
 
 }
 
+.left-button-text, .right-button-text {
+    position: relative;
+    top: 5%;
+    font-size: xx-large;
+    color: #333333;
+}
+
+.left-button-text {
+    right: 50%;
+}
+
+.right-button-text {
+    left: 50%;
+}
+
 .right-button {
     background-color: #F2EFE8;
 }
+
