@@ -22,7 +22,7 @@
     overflow: hidden;
     border-radius: 1000px 1000px 1000px 0;
     transform: rotate(-45deg);
-    /* animation: bobUpDown 10s infinite; */
+    animation: bobUpDown 10s infinite;
     z-index: 1;
     /* margin: 0 auto; */
 }
