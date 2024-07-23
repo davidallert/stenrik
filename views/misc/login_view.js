@@ -62,7 +62,9 @@ export default class LoginView extends HTMLElement {
     moveArrow(backgroundColor) {
         const animationArea = document.getElementById("animationArea");
         const arrowDown = document.getElementById("arrowDown");
+
         animationArea.style.height = "100vh";
+        arrowDown.style.transitionDuration = "9s";
         arrowDown.style.transform = "translateY(100vh)";
         arrowDown.style.borderTopColor = `${backgroundColor}`
     }
@@ -80,7 +82,6 @@ export default class LoginView extends HTMLElement {
     }
 
     createLoginForm() {
-
         if(!this.formExists) {
             setTimeout(() => {
                 this.createLoginFormHtml();
@@ -97,17 +98,17 @@ export default class LoginView extends HTMLElement {
 
     createRegisterForm() {
         if(!this.formExists) {
-        setTimeout(() => {
-            this.createRegisterFormHtml();
-            this.fadeInForm();
-        }, 900);
-    } else if (this.formExists) {
-        this.fadeOutForm();
-        setTimeout(() => {
-            this.createRegisterFormHtml();
-            this.fadeInForm();
-        }, 1000);
-    }
+            setTimeout(() => {
+                this.createRegisterFormHtml();
+                this.fadeInForm();
+            }, 900);
+        } else if (this.formExists) {
+            this.fadeOutForm();
+            setTimeout(() => {
+                this.createRegisterFormHtml();
+                this.fadeInForm();
+            }, 1000);
+        }
     }
 
     createRegisterFormHtml() {
