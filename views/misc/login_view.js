@@ -5,7 +5,7 @@ export default class LoginView extends HTMLElement {
 
     connectedCallback() {
         this.render();
-        this.addLoginFormOnClickEvent();
+        this.addCreateFormOnClickEvent();
     }
 
     render() {
@@ -28,22 +28,33 @@ export default class LoginView extends HTMLElement {
 
         </div>
 
-        <div id="signInUpFormWrapper" class="sign-in-up-form-wrapper">
-            <form id="signInUpForm" class="sign-in-up-form"></form>
-        </div>
+        <div id="signInUpFormWrapper" class="sign-in-up-form-wrapper"></div>
 
         `
     }
 
-    addLoginFormOnClickEvent() {
-        const leftButton = document.getElementById("leftButton");
-        const form = document.getElementById("signInUpForm");
+    addCreateFormOnClickEvent() {
         const formWrapper = document.getElementById("signInUpFormWrapper");
+        const leftButton = document.getElementById("leftButton");
+        const rightButton = document.getElementById("rightButton");
 
         leftButton.addEventListener("click", (e) => {
             formWrapper.innerHTML = `
             <h2>Logga in</h2>
-            <form>
+            <form id="signInUpForm" class="sign-in-up-form">
+                <label for="username">Användarnamn</label>
+                <input type="text" name="username">
+                <label for="password">Lösenord</label>
+                <input type="password" name="password">
+                <input type="submit">
+            </form>
+            `
+        });
+
+        rightButton.addEventListener("click", (e) => {
+            formWrapper.innerHTML = `
+            <h2>Registrera användare</h2>
+            <form id="signInUpForm" class="sign-in-up-form">
                 <label for="username">Användarnamn</label>
                 <input type="text" name="username">
                 <label for="email">E-post</label>
@@ -53,8 +64,7 @@ export default class LoginView extends HTMLElement {
                 <input type="submit">
             </form>
             `
-        })
-
+        });
     }
 
     addRegisterFormOnClickEvent() {

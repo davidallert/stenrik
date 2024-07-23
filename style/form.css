@@ -161,5 +161,14 @@
 
 .sign-in-up-form-wrapper {
     max-width: 100%;
-    margin-top: 10%;
+    margin: 10% auto auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sign-in-up-form {
+    display: flex;
+    flex-direction: column;
 }
