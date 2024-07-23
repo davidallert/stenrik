@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=MedievalSharp&display=swap');
+
 @import url('variables.css');
+@import url('typography.css');
 @import url('base.css');
 @import url('map.css');
 @import url('buttons.css');

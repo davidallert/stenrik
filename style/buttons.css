@@ -13,7 +13,6 @@
     border-radius: var(--base-border-radius);
     background-color: var(--base-color);
     z-index: 400;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
 .search-button:hover {

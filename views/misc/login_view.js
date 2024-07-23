@@ -17,10 +17,10 @@ export default class LoginView extends HTMLElement {
 
             <div class="buttons-wrapper">
                 <div id="leftButton" class="left-button">
-                    <h2 class="left-button-text noselect">Logga in</h2>
+                    <h2 class="left-button-text noselect"><span class="grey">Redan medlem?</span><span class="underline">Logga in</span></h2>
                 </div>
                 <div id="rightButton" class="right-button">
-                    <h2 class="right-button-text noselect">Registrera</h2>
+                    <h2 class="right-button-text noselect"><span class="grey">Bli medlem?</span><span class="underline">Nytt konto</span></h2>
                 </div>
                 <div id="arrowDown" class="arrow-down"></div>
             </div>

@@ -1,0 +1,15 @@
+.underline {
+    text-decoration: underline;
+}
+
+.green {
+    color: var(--color-alt-green);
+}
+
+.blue {
+    color: var(--color-alt-blue);
+}
+
+.grey {
+    color: var(--base-text-color);
+}

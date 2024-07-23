@@ -21,6 +21,10 @@
         height: 202px;
     }
 
+    .left-button-text, .right-button-text {
+        font-size: 1.7rem;
+    }
+
     .arrow-down {
         border-left: 150px solid transparent;
         border-right: 150px solid transparent;
@@ -39,6 +43,11 @@
         top: 20px;
         right: 80px;
     }
+
+    .left-button-text, .right-button-text {
+        font-size: 1.8rem;
+    }
+
 }
 
 @media screen and (min-width: 1440px) {
@@ -62,6 +71,10 @@
     .left-button, .right-button {
         width: 180px;
         height: 202px;
+    }
+
+    .left-button-text, .right-button-text {
+        font-size: 2rem;
     }
 
     .arrow-down {

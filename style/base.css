@@ -1,6 +1,9 @@
 * {
     box-sizing: border-box;
+    font-family: "Abril Fatface", serif;
 }
+
+/* font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif */
 
 body {
     padding: 0;

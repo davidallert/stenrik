@@ -71,27 +71,36 @@
     height: 180px;
     width: 125px;
     display: flex;
-    justify-content: center;
     align-items: flex-end;
     transition-duration: 0.3s;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     background-color: var(--base-color);
+    text-align: center;
+}
+
+.left-button {
+    justify-content: flex-start;
+}
+
+.right-button {
+    justify-content: flex-end;
 }
 
 .left-button-text, .right-button-text {
     position: relative;
-    top: 20%;
-    font-size: xx-large;
+    top: 50%;
+    font-size: 1.6rem;
     transition-duration: 0.3s;
+    /* text-decoration: underline; */
 }
 
 .left-button-text {
-    right: 40%;
+    right: 20%;
     color: var(--color-alt-green);
 }
 
 .right-button-text {
-    left: 40%;
+    left: 20%;
     color: var(--color-alt-blue);
 }
 
