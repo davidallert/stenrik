@@ -95,12 +95,12 @@
 }
 
 .left-button-text {
-    right: 20%;
+    right: 30%;
     color: var(--color-alt-green);
 }
 
 .right-button-text {
-    left: 20%;
+    left: 30%;
     color: var(--color-alt-blue);
 }
 
