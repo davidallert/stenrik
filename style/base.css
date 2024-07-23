@@ -3,6 +3,10 @@
     font-family: "Abril Fatface", serif;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 /* font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif */
 
 body {
@@ -19,4 +23,12 @@ body {
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
-  }
+}
+
+.green-bg {
+    background-color: var(--color-alt-green);
+}
+
+.blue-bg {
+    background-color: var(--color-alt-blue);
+}

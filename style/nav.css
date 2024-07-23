@@ -4,7 +4,7 @@
     background-color: #00000083;
     color: var(--base-color);
     z-index: 401;
-    position: absolute;
+    position: fixed;
     opacity: 0;
     visibility: hidden;
 }
