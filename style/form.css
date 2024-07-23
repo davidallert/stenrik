@@ -64,11 +64,11 @@
     align-items: center;
     flex-direction: row;
     position: relative;
-    bottom: 140px;
+    bottom: 120px;
 }
 
 .left-button, .right-button {
-    height: 202px;
+    height: 180px;
     width: 125px;
     display: flex;
     justify-content: center;
@@ -86,12 +86,12 @@
 }
 
 .left-button-text {
-    right: 30%;
+    right: 40%;
     color: var(--color-alt-green);
 }
 
 .right-button-text {
-    left: 30%;
+    left: 40%;
     color: var(--color-alt-blue);
 }
 
