@@ -52,7 +52,7 @@
     left: 50%;
     content: '';
     border-radius: 100%;
-    background-color: #ffffff;
+    background-color: var(--base-color);
     margin: -75px 0 0 -25px;
 
 }
@@ -74,9 +74,41 @@
     align-items: flex-end;
     transition-duration: 0.3s;
     white-space: nowrap;
+    background-color: var(--base-color);
 }
 
-.left-button:hover ~ .arrow-down, .right-button:hover ~ .arrow-down {
+.left-button-text, .right-button-text {
+    position: relative;
+    top: 20%;
+    font-size: xx-large;
+    transition-duration: 0.3s;
+}
+
+.left-button-text {
+    right: 30%;
+    color: var(--color-alt-green);
+}
+
+.right-button-text {
+    left: 30%;
+    color: var(--color-alt-blue);
+}
+
+.arrow-down {
+    width: 0; 
+    height: 0;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: -1;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 150px solid var(--base-color);
+    margin: 0 0 0 -150px;
+    transition-duration: 0.3s;
+  }
+
+  .left-button:hover ~ .arrow-down, .right-button:hover ~ .arrow-down {
     filter: drop-shadow(1px 1px 10px #00000039);
     transition-duration: 0.3s;
     cursor: pointer;
@@ -89,6 +121,11 @@
 
 .right-button:hover ~ .arrow-down {
     border-top-color: var(--color-alt-blue);
+}
+
+.left-button:hover > .left-button-text,
+.right-button:hover > .right-button-text {
+    color: var(--base-text-color);
 }
 
 .left-button:hover, .right-button:hover {
@@ -104,40 +141,3 @@
 .left-button:hover {
     background-color: var(--color-alt-green);
 }
-
-.left-button {
-    background-color: var(--color-alt-beige);
-}
-
-.left-button-text, .right-button-text {
-    position: relative;
-    top: 5%;
-    font-size: xx-large;
-    color: #333333;
-}
-
-.left-button-text {
-    right: 50%;
-}
-
-.right-button-text {
-    left: 50%;
-}
-
-.right-button {
-    background-color: #F2EFE8;
-}
-
-.arrow-down {
-    width: 0; 
-    height: 0;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    z-index: -1;
-    border-left: 150px solid transparent;
-    border-right: 150px solid transparent;
-    border-top: 150px solid #F2EFE8;
-    margin: 0 0 0 -150px;
-    transition-duration: 0.3s;
-  }
