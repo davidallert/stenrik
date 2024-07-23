@@ -1,15 +1,3 @@
-@media screen and (min-width: 767px) {
-    .hamburger-menu-btn {
-        top: 20px;
-        right: 20px;
-    }
-
-    .fly-to-user-button {
-        top: 20px;
-        right: 80px;
-    }
-}
-
 @media screen and (min-width: 424px) {
     .image-div {
         width: 300px;
@@ -38,5 +26,48 @@
         border-right: 150px solid transparent;
         border-top: 150px solid var(--base-color);
         margin: 0 0 0 -150px;
+      }
+}
+
+@media screen and (min-width: 767px) {
+    .hamburger-menu-btn {
+        top: 20px;
+        right: 20px;
+    }
+
+    .fly-to-user-button {
+        top: 20px;
+        right: 80px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .image-div {
+        width: 400px;
+        height: 400px;
+    }
+
+    .image-div::before {
+        width: 524px;
+        height: 524px;
+        margin: -221px 0 0 -262px; /* Center the image: -212px 0 0 -212px; (Half of 424). */
+    }
+
+    .image-div::after {
+        width: 150px;
+        height: 150px;
+        margin: -125px 0 0 -25px;
+    }
+
+    .left-button, .right-button {
+        width: 180px;
+        height: 202px;
+    }
+
+    .arrow-down {
+        border-left: 180px solid transparent;
+        border-right: 180px solid transparent;
+        border-top: 180px solid var(--base-color);
+        margin: 0 0 0 -180px;
       }
 }
