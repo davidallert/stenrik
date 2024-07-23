@@ -5,6 +5,7 @@ export default class LoginView extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        this.addLoginFormOnClickEvent();
     }
 
     render() {
@@ -27,16 +28,36 @@ export default class LoginView extends HTMLElement {
 
         </div>
 
+        <div id="signInUpFormWrapper" class="sign-in-up-form-wrapper">
+            <form id="signInUpForm" class="sign-in-up-form"></form>
+        </div>
+
         `
     }
-}
 
-{/* <form>
-<label for="username">Användarnamn</label>
-<input type="text" name="username">
-<label for="email">E-post</label>
-<input type="email" name="email">
-<label for="password">Lösenord</label>
-<input type="password" name="password">
-<input type="submit">
-</form> */}
+    addLoginFormOnClickEvent() {
+        const leftButton = document.getElementById("leftButton");
+        const form = document.getElementById("signInUpForm");
+        const formWrapper = document.getElementById("signInUpFormWrapper");
+
+        leftButton.addEventListener("click", (e) => {
+            formWrapper.innerHTML = `
+            <h2>Logga in</h2>
+            <form>
+                <label for="username">Användarnamn</label>
+                <input type="text" name="username">
+                <label for="email">E-post</label>
+                <input type="email" name="email">
+                <label for="password">Lösenord</label>
+                <input type="password" name="password">
+                <input type="submit">
+            </form>
+            `
+        })
+
+    }
+
+    addRegisterFormOnClickEvent() {
+
+    }
+}
