@@ -9,3 +9,34 @@
         right: 80px;
     }
 }
+
+@media screen and (min-width: 424px) {
+    .image-div {
+        width: 300px;
+        height: 300px;
+    }
+
+    .image-div::before {
+        width: 424px;
+        height: 424px;
+        margin: -185px 0 0 -205px; /* Center the image: -212px 0 0 -212px; (Half of 424). */
+    }
+
+    .image-div::after {
+        width: 100px;
+        height: 100px;
+        margin: -75px 0 0 -25px;
+    }
+
+    .left-button, .right-button {
+        width: 150px;
+        height: 202px;
+    }
+
+    .arrow-down {
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-top: 150px solid var(--base-color);
+        margin: 0 0 0 -150px;
+      }
+}

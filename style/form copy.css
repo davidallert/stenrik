@@ -11,8 +11,8 @@
 }
 
 .image-div {
-    width: 250px;
-    height: 250px;
+    width: 300px;
+    height: 300px;
     position: relative;
     overflow: hidden;
     border-radius: 1000px 1000px 1000px 0;
@@ -23,8 +23,8 @@
 }
 
 .image-div::before {
-    width: 374px;
-    height: 374px;
+    width: 424px;
+    height: 424px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -34,7 +34,9 @@
     background-size: cover;
     background-position: center;
     transform: rotate(45deg);
-    margin: -168px 0 0 -177px;
+    margin: -185px 0 0 -205px; /* Center the image: -212px 0 0 -212px; (Half of 424). */
+    /* margin: -185px 0 0 -205px; Center the image: -212px 0 0 -212px; (Half of 424). */
+
 }
 
 @keyframes bobUpDown {
@@ -47,15 +49,16 @@
 }
 
 .image-div::after {
-    width: 75px;
-    height: 75px;
+    width: 100px;
+    height: 100px;
     position: absolute;
     top: 50%;
     left: 50%;
     content: '';
     border-radius: 100%;
     background-color: var(--base-color);
-    margin: -75px 0 0 0;
+    margin: -75px 0 0 -25px;
+
 }
 
 .buttons-wrapper {
@@ -69,7 +72,7 @@
 
 .left-button, .right-button {
     height: 202px;
-    width: 125px;
+    width: 150px;
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -102,10 +105,10 @@
     top: 100%;
     left: 50%;
     z-index: -1;
-    border-left: 125px solid transparent;
-    border-right: 125px solid transparent;
-    border-top: 125px solid var(--base-color);
-    margin: 0 0 0 -125px;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 150px solid var(--base-color);
+    margin: 0 0 0 -150px;
     transition-duration: 0.3s;
   }
 
