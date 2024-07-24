@@ -14,10 +14,7 @@ export default class NavComponent extends HTMLElement {
         this.innerHTML = `
             <div id="navPopup" class="nav-popup">
                 <ul class="nav-wrapper">
-                    <a href="#"><li class="nav-item">Hem</li></a>
                     <a href=""><li class="nav-item">Karta</li></a>
-                    <a href="#"><li class="nav-item">Kunskap</li></a>
-                    <a href="#om-oss"><li class="nav-item">Om oss</li></a>
                     <a href="#logga-in"><li class="nav-item">Logga in</li></a>
                 </ul>
             </div>
