@@ -64,7 +64,7 @@ export default class LoginView extends HTMLElement {
         const arrowDown = document.getElementById("arrowDown");
 
         animationArea.style.height = "100vh";
-        arrowDown.style.transitionDuration = "9s";
+        arrowDown.style.transitionDuration = "5s";
         arrowDown.style.transform = "translateY(100vh)";
         arrowDown.style.borderTopColor = `${backgroundColor}`
     }
