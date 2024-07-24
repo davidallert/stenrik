@@ -185,6 +185,8 @@
     transform-origin: bottom;
     transition-duration: 3s;
     overflow: hidden;
+    font-size: x-large;
+
 }
 
 .fade-in {
@@ -204,6 +206,22 @@
     transition-duration: 0.3s;
     width: 80vw;
 }
+
+.sign-in-up-form input {
+    padding: 1rem;
+    background-color: var(--base-color);
+    margin-bottom: 1rem;
+}
+
+/* input:is(:-webkit-autofill, :autofill) {
+    background-color: var(--base-color);
+  } */
+
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 100px var(--base-color) inset;
+    box-shadow: 0 0 0 100px var(--base-color) inset;
+}
+
 
 .form-bg {
     width: 100%;

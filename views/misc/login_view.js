@@ -36,6 +36,12 @@ export default class LoginView extends HTMLElement {
         `
     }
 
+    /**
+     * Adds event listeners to the left and right buttons.
+     * On click, the buttons will create a form.
+     * The left button creates a login form (the user is asked to provide username and password).
+     * The right button creates a register form (the user is asked to provide username, password and email).
+     */
     addCreateFormOnClickEvent() {
         const leftButton = document.getElementById("leftButton");
         const rightButton = document.getElementById("rightButton");
@@ -52,23 +58,36 @@ export default class LoginView extends HTMLElement {
         });
     }
 
+    /**
+     * Adds an animation to the downward "arrow" (the triangle),
+     * then scrolls down to the bottom of the page.
+     * Lastly, the form is created.
+     * @param {string} backgroundColor The color that the background of the form should use. E.g. a hex code.
+     */
     createAnimation(backgroundColor) {
         this.moveArrow(backgroundColor);
         this.scrollDown();
         this.createFormBg(backgroundColor);
-
     }
 
+    /**
+     * Move the arrow/triangle downwards by 100 vh, while changing its color to match the background of the form.
+     * @param {string} backgroundColor The color that the background of the form should use. E.g. a hex code.
+     */
     moveArrow(backgroundColor) {
-        const animationArea = document.getElementById("animationArea");
-        const arrowDown = document.getElementById("arrowDown");
+        const animationArea = document.getElementById("animationArea"); // Wrapper for the bottom half of the screen.
+        const arrowDown = document.getElementById("arrowDown"); // The arrow/triangle.
 
-        animationArea.style.height = "100vh";
-        arrowDown.style.transitionDuration = "5s";
-        arrowDown.style.transform = "translateY(100vh)";
+        animationArea.style.height = "100vh"; // Add space so that the arrow has room to move down, outside of the viewport.
+        arrowDown.style.transitionDuration = "5s"; // Can be changed to control the speed of the arrow/triangle.
+        arrowDown.style.transform = "translateY(100vh)"; // Can be changed to control the distance traveled.
         arrowDown.style.borderTopColor = `${backgroundColor}`
     }
 
+    /**
+     * Creates the colored background of the form. Uses CSS keyframes through the class animate-form-bg.
+     * @param {string} backgroundColor The color that the background of the form should use. E.g. a hex code.
+     */
     createFormBg(backgroundColor) {
         const arrowDown = document.getElementById("arrowDown");
         const formWrapper = document.getElementById("signInUpFormWrapper");
@@ -76,11 +95,14 @@ export default class LoginView extends HTMLElement {
         setTimeout(() => {
             formWrapper.classList.add("animate-form-bg");
             formWrapper.style.backgroundColor = `${backgroundColor}`;
-            arrowDown.style.opacity = "0";
+            arrowDown.style.opacity = "0"; // Make the arrow fade out along its path.
             arrowDown.style.visibility = "hidden";
         }, 300);
     }
 
+    /**
+     * Creates the login form and fades it in/out.
+     */
     createLoginForm() {
         if(!this.formExists) {
             setTimeout(() => {
@@ -96,6 +118,9 @@ export default class LoginView extends HTMLElement {
         }
     }
 
+    /**
+     * Creates the register form and fades it in/out.
+     */
     createRegisterForm() {
         if(!this.formExists) {
             setTimeout(() => {
@@ -111,6 +136,28 @@ export default class LoginView extends HTMLElement {
         }
     }
 
+    /**
+     * HTML for the login form.
+     */
+    createLoginFormHtml() {
+        const formWrapper = document.getElementById("signInUpFormWrapper");
+        formWrapper.innerHTML = `
+        <div id="fadeInDiv" class="fade-in">
+            <h2 id="formHeading">Logga in</h2>
+            <form id="signInUpForm" class="sign-in-up-form">
+                <label for="username">Användarnamn</label>
+                <input type="text" name="username">
+                <label for="password">Lösenord</label>
+                <input type="password" name="password">
+                <input type="submit">
+            </form>
+        </div>
+        `
+    }
+
+    /**
+     * HTML for the register form.
+     */
     createRegisterFormHtml() {
         const formWrapper = document.getElementById("signInUpFormWrapper");
         formWrapper.innerHTML = `
@@ -127,22 +174,6 @@ export default class LoginView extends HTMLElement {
             </form>
         </div>
     `
-    }
-
-    createLoginFormHtml() {
-        const formWrapper = document.getElementById("signInUpFormWrapper");
-        formWrapper.innerHTML = `
-        <div id="fadeInDiv" class="fade-in">
-            <h2 id="formHeading">Logga in</h2>
-            <form id="signInUpForm" class="sign-in-up-form">
-                <label for="username">Användarnamn</label>
-                <input type="text" name="username">
-                <label for="password">Lösenord</label>
-                <input type="password" name="password">
-                <input type="submit">
-            </form>
-        </div>
-        `
     }
 
     fadeInForm() {

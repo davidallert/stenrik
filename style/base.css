@@ -15,6 +15,10 @@ body {
     overflow-x: hidden; /* TODO find the issue that is causing the login page to overflow. This fixes the issue but is hacky.*/
 }
 
+textarea, input { 
+    all: unset;
+}
+
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
