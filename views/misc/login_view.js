@@ -79,8 +79,11 @@ export default class LoginView extends HTMLElement {
         const arrowDown = document.getElementById("arrowDown"); // The arrow/triangle.
 
         animationArea.style.height = "100vh"; // Add space so that the arrow has room to move down, outside of the viewport.
-        arrowDown.style.transitionDuration = "5s"; // Can be changed to control the speed of the arrow/triangle.
+        arrowDown.style.transitionDuration = "6s"; // Can be changed to control the speed of the arrow/triangle.
         arrowDown.style.transform = "translateY(100vh)"; // Can be changed to control the distance traveled.
+        arrowDown.style.borderRightWidth = "37.5vw";
+        arrowDown.style.borderLeftWidth = "37.5vw";
+        arrowDown.style.marginLeft = "-37.5vw";
         arrowDown.style.borderTopColor = `${backgroundColor}`
     }
 
@@ -98,6 +101,12 @@ export default class LoginView extends HTMLElement {
             arrowDown.style.opacity = "0"; // Make the arrow fade out along its path.
             arrowDown.style.visibility = "hidden";
         }, 300);
+
+        setTimeout(() => {
+            formWrapper.style.width = "100vw";
+            formWrapper.style.height = "100vh";
+            formWrapper.style.transitionDuration = "0s";
+        }, 3000);
     }
 
     /**

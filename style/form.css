@@ -29,7 +29,7 @@
     max-height: 100%;
     max-width: 100%;
     position: relative;
-    top: -2rem;
+    top: -3rem;
     /* overflow: hidden;  Ensures the background image does not overflow */
     display: flex;
     justify-content: center;
@@ -195,8 +195,6 @@
 }
 
 .animate-form-bg {
-    height: 100vh;
-    width: 100vw;
     animation: animate-form-bg 3s ease;
 }
 
@@ -211,15 +209,6 @@
     padding: 1rem;
     background-color: var(--base-color);
     margin-bottom: 1rem;
-}
-
-/* input:is(:-webkit-autofill, :autofill) {
-    background-color: var(--base-color);
-  } */
-
-  input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 100px var(--base-color) inset;
-    box-shadow: 0 0 0 100px var(--base-color) inset;
 }
 
 

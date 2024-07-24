@@ -19,6 +19,11 @@ textarea, input {
     all: unset;
 }
 
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 100px var(--base-color) inset;
+    box-shadow: 0 0 0 100px var(--base-color) inset;
+}
+
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
