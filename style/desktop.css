@@ -91,4 +91,8 @@
     .sign-in-up-form {
         width: 50vw;
     }
+
+    .form-heading {
+        font-size: 3rem;
+    }
 }

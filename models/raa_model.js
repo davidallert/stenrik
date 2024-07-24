@@ -19,7 +19,7 @@ const apiModel = {
 
     // console.log(boundingBox);
 
-    const response = await fetch(`https://kulturarvsdata.se/ksamsok/api?method=search&hitsPerPage=1000&query=itemType=kulturl%C3%A4mning+and+geoDataExists=j+and+subject=Milj%C3%B6%20AND%20serviceOrganization%3D%22RAÄ%22%20AND%20serviceName%3Dkmr_lamningar%20AND%20itemDescription%3D%22synlig%20ovan%20mark%22+and+boundingBox=/WGS84"${boundingBox.west} ${boundingBox.south} ${boundingBox.east} ${boundingBox.north}"`,
+    const response = await fetch(`https://kulturarvsdata.se/ksamsok/api?method=search&hitsPerPage=100&query=itemType=kulturl%C3%A4mning+and+geoDataExists=j+and+subject=Milj%C3%B6%20AND%20serviceOrganization%3D%22RAÄ%22%20AND%20serviceName%3Dkmr_lamningar%20AND%20itemDescription%3D%22synlig%20ovan%20mark%22+and+boundingBox=/WGS84"${boundingBox.west} ${boundingBox.south} ${boundingBox.east} ${boundingBox.north}"`,
     {
         method: 'GET',
         headers: {
