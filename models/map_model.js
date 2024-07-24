@@ -43,7 +43,7 @@ const mapModel = {
                             markers.addLayer(L.marker([pin.coords.lat, pin.coords.lon], {icon: runeIcon})
                             .bindPopup(`
                                 <div class="pin">
-                                    <h3><a href="https://www.google.com/search?q=${pin.name}">${pin.name}</a></h3>
+                                    <h2>${pin.name}</h2>
                                     <p>${pin.description}</p>
                                 </div>
                                 `, {'maxHeight': '500'}));
@@ -52,7 +52,7 @@ const mapModel = {
                         let polygon = L.polygon(pin.coords.coordsArray).addTo(map);
                         polygon.bindPopup(`
                             <div class="pin">
-                                <h3><a href="https://www.google.com/search?q=${pin.name}">${pin.name}</a></h3>
+                                <h2>${pin.name}</h2>
                                 <p>${pin.description}</p>
                             </div>
                         `, {'maxHeight': '500'});

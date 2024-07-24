@@ -13,6 +13,7 @@
     border-radius: var(--base-border-radius);
     background-color: var(--base-color);
     z-index: 400;
+    color: var(--base-text-color);
 }
 
 .search-button:hover {

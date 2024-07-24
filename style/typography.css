@@ -14,11 +14,35 @@
     color: var(--base-text-color);
 }
 
-/* h1,
+h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-    font-family: 'Abril Fatface';
-} */
+    font-family: 'Abril Fatface', 'Dm Serif Display', serif;
+}
+
+p,
+label,
+input[type="text"],
+input[type="submit"],
+textarea,
+a {
+    font-family: "DM Serif Text", serif;
+    font-size: large;
+}
+
+i {
+    color: var(--base-text-color);
+}
+
+.leaflet-control-attribution a {
+    font-size: x-small;
+}
+
+.leaflet-marker-icon div span {
+    font-size: large;
+    font-family: 'MedievalSharp';
+    font-weight: bold;
+}

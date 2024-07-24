@@ -48,6 +48,10 @@
         font-size: 1.8rem;
     }
 
+    .sign-in-up-form {
+        width: 50vw;
+    }
+
 }
 
 @media screen and (min-width: 1440px) {
@@ -83,4 +87,8 @@
         border-top: 180px solid var(--base-color);
         margin: 0 0 0 -180px;
       }
+
+    .sign-in-up-form {
+        width: 50vw;
+    }
 }

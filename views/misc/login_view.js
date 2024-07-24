@@ -152,12 +152,13 @@ export default class LoginView extends HTMLElement {
         const formWrapper = document.getElementById("signInUpFormWrapper");
         formWrapper.innerHTML = `
         <div id="fadeInDiv" class="fade-in">
-            <h2 id="formHeading">Logga in</h2>
+            <h1 id="formHeading">Logga in</h1>
             <form id="signInUpForm" class="sign-in-up-form">
                 <label for="username">Användarnamn</label>
                 <input type="text" name="username">
                 <label for="password">Lösenord</label>
                 <input type="password" name="password">
+                <label><br></label>
                 <input type="submit">
             </form>
         </div>
@@ -171,7 +172,7 @@ export default class LoginView extends HTMLElement {
         const formWrapper = document.getElementById("signInUpFormWrapper");
         formWrapper.innerHTML = `
         <div id="fadeInDiv" class="fade-in">
-            <h2 id="formHeading">Registrera användare</h2>
+            <h1 id="formHeading">Registrera dig</h1>
             <form id="signInUpForm" class="sign-in-up-form">
                 <label for="username">Användarnamn</label>
                 <input type="text" name="username">
@@ -179,6 +180,7 @@ export default class LoginView extends HTMLElement {
                 <input type="email" name="email">
                 <label for="password">Lösenord</label>
                 <input type="password" name="password">
+                <label><br></label>
                 <input type="submit">
             </form>
         </div>
