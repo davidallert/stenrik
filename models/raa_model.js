@@ -112,7 +112,13 @@ const apiModel = {
                                     desc = desc.replace("Beskrivning saknas.", "")
                                 }
                                 if (desc.includes("Beskrivningen är inte kvalitetssäkrad. Information kan saknas, vara felaktig eller inaktuell. Se även Inventeringsbok.")) {
-                                    desc = desc.replace("Beskrivningen är inte kvalitetssäkrad. Information kan saknas, vara felaktig eller inaktuell. Se även Inventeringsbok.", "")
+                                    desc = desc.replace("Beskrivningen är inte kvalitetssäkrad. Information kan saknas, vara felaktig eller inaktuell. Se även Inventeringsbok.", "");
+                                }
+                                if (desc.includes("För beskrivning av lämningen se Inventeringsbok under Dokument och bilder.")) {
+                                    desc = desc.replace("För beskrivning av lämningen se Inventeringsbok under Dokument och bilder.", "");
+                                }
+                                if (desc.includes("Överförd.")) {
+                                    desc = desc.replace("Överförd.", "");
                                 }
                                 pinData.description = pinData.description || '';
                                 pinData.description += desc + " ";

@@ -6,3 +6,31 @@
 .pin {
     text-align: center;
 }
+
+.leaflet-control-attribution a {
+    font-size: x-small;
+}
+
+.leaflet-marker-icon div span {
+    font-size: large;
+    font-family: 'MedievalSharp';
+    font-weight: bold;
+}
+
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+    background-color: var(--base-transparent-color);
+}
+
+.marker-cluster-small div {
+    background-color: var(--color-alt-blue);
+}
+
+.marker-cluster-medium div {
+    background-color: var(--color-alt-green);
+}
+
+.marker-cluster-large div {
+    background-color: var(--base-color);
+}

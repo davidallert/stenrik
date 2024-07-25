@@ -11,7 +11,7 @@
     user-select: none;
     font-size: large;
     border-radius: var(--base-border-radius);
-    background-color: var(--base-color);
+    background-color: var(--white);
     z-index: 400;
     color: var(--base-text-color);
 }
@@ -30,7 +30,7 @@
     justify-content: center;
     align-items: center;
     border-radius: var(--base-border-radius);
-    background-color: var(--base-color);
+    background-color: var(--white);
     color: var(--base-text-color);
     z-index: 401;
     font-size: 1.4rem;

@@ -1,12 +1,15 @@
 :root {
     --base-color: #f2efe8;
-    --base-transparent-color: #ffffffb6;
+    --base-transparent-color: #f2efe89d;
     --base-text-color: #333333;
     --white: #ffffff;
     --black: #000000;
 
     --color-alt-green: #acd09e;
     --color-alt-blue: #abd2df;
+    --color-transparent-green: #b6d2abb7;
+    --color-transparent-blue: #b8d5dfbd;
+    --color-transparent-black: #00000056;
     /* --color-alt-beige: #f2efe8; */
 
     --base-border-radius: 20px;
