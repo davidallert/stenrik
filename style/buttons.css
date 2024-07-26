@@ -63,3 +63,16 @@
 .hamburger-menu-btn-icon {
     transition: opacity 0.3s;
 }
+
+.sign-in-up-form .submit-btn {
+    text-align: center;
+    transition-duration: 0.3s;
+    font-size: x-large;
+}
+
+.sign-in-up-form .submit-btn:hover,
+.sign-in-up-form .submit-btn:active {
+    background-color: var(--base-transparent-color);
+    transition-duration: 0.3s;
+    cursor: pointer;
+}

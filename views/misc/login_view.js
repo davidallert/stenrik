@@ -1,3 +1,5 @@
+import authModel from "../../models/auth_model.js";
+
 export default class LoginView extends HTMLElement {
     constructor() {
         super();
@@ -34,6 +36,52 @@ export default class LoginView extends HTMLElement {
             <div id="signInUpFormWrapper" class="sign-in-up-form-wrapper"></div>
         </div>
         `
+    }
+
+    /**
+     * HTML for the login form.
+     */
+    createLoginFormHtml() {
+        const formWrapper = document.getElementById("signInUpFormWrapper");
+        formWrapper.innerHTML = `
+        <div id="fadeInDiv" class="fade-in">
+            <h2 id="formHeading" class="form-heading">Logga in</h2>
+            <form id="signInForm" class="sign-in-up-form">
+                <label for="email">E-post</label>
+                <input type="email" name="email" autocomplete="current-password">
+                <label for="password">Lösenord</label>
+                <input type="password" name="password" autocomplete="current-password">
+                <label><br></label>
+                <input type="submit" id="submitBtn" class="submit-btn" value="Logga in" data-action="login">
+            </form>
+        </div>
+        `
+    }
+    
+    /**
+     * HTML for the register form.
+     */
+    createRegisterFormHtml() {
+        const formWrapper = document.getElementById("signInUpFormWrapper");
+        formWrapper.innerHTML = `
+        <div id="fadeInDiv" class="fade-in">
+            <h2 id="formHeading" class="form-heading">Registrera dig</h2>
+            <form id="signUpForm" class="sign-in-up-form">
+                <label for="dummy-username" style="display:none;">Username</label>
+                <input type="username" id="dummy-username" style="display:none;" autocomplete="off">
+
+                <label for="username">Användarnamn</label>
+                <input type="text" id="username" name="username" autocomplete="off">
+                <label for="email">E-post</label>
+                <input type="email" id="email" name="email" autocomplete="email">
+                <label for="password">Lösenord</label>
+                <input type="password" id="password" name="password" autocomplete="current-password">
+                <label><br></label>
+                <input type="submit" id="submitBtn" class="submit-btn" value="Skapa nytt konto" data-action="register">
+            </form>
+        </div>
+    `
+
     }
 
     /**
@@ -116,12 +164,14 @@ export default class LoginView extends HTMLElement {
         if(!this.formExists) {
             setTimeout(() => {
                 this.createLoginFormHtml();
+                this.addSubmitEvent();
                 this.fadeInForm();
             }, 900);
         } else if (this.formExists) {
             this.fadeOutForm();
             setTimeout(() => {
                 this.createLoginFormHtml();
+                this.addSubmitEvent();
                 this.fadeInForm();
             }, 1000);
         }
@@ -134,57 +184,17 @@ export default class LoginView extends HTMLElement {
         if(!this.formExists) {
             setTimeout(() => {
                 this.createRegisterFormHtml();
+                this.addSubmitEvent();
                 this.fadeInForm();
             }, 900);
         } else if (this.formExists) {
             this.fadeOutForm();
             setTimeout(() => {
                 this.createRegisterFormHtml();
+                this.addSubmitEvent();
                 this.fadeInForm();
             }, 1000);
         }
-    }
-
-    /**
-     * HTML for the login form.
-     */
-    createLoginFormHtml() {
-        const formWrapper = document.getElementById("signInUpFormWrapper");
-        formWrapper.innerHTML = `
-        <div id="fadeInDiv" class="fade-in">
-            <h2 id="formHeading" class="form-heading">Logga in</h2>
-            <form id="signInUpForm" class="sign-in-up-form">
-                <label for="username">Användarnamn</label>
-                <input type="text" name="username">
-                <label for="password">Lösenord</label>
-                <input type="password" name="password">
-                <label><br></label>
-                <input type="submit">
-            </form>
-        </div>
-        `
-    }
-
-    /**
-     * HTML for the register form.
-     */
-    createRegisterFormHtml() {
-        const formWrapper = document.getElementById("signInUpFormWrapper");
-        formWrapper.innerHTML = `
-        <div id="fadeInDiv" class="fade-in">
-            <h2 id="formHeading" class="form-heading">Registrera dig</h2>
-            <form id="signInUpForm" class="sign-in-up-form">
-                <label for="username">Användarnamn</label>
-                <input type="text" name="username">
-                <label for="email">E-post</label>
-                <input type="email" name="email">
-                <label for="password">Lösenord</label>
-                <input type="password" name="password">
-                <label><br></label>
-                <input type="submit">
-            </form>
-        </div>
-    `
     }
 
     fadeInForm() {
@@ -205,5 +215,41 @@ export default class LoginView extends HTMLElement {
         setTimeout(() => {
             window.scrollBy(0, viewheight);
         }, 300);
+    }
+
+    addSubmitEvent() {
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            let username;
+            let email;
+            let password;
+
+            if (e.target.dataset.action === "login") {
+                const form = document.getElementById("signInForm");
+                let formData = new FormData(form);
+                email = formData.get("email");
+                password = formData.get("password");
+
+                // console.log(username);
+                // console.log(email);
+                // console.log(password);
+
+                authModel.login(email, password);
+            } else if (e.target.dataset.action === "register") {
+                const form = document.getElementById("signUpForm");
+                let formData = new FormData(form);
+                username = formData.get("username");
+                email = formData.get("email");
+                password = formData.get("password");
+
+                // console.log(username);
+                // console.log(email);
+                // console.log(password);
+
+                authModel.register(username, email, password);
+            }
+        });
     }
 }

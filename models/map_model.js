@@ -50,7 +50,7 @@ const mapModel = {
                         };
                     } else if (pin.coords.type === "MultiPolygon") { // Larger sites with many individual points.
                         let polygon = L.polygon(pin.coords.coordsArray).addTo(map);
-                        polygon.setStyle({color: '#000'});
+                        polygon.setStyle({color: '#333333'});
                         polygon.bindPopup(`
                             <div class="pin">
                                 <h2>${pin.name}</h2>

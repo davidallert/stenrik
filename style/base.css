@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    font-family: "Abril Fatface", serif;
+    /* font-family: "Abril Fatface", serif; */
 }
 
 html {
@@ -20,8 +20,10 @@ textarea, input {
 }
 
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 100px var(--base-color) inset;
-    box-shadow: 0 0 0 100px var(--base-color) inset;
+    -webkit-box-shadow: 0 0 0 100px var(--white) inset;
+    box-shadow: 0 0 0 100px var(--white) inset;
+    font-family: "DM Serif Text", serif;
+    font-size: large;
 }
 
 .noselect {

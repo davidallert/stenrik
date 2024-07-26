@@ -206,8 +206,14 @@
 
 .sign-in-up-form input {
     padding: 1rem;
-    background-color: var(--base-color);
+    background-color: var(--white);
     margin: 0.25rem 0 1rem;
+    font-family: "DM Serif Text", serif;
+    font-size: large;
+}
+
+.sign-in-up-form input[type="submit"] {
+    background-color: var(--base-color);
 }
 
 .form-bg {

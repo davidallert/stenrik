@@ -7,6 +7,10 @@
     text-align: center;
 }
 
+.leaflet-marker-pane > img {
+    filter: drop-shadow(1px 1px 3px #000000a5)
+}
+
 .leaflet-control-attribution a {
     font-size: x-small;
 }

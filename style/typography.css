@@ -25,12 +25,11 @@ h6 {
 
 p,
 label,
-input[type="text"],
-input[type="submit"],
+input,
 textarea,
 a {
     font-family: "DM Serif Text", serif;
-    font-size: large;
+    font-size: x-large;
 }
 
 i {
