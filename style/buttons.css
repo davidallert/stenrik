@@ -12,6 +12,7 @@
     font-size: large;
     border-radius: var(--base-border-radius);
     background-color: var(--white);
+    font-family: 'Abril Fatface', 'Dm Serif Display', serif;
     z-index: 400;
     color: var(--base-text-color);
 }
