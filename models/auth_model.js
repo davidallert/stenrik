@@ -18,6 +18,7 @@ const authModel = {
         if (error) {
             console.error(error);
         } else if (!error) {
+            console.log(data);
             authModel.accessToken = data.session.access_token;
         }
 
@@ -44,6 +45,19 @@ const authModel = {
             display_name: username,
           };
           const { error } = await supabase.auth.updateUser({ data });
+
+          console.log(data);
+          console.log(error);
+    },
+
+    getAllUserData: async function getAllUserData() {
+        const { data: { user } } = await supabase.auth.getUser();
+        return user;
+    },
+
+    addFavoriteLocation: async function addFavoriteLocation(location) {
+        const data = {};
+        const { error } = await supabase.auth.updateUser({ data });
 
           console.log(data);
           console.log(error);

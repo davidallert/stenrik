@@ -14,9 +14,9 @@ export default class AppRouter extends HTMLElement {
                 view: '<login-view></login-view>',
                 name: 'Logga in'
             },
-            'profile': {
-                view: '<about-view></about-view>',
-                name: 'Om oss'
+            'mina-sidor': {
+                view: '<my-pages-view></my-pages-view>',
+                name: 'Profil'
             },
             'om-oss': {
                 view: '<about-view></about-view>',

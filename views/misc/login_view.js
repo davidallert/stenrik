@@ -46,11 +46,11 @@ export default class LoginView extends HTMLElement {
         formWrapper.innerHTML = `
         <div id="fadeInDiv" class="fade-in">
             <h2 id="formHeading" class="form-heading">Logga in</h2>
-            <form id="signInForm" class="sign-in-up-form">
+            <form id="signInUpForm" class="sign-in-up-form">
                 <label for="email">E-post</label>
-                <input type="email" name="email" autocomplete="current-password">
+                <input type="email" name="email" autocomplete="current-password" required>
                 <label for="password">Lösenord</label>
-                <input type="password" name="password" autocomplete="current-password">
+                <input type="password" name="password" minlength="6" maxlength="30" autocomplete="current-password" required>
                 <label><br></label>
                 <input type="submit" id="submitBtn" class="submit-btn" value="Logga in" data-action="login">
             </form>
@@ -66,16 +66,16 @@ export default class LoginView extends HTMLElement {
         formWrapper.innerHTML = `
         <div id="fadeInDiv" class="fade-in">
             <h2 id="formHeading" class="form-heading">Registrera dig</h2>
-            <form id="signUpForm" class="sign-in-up-form">
+            <form id="signInUpForm" class="sign-in-up-form">
                 <label for="dummy-username" style="display:none;">Username</label>
                 <input type="username" id="dummy-username" style="display:none;" autocomplete="off">
 
                 <label for="username">Användarnamn</label>
-                <input type="text" id="username" name="username" autocomplete="off">
+                <input type="text" id="username" name="username" autocomplete="off" maxlength="30" required>
                 <label for="email">E-post</label>
-                <input type="email" id="email" name="email" autocomplete="email">
+                <input type="email" id="email" name="email" autocomplete="email" required>
                 <label for="password">Lösenord</label>
-                <input type="password" id="password" name="password" autocomplete="current-password">
+                <input type="password" id="password" name="password" autocomplete="current-password" minlength="6" maxlength="30" required>
                 <label><br></label>
                 <input type="submit" id="submitBtn" class="submit-btn" value="Skapa nytt konto" data-action="register">
             </form>
@@ -218,38 +218,36 @@ export default class LoginView extends HTMLElement {
     }
 
     addSubmitEvent() {
+        const form = document.getElementById("signInUpForm");
         const submitBtn = document.getElementById("submitBtn");
-        submitBtn.addEventListener("click", (e) => {
+        form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
             let username;
             let email;
             let password;
 
-            if (e.target.dataset.action === "login") {
-                const form = document.getElementById("signInForm");
+            if (submitBtn.dataset.action === "login") {
+
+                const form = document.getElementById("signInUpForm");
                 let formData = new FormData(form);
+
                 email = formData.get("email");
                 password = formData.get("password");
 
-                // console.log(username);
-                // console.log(email);
-                // console.log(password);
-
-                authModel.login(email, password);
-            } else if (e.target.dataset.action === "register") {
-                const form = document.getElementById("signUpForm");
+                await authModel.login(email, password);
+            } else if (submitBtn.dataset.action === "register") {
+                const form = document.getElementById("signInUpForm");
                 let formData = new FormData(form);
+
                 username = formData.get("username");
                 email = formData.get("email");
                 password = formData.get("password");
 
-                // console.log(username);
-                // console.log(email);
-                // console.log(password);
-
-                authModel.register(username, email, password);
+                await authModel.register(username, email, password);
             }
+
+            window.location.hash = "mina-sidor";
         });
     }
 }
