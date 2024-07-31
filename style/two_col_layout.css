@@ -1,0 +1,19 @@
+.two-col-wrapper {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    gap: 10%;
+}
+
+.col-one,
+.col-two {
+    width: 100%;
+    padding: 1rem;
+}
+
+.col-two h1 {
+    margin-bottom: 50px;
+}

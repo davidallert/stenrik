@@ -52,6 +52,11 @@
         width: 50vw;
     }
 
+    .col-one,
+    .col-two {
+        width: 45%;
+    }
+
 }
 
 @media screen and (min-width: 1440px) {

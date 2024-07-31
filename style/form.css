@@ -207,11 +207,16 @@
     background-color: var(--white);
 }
 
+.sign-in-up-form {
+    width: 80vw;
+}
+
 form {
     display: flex;
     flex-direction: column;
     transition-duration: 0.3s;
-    width: 80vw;
+    margin: 0 auto;
+    width: 100%;
 }
 
 form input {

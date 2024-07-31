@@ -24,6 +24,11 @@ const authModel = {
 
     },
 
+    logout: async function logout() {
+        let { error } = await supabase.auth.signOut();
+        console.log(authModel.accessToken);
+    },
+
     register: async function register(username, email, password) {
         let { data, error } = await supabase.auth.signUp({
             email: email,

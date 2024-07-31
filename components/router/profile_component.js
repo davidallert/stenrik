@@ -15,7 +15,6 @@ export default class ProfileComponent extends HTMLElement {
 
     render() {
         this.innerHTML = `
-            <h1>Hello world</h1>
             <form>
                 <label for="displayName">Användarnamn</label>
                 <input type="text" name="displayName" value="${this.data.user_metadata.display_name}" readonly>
@@ -27,6 +26,5 @@ export default class ProfileComponent extends HTMLElement {
 
     async getUserData() {
         this.data = await authModel.getAllUserData();
-        console.log(this.data);
     }
 }

@@ -16,6 +16,7 @@ export default class NavComponent extends HTMLElement {
                 <ul class="nav-wrapper">
                     <a href=""><li class="nav-item">Karta</li></a>
                     <a href="#logga-in"><li class="nav-item">Logga in</li></a>
+                    <a href="#logga-ut"><li class="nav-item">Logga ut</li></a>
                     <a href="#mina-sidor"><li class="nav-item">Mina sidor</li></a>
                 </ul>
             </div>
