@@ -30,9 +30,14 @@ const mapModel = {
             // shadowAnchor: [1, 15.5],  // Default numbers.
             popupAnchor:  [-3, -29] // point from which the popup should open relative to the iconAnchor
         });
-        let markers = new L.MarkerClusterGroup();
+        let markers = new L.MarkerClusterGroup({
+            disableClusteringAtZoom: 16,
+            spiderfyOnMaxZoom: false,
+            showCoverageOnHover: false,
+        });
         let uniqueLocations = [];
-        let excludedLocations = ["övrigt", "fyndplats", "fossil åker", "område med fossil åkermark", "blästbrukslämning", "lägenhetsbebyggelse", "husgrund, historisk tid", "kemisk industri", "textilindustri", "boplatsområde", "boplats", "bytomt/gårdstomt", "depåfynd", "fyndsamling", "kolningsanläggning"];
+        let excludedLocations = [];
+        // let excludedLocations = ["övrigt", "fyndplats", "fossil åker", "område med fossil åkermark", "blästbrukslämning", "lägenhetsbebyggelse", "husgrund, historisk tid", "kemisk industri", "textilindustri", "boplatsområde", "boplats", "bytomt/gårdstomt", "depåfynd", "fyndsamling", "kolningsanläggning"];
         // console.log(pins);
         for (let pin of pins) {
             if (!excludedLocations.includes(pin.name.toLowerCase())) {
