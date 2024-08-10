@@ -1,3 +1,6 @@
+/**
+ * The Auth Model object includes functions that handle authentication of users and fetching of user data.
+ */
 
 import config from '../config.js';
 

@@ -1,3 +1,7 @@
+/**
+ * The RAA (RAÄ - Riksantikvarieämbetet) Model object includes functions that handle API calls to K-SAMSÖK.
+ */
+
 "use strict";
 
 // Fetch byggnad geodata: https://kulturarvsdata.se/ksamsok/api?method=search&hitsPerPage=10&query=itemType=byggnad+and+geoDataExists=j
@@ -15,10 +19,12 @@
 
 const apiModel = {
 
+    /**
+     * Fetches data from the K-SAMSÖK API, using a bounding box. (Four coordinates that make up a square, i.e. top left/right, bottom left/right of the screen).
+     * @param {Object} boundingBox 
+     * @returns {Array} An array containing all record objects found within the specified bounding box coordinates.
+     */
     fetchGeoData: async function fetchGeoData(boundingBox) {
-
-    // console.log(boundingBox);
-
     const response = await fetch(`https://kulturarvsdata.se/ksamsok/api?method=search&hitsPerPage=1000&query=itemType=kulturl%C3%A4mning+and+geoDataExists=j+and+subject=Milj%C3%B6%20AND%20serviceOrganization%3D%22RAÄ%22%20AND%20serviceName%3Dkmr_lamningar%20AND%20itemDescription%3D%22synlig%20ovan%20mark%22+and+boundingBox=/WGS84"${boundingBox.west} ${boundingBox.south} ${boundingBox.east} ${boundingBox.north}"`,
     {
         method: 'GET',
@@ -28,12 +34,17 @@ const apiModel = {
     });
 
     const result = await response.json();
-    // console.log(result);
+    console.log(result);
 
     // console.log(result.result.records);
     return result.result.records;
 },
 
+    /**
+     * Creates an array of pins/markers to be placed upon the map, based on the data provided by the fetchGeoData function.
+     * @param {Array} records An array containing all record objects found within the specified bounding box coordinates.
+     * @returns {Array} An array of objects.
+     */
     createPins: function createPins(records) {
         let pins = [];
         let building = false;
@@ -189,7 +200,6 @@ const apiModel = {
                 }
 
             }
-
 
             let coords = {
                 type: "MultiPolygon",

@@ -1,3 +1,7 @@
+/**
+ * The Location Model object includes functions that handle users' geolocation.
+ */
+
 const locationModel = {
     getInitialPosition: async function getInitialPosition() {
         const geolocationOptions = {

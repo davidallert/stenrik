@@ -27,6 +27,11 @@ export default class NavComponent extends HTMLElement {
 
     }
 
+    /**
+     * Adds a click event to the hamburger menu icon.
+     * The event animates and changes the icon from a hamburger menu to an X.
+     * It also shows/hides the entire menu.
+     */
     addHamburgerMenuEvent() {
         const navPopup = document.getElementById("navPopup");
         const hamburgerMenu = document.getElementById('hamburgerMenuBtn');
@@ -63,6 +68,10 @@ export default class NavComponent extends HTMLElement {
         })
     }
 
+    /**
+     * Switches the hamburger menu icon to an X when it is clicked.
+     * @param {String} icon The fontawesome icon name, as a string. I.e. 'fa-solid fa-bars'.
+     */
     switchIcon(icon) {
         const hamburgerMenuBtn = document.getElementById("hamburgerMenuBtn");
         let hamburgerMenuBtnIcon = document.getElementById("hamburgerMenuBtnIcon");
@@ -85,7 +94,11 @@ export default class NavComponent extends HTMLElement {
         }, 300);
     }
 
-    // TODO this code isn't DRY. It hides the menu when the links are clicked.
+    // TODO this code isn't DRY.
+    /**
+     * Add an event listener to each menu event. It hides the menu when a link is clicked.
+     * As the menu element isn't deleted, it only needs to be called once.
+     */
     addCloseNavPopupOnClickEvent() {
         let navItems = document.getElementsByClassName('nav-item');
         for (let item of navItems) {

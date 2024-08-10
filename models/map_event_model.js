@@ -1,3 +1,7 @@
+/**
+ * The Map Event Model object includes functions that handle event listeners related to the map.
+ */
+
 "use strict";
 
 import positioningModel from "./positioning_model.js";

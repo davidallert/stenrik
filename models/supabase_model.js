@@ -1,3 +1,7 @@
+/**
+ * The Supabase Model object includes functions that handle API calls to the Supabase database. Not currently in use.
+ */
+
 "use strict";
 
 // Doc: https://supabase.com/docs/guides/auth/passwords

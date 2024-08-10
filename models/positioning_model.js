@@ -1,3 +1,7 @@
+/**
+ * The Positioning Model object includes functions that handle positioning of elements on the page, such as dynamic centering.
+ */
+
 const positioningModel = {
     centerElementHorizontally: function centerElementHorizontally(element) {
         const left = (window.innerWidth / 2) - (element.clientWidth / 2);

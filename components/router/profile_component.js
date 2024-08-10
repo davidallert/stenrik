@@ -1,9 +1,12 @@
+/**
+ * Fetches and renders data about the user.
+ */
+
 import authModel from "../../models/auth_model.js";
 
 export default class ProfileComponent extends HTMLElement {
     constructor() {
         super();
-
 
         this.data = "";
     }
@@ -24,6 +27,9 @@ export default class ProfileComponent extends HTMLElement {
         `
     }
 
+    /**
+     * Get all user data from Supabase.
+     */
     async getUserData() {
         this.data = await authModel.getAllUserData();
     }
