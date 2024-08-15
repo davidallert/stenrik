@@ -19,7 +19,7 @@ export default class MapViewFromDb extends HTMLElement {
             <div id="flyToUserButton" class="icon-button fly-to-user-button"><i class="fa-solid fa-crosshairs"></i></div>
         </main>`;
 
-        this.map = mapModel.initMap(63.334591, 16.063240, 5);
+        this.map = mapModel.initMap(62.334591, 16.063240, 5);
 
         // let data = await supabaseModel.fetchData();
 
