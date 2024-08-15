@@ -1,5 +1,6 @@
 import positioningModel from "../../models/positioning_model.js";
 import locationModel from "../../models/location_model.js";
+import authModel from "../../models/auth_model.js";
 
 export default class NavComponent extends HTMLElement {
     constructor() {
@@ -16,15 +17,24 @@ export default class NavComponent extends HTMLElement {
                 <ul class="nav-wrapper">
                     <a href=""><li class="nav-item">Karta</li></a>
                     <a href="#logga-in"><li class="nav-item">Logga in</li></a>
-                    <a href="#logga-ut"><li class="nav-item">Logga ut</li></a>
+                    <a href="#logga-in" id="logout"><li class="nav-item">Logga ut</li></a>
                     <a href="#mina-sidor"><li class="nav-item">Mina sidor</li></a>
+                    <a href="#karta2"><li class="nav-item">Karta från DB</li></a>
                 </ul>
             </div>
             <div id="hamburgerMenuBtn" class="icon-button hamburger-menu-btn"><i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon noselect fa-solid fa-bars"></i></div>`
 
         this.addHamburgerMenuEvent();
         this.addCloseNavPopupOnClickEvent();
+        this.addLogoutEvent();
+    }
 
+    addLogoutEvent() {
+        let logoutBtn = document.getElementById("logout");
+        logoutBtn.addEventListener("click", async () => {
+            await authModel.logout();
+            authModel.accessToken = "";
+        })
     }
 
     /**

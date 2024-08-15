@@ -6,11 +6,11 @@ export default class MyPagesView extends HTMLElement {
     }
 
     connectedCallback() {
-        // if (!authModel.accessToken) {
-        //     window.location.hash = "logga-in";
-        // }
-
-        this.render();
+        if (!authModel.accessToken) {
+            window.location.hash = "logga-in";
+        } else {
+            this.render();
+        }
     }
 
     render() {

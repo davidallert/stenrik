@@ -2,12 +2,7 @@
  * The Auth Model object includes functions that handle authentication of users and fetching of user data.
  */
 
-import config from '../config.js';
-
-// Supabase.
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-const supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
+import supabase from "../util/supabase_client.js";
 
 const authModel = {
     accessToken: "",
@@ -29,7 +24,6 @@ const authModel = {
 
     logout: async function logout() {
         let { error } = await supabase.auth.signOut();
-        console.log(authModel.accessToken);
     },
 
     register: async function register(username, email, password) {
