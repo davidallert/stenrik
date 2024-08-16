@@ -7,6 +7,10 @@
     text-align: center;
 }
 
+.monument-icon {
+    font-size: large;
+}
+
 .leaflet-marker-pane > img {
     filter: drop-shadow(1px 1px 3px #000000a5)
 }
@@ -28,13 +32,13 @@
 }
 
 .marker-cluster-small div {
-    background-color: var(--color-alt-blue);
+    background-color: var(--base-color);
 }
 
 .marker-cluster-medium div {
-    background-color: var(--color-alt-green);
+    background-color: var(--color-alt-blue);
 }
 
 .marker-cluster-large div {
-    background-color: var(--base-color);
+    background-color: var(--color-alt-green);
 }

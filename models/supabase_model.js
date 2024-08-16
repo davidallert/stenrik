@@ -13,7 +13,7 @@ const supabaseModel = {
         let { data: site_data, error } = await supabase
         .from('site_data')
         .select('*')
-        .eq('site_type', ['Runristning']);
+        .eq('site_type', ['Runristning'])
         // .in('site_type', ['Runristning', 'Hällristning']);
 
         if (!error) {
