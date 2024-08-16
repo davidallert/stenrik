@@ -7,8 +7,8 @@
     text-align: center;
 }
 
-.monument-icon {
-    font-size: large;
+.fa-marker-icon {
+    font-size: x-large;
 }
 
 .leaflet-marker-pane > img {
