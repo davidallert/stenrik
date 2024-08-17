@@ -4,7 +4,7 @@
 
 "use strict";
 
-import supabase from "../util/supabase_client.js";
+import supabase from "../../util/supabase_client.js";
 
 // Doc: https://supabase.com/docs/guides/auth/passwords
 
@@ -13,17 +13,18 @@ const supabaseModel = {
         let { data: site_data, error } = await supabase
         .from('site_data')
         .select('*')
-        // .eq('site_type', ['Bro'])
+        // .eq('site_type', ['Fyr'])
         // .in('site_type', ['Kloster', 'Kyrka/kapell'])
-        .limit(25000);
+        .limit(1000);
 
         if (!error) {
             console.log(site_data);
             return site_data;
         }
-
         console.log(error);
-
+    },
+    fetchBoundingBoxData: async function fetchBoundingBoxData(boundingBox) {
+        console.log(boundingBox);
     }
 
 }

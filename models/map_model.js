@@ -2,7 +2,7 @@
  * The Map Model object includes functions that handle the initialization of the map, rendering of markers, etc.
  */
 
-import apiModel from "./raa_model.js";
+import apiModel from "./v1/raa_model.js";
 
 const mapModel = {
     getBoundingBoxCoords: async function getBoundingBoxCoords(map) {
