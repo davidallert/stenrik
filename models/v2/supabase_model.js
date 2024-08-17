@@ -15,7 +15,7 @@ const supabaseModel = {
         .select('*')
         // .eq('site_type', ['Fyr'])
         // .in('site_type', ['Kloster', 'Kyrka/kapell'])
-        .limit(1000);
+        .limit(5000);
 
         if (!error) {
             console.log(site_data);
