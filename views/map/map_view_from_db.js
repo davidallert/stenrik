@@ -2,6 +2,7 @@
 
 import mapModel from '../../models/v2/map_model.js';
 import mapEventModel from '../../models/v2/map_event_model.js';
+import supabaseModel from '../../models/v2/supabase_model.js';
 
 export default class MapViewFromDb extends HTMLElement {
     constructor() {
@@ -25,6 +26,7 @@ export default class MapViewFromDb extends HTMLElement {
 
         this.map = mapModel.initMap(62.334591, 16.063240, 5);
 
-        // let data = await supabaseModel.fetchData();
+        const records = await supabaseModel.fetchData();
+        mapModel.createMarkers(this.map, this.markers, this.addedSites, records);
     }
 }
