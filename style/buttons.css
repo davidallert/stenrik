@@ -15,6 +15,7 @@
     font-family: 'Abril Fatface', 'Dm Serif Display', serif;
     z-index: 400;
     color: var(--base-text-color);
+    transition-duration: 0.3s;
 }
 
 .search-button:hover {

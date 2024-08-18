@@ -11,3 +11,7 @@
 @import url('form.css');
 @import url('two_col_layout.css');
 @import url('desktop.css');
+
+.hidden {
+    visibility: hidden;
+}

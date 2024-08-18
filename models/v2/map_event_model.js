@@ -4,82 +4,25 @@
 
 "use strict";
 
-import positioningModel from "../positioning_model.js";
-import mapModel from "../v2/map_model.js";
 import locationModel from "../location_model.js";
-import supabaseModel from "./supabase_model.js";
 
 const mapEventModel = {
-    /**
-     * Adds an event listener to the Leaflet map, which tracks movement.
-     * When the event is triggered, a search button will appear at the top of the screen.
-     * @param {Object} map The Leaflet map object (this.map in map_view.js).
-     */
-    addSearchAreaOnMoveEvent: async function addSearchAreaOnMoveEvent(map, markers, addedSites) {
-        this.searchButtonEventTriggered = false;
-
-        map.on("moveend", (e) => { // Triggers at the end of the movement. Other options are "movestart" and "move".
-            // TODO Make sure the event is only triggered once for a unique set of bounds.
-            if (!this.searchButtonEventTriggered && map.getZoom() > 8) {
-                this.searchButtonEventTriggered = true;
-                // Create the search box element when the map is moved.
-                let searchButton = document.createElement("div");
-                let mapOverlay = document.getElementById("mapOverlay");
-
-                // Add style to the search box.
-                searchButton.textContent = "Sök i området";
-                searchButton.classList.add("search-button");
-                searchButton.id = "searchButton";
-
-                // Append to the wrapper element.
-                mapOverlay.append(searchButton);
-
-                // Initial centering of the search box.
-                positioningModel.centerElementHorizontally(searchButton);
-
-                // Add continuous centering of the search box if the window is changed/resized.
-                positioningModel.addCenterElementHorizontallyEvent(searchButton);
-
-                searchButton.addEventListener("click", () => {
-                    this.searchButtonClickEvent(map, markers, addedSites);
-                });
-            }
-        });
+    fadeElement: function fadeElement(element) {
+        element.style.backgroundColor = "#ff7153";
+        element.style.opacity = "0";
+        setTimeout(() => {
+            element.classList.toggle("hidden");
+            element.style.backgroundColor = "#ffffff";
+        }, 300);
     },
 
-    /**
-     * Adds a click event to the search button which is created by addSearchAreaEventOnMove.
-     * The button fades out and is then removed from the page.
-     * An API call is made, using the current bounding box coordinates.
-     * The records that were found is then turned into markers and added to the map.
-     * @param {Object} map The Leaflet map object (this.map in map_view.js).
-     */
-    searchButtonClickEvent: async function searchButtonClickEvent(map, markers, addedSites) {
-        // Fade the search button, then remove it after a duration of 300ms (Its transition-duration is 0.3s).
-        this.fadeSearchButton();
-
-        // Get the coords of the current bounding box via the mapModel.
-        const boundingBox = await mapModel.getBoundingBoxCoords(map);
-
-        // Fetch the data from within the current bounding box.
-        const records = await supabaseModel.fetchBoundingBoxData(boundingBox);
-
-        if (records) {
-            mapModel.createMarkers(map, markers, addedSites, records); // Create markers.
-        }
-
-        // Change the searchButtonEventTriggered flag in order to create a new search button when the map is moved.
-        this.searchButtonEventTriggered = false;
+    fadeInElement: function fadeInElement(element) {
+        element.classList.toggle("hidden");
+        element.style.opacity = "1";
     },
 
-    fadeSearchButton: function fadeSearchButton() {
-        let searchButton = document.getElementById("searchButton");
-        if (searchButton) {
-            searchButton.style.opacity = "0";
-            setTimeout(() => {
-                searchButton.remove();
-            }, 300);
-        }
+    screenFlash: function screenFlash() {
+        // Maybe create a function that makes the screen or borders flash when the user is too far or close enough to search. Green/red pulse/blink. Has to be easy on the eyes, though.
     },
 
     /**

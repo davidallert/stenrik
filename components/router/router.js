@@ -23,7 +23,7 @@ export default class AppRouter extends HTMLElement {
                 name: 'Om oss'
             },
             'karta': {
-                view: '<map-view-from-db></map-view-from-db>',
+                view: '<map-view-db></map-view-db>',
                 name: 'Karta 2.0'
             },
         };

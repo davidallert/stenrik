@@ -1,6 +1,6 @@
-import positioningModel from "../../models/positioning_model.js";
-import locationModel from "../../models/location_model.js";
-import authModel from "../../models/auth_model.js";
+import positioningModel from "../models/positioning_model.js";
+import locationModel from "../models/location_model.js";
+import authModel from "../models/auth_model.js";
 
 export default class NavComponent extends HTMLElement {
     constructor() {
