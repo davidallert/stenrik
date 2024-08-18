@@ -8,7 +8,7 @@ const checkIf = {
             check = true;
         })(navigator.userAgent||navigator.vendor||window.opera);
 
-        console.log(check);
+        // console.log(check);
 
         return check;
     }

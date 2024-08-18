@@ -1,6 +1,6 @@
 "use strict";
 
-import mapModel from '../../models/map_model.js';
+import mapModel from '../../models/v1/map_model.js';
 import getCoordinates from '../../models/nominatim.js';
 import locationModel from '../../models/location_model.js';
 import mapEventModel from '../../models/v1/map_event_model.js';

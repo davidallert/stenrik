@@ -6,7 +6,7 @@
 
 import positioningModel from "../positioning_model.js";
 import apiModel from "./raa_model.js";
-import mapModel from "../map_model.js";
+import mapModel from "../v1/map_model.js";
 import locationModel from "../location_model.js";
 
 const mapEventModel = {
