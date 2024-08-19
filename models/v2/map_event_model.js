@@ -8,7 +8,7 @@ import locationModel from "../location_model.js";
 
 const mapEventModel = {
     fadeElement: function fadeElement(element) {
-        element.style.backgroundColor = "#ff7153";
+        element.style.backgroundColor = "red";
         element.style.opacity = "0";
         setTimeout(() => {
             element.classList.toggle("hidden");

@@ -21,8 +21,9 @@ export default class MapComponent extends HTMLElement {
 
     async connectedCallback() {
         await this.render();
-        this.addSearchAreaOnMoveEvent(this.map);
-        this.initSearchButtonClickEvent();
+        this.addSearchAreaOnMoveEvent();
+        this.initSearchButton();
+        this.closeSearchButtonOnPopupOpen();
     }
 
     async render() {
@@ -159,7 +160,7 @@ export default class MapComponent extends HTMLElement {
         });
     }
 
-    initSearchButtonClickEvent() {
+    initSearchButton() {
         let searchButton = document.getElementById("searchButton");
 
         searchButton.style.opacity = "0";
@@ -196,5 +197,12 @@ export default class MapComponent extends HTMLElement {
         if (records) {
             this.createMarkers(records); // Create markers.
         }
+    }
+
+    closeSearchButtonOnPopupOpen() {
+        this.map.on('popupopen', function(e) {
+            let searchButton = document.getElementById("searchButton");
+            mapEventModel.fadeElement(searchButton);
+          });
     }
 }
