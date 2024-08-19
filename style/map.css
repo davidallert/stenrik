@@ -13,6 +13,10 @@
 
 .fa-location-icon {
     font-size: xx-large;
+    display: flex;
+    align-items: center;     /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    transform-origin: center;
 }
 
 .fa-location-arrow {
