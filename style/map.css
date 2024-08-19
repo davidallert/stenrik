@@ -12,15 +12,15 @@
 }
 
 .fa-location-icon {
-    /* font-size: x-large; */
-    display: flex;
-    align-items: center;     /* Center icon vertically */
-    justify-content: center; /* Center icon horizontally */
-    transform-origin: center;
+    font-size: x-large;
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center; */
 }
 
 .fa-location-arrow {
-    color: blue;
+    color: black;
     border: 1px solid black;
 }
 
