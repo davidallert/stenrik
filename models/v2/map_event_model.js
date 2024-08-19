@@ -89,7 +89,8 @@ const mapEventModel = {
     // Function to update the marker's rotation based on the device orientation
     updateOrientation: (e, locationMarker) => {
         let alpha = e.alpha; // 0-360 degrees
-        locationMarker.setRotationAngle(alpha);
+        const correctedAlpha = alpha - 45; // Adjust for the initial -45deg rotation
+        locationMarker.setRotationAngle(correctedAlpha);
     },
 
     removeSearchButtonOnPopupOpen: async function (map) {
