@@ -20,7 +20,7 @@
 }
 
 .fa-location-arrow {
-    color: var(--color-alt-green);
+    color: var(--black);
 }
 
 .leaflet-marker-pane > img {

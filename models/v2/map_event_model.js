@@ -48,7 +48,7 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: '<i class="fa-solid fa-location-arrow></i>',
+                    html: '<i class="fa-solid fa-location-arrow"></i>',
                     className: 'fa-location-icon',
                 });
 
