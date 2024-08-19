@@ -13,10 +13,10 @@
 
 .fa-location-icon {
     font-size: x-large;
-    /* display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    transform-origin: center; */
+    transform-origin: center;
 }
 
 .fa-location-arrow {

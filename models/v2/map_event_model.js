@@ -61,6 +61,7 @@ const mapEventModel = {
                 locationModel.watchPosition((position) => {
                     locationModel.updatePosition(position, locationMarker);
                 });
+                locationMarker.setRotationOrigin("center center");
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
