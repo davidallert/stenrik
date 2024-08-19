@@ -19,7 +19,6 @@ export default class NavComponent extends HTMLElement {
                     <a href="#logga-in"><li class="nav-item">Logga in</li></a>
                     <a href="#logga-in" id="logout"><li class="nav-item">Logga ut</li></a>
                     <a href="#mina-sidor"><li class="nav-item">Mina sidor</li></a>
-                    <a href="#karta"><li class="nav-item">Karta från DB</li></a>
                 </ul>
             </div>
             <div id="hamburgerMenuBtn" class="icon-button hamburger-menu-btn"><i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon noselect fa-solid fa-bars"></i></div>`

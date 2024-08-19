@@ -7,8 +7,8 @@ export default class AppRouter extends HTMLElement {
 
         this.allRoutes = {
             '': {
-                view: '<map-view></map-view>',
-                name: 'Karta'
+                view: '<map-view-db></map-view-db>',
+                name: 'Stenrik'
             },
             'logga-in': {
                 view: '<login-view></login-view>',
@@ -23,7 +23,7 @@ export default class AppRouter extends HTMLElement {
                 name: 'Om oss'
             },
             'karta': {
-                view: '<map-view-db></map-view-db>',
+                view: '<map-view></map-view>',
                 name: 'Karta 2.0'
             },
         };

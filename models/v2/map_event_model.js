@@ -38,17 +38,77 @@ const mapEventModel = {
      * The button centers the map around the user's position and zooms in.
      * @param {Object} map The Leaflet map object (this.map in map_view.js).
      */
-    addFlyToUserButtonEvent: async function addFlyToUserButtonEvent(map) {
-        const flyToUserButton = document.getElementById("flyToUserButton");
-        flyToUserButton.addEventListener("click", (e) => {
-            // Get the current position using the locationModel.
-            const position = locationModel.getCurrentPosition(); // Uses watchPosition in location_model.js.
-            const zoomLevel = 17; // Set the zoom level.
-            map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
-                animate: true,
-                duration: 1
-            });
+    addLocationTrackingEvent: function addLocationTrackingEvent(map) {
+        this.init = true;
+        this.locationMarker = null;
+        const zoomLevel = 17;
+        const locationTrackingBtn = document.getElementById("locationTrackingBtn");
+        locationTrackingBtn.addEventListener("click", async () => {
+            if (this.init) {
+                const position = await locationModel.getInitialPosition();
+                locationModel.setCurrentPosition(position);
+                const locationMarkerIcon = L.divIcon({
+                    html: '<i class="fa-solid fa-location-arrow"></i>',
+                    className: 'fa-location-icon',
+                });
+
+                this.locationMarker = L.marker(
+                    [position.coords.latitude, position.coords.longitude],
+                    { icon: locationMarkerIcon }
+                );
+                this.locationMarker.addTo(map);
+                locationModel.watchPosition((position) => {
+                    locationModel.updatePosition(position, this.locationMarker);
+                });
+
+                locationTrackingBtn.childNodes[0].style.color = "#abd2df";
+
+                map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
+                    animate: true,
+                    duration: 1
+                });
+
+                // Listen for device orientation changes
+                if (window.DeviceOrientationEvent) {
+                    window.addEventListener('deviceorientation', this.updateOrientation, true);
+                }
+
+                this.init = false;
+            } else if (!this.init) {
+                const position = locationModel.getCurrentPosition();
+                map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
+                    animate: true,
+                    duration: 1
+                });
+            }
         })
+    },
+
+    // Function to update the marker's rotation based on the device orientation
+    updateOrientation: function updateOrientation(e) {
+        let alpha = e.alpha; // 0-360 degrees
+        this.locationMarker.setRotationAngle(alpha);
+    },
+
+    removeSearchButtonOnPopupOpen: async function (map) {
+        map.on('popupopen', () => {
+            const searchButton = document.getElementById("searchButton");
+            mapEventModel.fadeElement(searchButton);
+            // Workaround to force the button to be hidden whenever a marker is open,
+            // even if the moveend event is triggered and the zoomlevel is valid.
+            // This prevents the search button from blocking the popup content.
+            searchButton.style.display = "none";
+          });
+    },
+
+    addSearchButtonOnPopupOpen: async function addSearchButtonOnPopupOpen(map) {
+        map.on('popupclose', () => {
+            const searchButton = document.getElementById("searchButton");
+            searchButton.style.display = "flex"; // Must change from display: none; before fadeInElement is called.
+            if (map.getZoom() >= 9) {
+                mapEventModel.fadeInElement(searchButton);
+            }
+          });
     }
 }
 

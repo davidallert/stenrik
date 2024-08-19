@@ -21,10 +21,11 @@ export default class MapComponent extends HTMLElement {
 
     async connectedCallback() {
         await this.render();
+        mapEventModel.addLocationTrackingEvent(this.map);
         this.addSearchAreaOnMoveEvent();
         this.initSearchButton();
-        this.removeSearchButtonOnPopupOpen();
-        this.addSearchButtonOnPopupOpen();
+        mapEventModel.removeSearchButtonOnPopupOpen(this.map);
+        mapEventModel.addSearchButtonOnPopupOpen(this.map);
     }
 
     async render() {
@@ -32,6 +33,7 @@ export default class MapComponent extends HTMLElement {
         <main id="mapOverlay" class="map-overlay">
             <div id="map" class="map" style="height: 100vh; width: 100%;"></div>
             <div id="searchButton" class="search-button hidden">Sök i området</div>
+            <div id="locationTrackingBtn" class="icon-button fly-to-user-button"><i class="fa-solid fa-location-crosshairs"></i></i></div>
         </main>`;
 
         this.map = this.initMap(62.334591, 16.063240, 5);
@@ -193,24 +195,4 @@ export default class MapComponent extends HTMLElement {
         }
     }
 
-    removeSearchButtonOnPopupOpen() {
-        this.map.on('popupopen', () => {
-            const searchButton = document.getElementById("searchButton");
-            mapEventModel.fadeElement(searchButton);
-            // Workaround to force the button to be hidden whenever a marker is open,
-            // even if the moveend event is triggered and the zoomlevel is valid.
-            // This prevents the search button from blocking the popup content.
-            searchButton.style.display = "none";
-          });
-    }
-
-    addSearchButtonOnPopupOpen() {
-        this.map.on('popupclose', () => {
-            const searchButton = document.getElementById("searchButton");
-            searchButton.style.display = "flex"; // Must change from display: none; before fadeInElement is called.
-            if (this.map.getZoom() >= 9) {
-                mapEventModel.fadeInElement(searchButton);
-            }
-          });
-    }
 }

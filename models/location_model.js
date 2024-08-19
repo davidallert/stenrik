@@ -56,6 +56,10 @@ const locationModel = {
         return this.currentPosition;
     },
 
+    setCurrentPosition: function getCurrentPosition(currentPosition) {
+        this.currentPosition = currentPosition;
+    },
+
     getWatchId: function getWatchId() {
         return this.watchId;
     }
