@@ -21,7 +21,6 @@
 
 .fa-location-arrow {
     color: #000;
-    transform: rotate(-45deg);
 }
 
 .leaflet-marker-pane > img {
