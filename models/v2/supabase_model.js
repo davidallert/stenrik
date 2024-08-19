@@ -12,9 +12,9 @@ const supabaseModel = {
     fetchData: async function fetchData() {
         let { data: site_data, error } = await supabase
         .from('site_data')
-        .select('*')
+        .select('id, site_id, raa_id, site_name, site_type, municipality, parish, province, county, desc_terrain, desc_orientation, desc_tradition, desc_text, coordinates')
         .eq('site_type', ['Runristning'])
-        // .limit(10)
+        // .limit(3000)
         // .in('site_type', ['Kloster', 'Kyrka/kapell'])
 
         if (!error) {
@@ -30,7 +30,7 @@ const supabaseModel = {
             south: boundingBox.south,
             east: boundingBox.east, 
             north: boundingBox.north,
-            max_rows: 10000
+            max_rows: 5000
         });
     
         if (error) {

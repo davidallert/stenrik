@@ -147,9 +147,9 @@ export default class MapComponent extends HTMLElement {
         this.map.on("moveend", (e) => { // Triggers at the end of the movement. Other options are "movestart" and "move".
             // TODO Make sure the event is only triggered once for a unique set of bounds.
             const searchButton = document.getElementById("searchButton");
-            if (this.map.getZoom() >= 8) { //8
+            if (this.map.getZoom() >= 9) {
                 mapEventModel.fadeInElement(searchButton);
-            } else if (this.map.getZoom() < 8) {
+            } else if (this.map.getZoom() < 9) {
                 mapEventModel.fadeElement(searchButton);
             }
         });
@@ -208,7 +208,7 @@ export default class MapComponent extends HTMLElement {
         this.map.on('popupclose', () => {
             const searchButton = document.getElementById("searchButton");
             searchButton.style.display = "flex"; // Must change from display: none; before fadeInElement is called.
-            if (this.map.getZoom() >= 8) {
+            if (this.map.getZoom() >= 9) {
                 mapEventModel.fadeInElement(searchButton);
             }
           });
