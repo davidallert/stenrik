@@ -14,7 +14,7 @@ const supabaseModel = {
         .from('site_data')
         .select('*')
         .eq('site_type', ['Runristning'])
-        .limit(10)
+        // .limit(10)
         // .in('site_type', ['Kloster', 'Kyrka/kapell'])
 
         if (!error) {
