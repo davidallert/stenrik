@@ -23,7 +23,8 @@ export default class MapComponent extends HTMLElement {
         await this.render();
         this.addSearchAreaOnMoveEvent();
         this.initSearchButton();
-        this.closeSearchButtonOnPopupOpen();
+        this.removeSearchButtonOnPopupOpen();
+        this.addSearchButtonOnPopupOpen();
     }
 
     async render() {
@@ -146,16 +147,10 @@ export default class MapComponent extends HTMLElement {
         this.map.on("moveend", (e) => { // Triggers at the end of the movement. Other options are "movestart" and "move".
             // TODO Make sure the event is only triggered once for a unique set of bounds.
             const searchButton = document.getElementById("searchButton");
-            const computedStyle = window.getComputedStyle(searchButton);
-            const visibility = computedStyle.visibility;
             if (this.map.getZoom() >= 8) { //8
-                if (visibility === "hidden") {
-                    mapEventModel.fadeInElement(searchButton);
-                }
+                mapEventModel.fadeInElement(searchButton);
             } else if (this.map.getZoom() < 8) {
-                if (visibility === "visible") {
-                    mapEventModel.fadeElement(searchButton);
-                }
+                mapEventModel.fadeElement(searchButton);
             }
         });
     }
@@ -185,7 +180,6 @@ export default class MapComponent extends HTMLElement {
      */
     async searchButtonClickEvent() {
         // Fade the search button, then remove it after a duration of 300ms (Its transition-duration is 0.3s).
-
         let searchButton = document.getElementById("searchButton");
         mapEventModel.fadeElement(searchButton);
 
@@ -195,14 +189,28 @@ export default class MapComponent extends HTMLElement {
         // Fetch the data from within the current bounding box.
         const records = await supabaseModel.fetchBoundingBoxData(boundingBox);
         if (records) {
-            this.createMarkers(records); // Create markers.
+            this.createMarkers(records);
         }
     }
 
-    closeSearchButtonOnPopupOpen() {
-        this.map.on('popupopen', function(e) {
-            let searchButton = document.getElementById("searchButton");
+    removeSearchButtonOnPopupOpen() {
+        this.map.on('popupopen', () => {
+            const searchButton = document.getElementById("searchButton");
             mapEventModel.fadeElement(searchButton);
+            // Workaround to force the button to be hidden whenever a marker is open,
+            // even if the moveend event is triggered and the zoomlevel is valid.
+            // This prevents the search button from blocking the popup content.
+            searchButton.style.display = "none";
+          });
+    }
+
+    addSearchButtonOnPopupOpen() {
+        this.map.on('popupclose', () => {
+            const searchButton = document.getElementById("searchButton");
+            searchButton.style.display = "flex"; // Must change from display: none; before fadeInElement is called.
+            if (this.map.getZoom() >= 8) {
+                mapEventModel.fadeInElement(searchButton);
+            }
           });
     }
 }

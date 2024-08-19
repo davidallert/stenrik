@@ -14,7 +14,7 @@ const supabaseModel = {
         .from('site_data')
         .select('*')
         .eq('site_type', ['Runristning'])
-        .limit(100)
+        .limit(10)
         // .in('site_type', ['Kloster', 'Kyrka/kapell'])
 
         if (!error) {
@@ -30,7 +30,7 @@ const supabaseModel = {
             south: boundingBox.south,
             east: boundingBox.east, 
             north: boundingBox.north,
-            max_rows: 100000
+            max_rows: 10000
         });
     
         if (error) {

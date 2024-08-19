@@ -21,7 +21,7 @@
 .search-button:hover {
     transition-duration: 0.3s;
     cursor: pointer;
-    background-color: var(--base-transparent-color);
+    background-color: var(--base-transparent-color)!important; /* Had to add important here, in order to override element.style.backgroundColor in map_event_model.js (fadeElement: function fadeElement(element)) */
 }
 
 .icon-button {

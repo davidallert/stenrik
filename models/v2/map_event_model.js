@@ -8,17 +8,25 @@ import locationModel from "../location_model.js";
 
 const mapEventModel = {
     fadeElement: function fadeElement(element) {
-        element.style.backgroundColor = "red";
-        element.style.opacity = "0";
-        setTimeout(() => {
-            element.classList.toggle("hidden");
-            element.style.backgroundColor = "#ffffff";
-        }, 300);
+        const computedStyle = window.getComputedStyle(element);
+        const visibility = computedStyle.visibility;
+        if (visibility === "visible") {
+            element.style.backgroundColor = "#D19FAE";
+            element.style.opacity = "0";
+            setTimeout(() => {
+                element.classList.toggle("hidden");
+                element.style.backgroundColor = "#ffffff";
+            }, 300);
+        }
     },
 
     fadeInElement: function fadeInElement(element) {
-        element.classList.toggle("hidden");
-        element.style.opacity = "1";
+        const computedStyle = window.getComputedStyle(element);
+        const visibility = computedStyle.visibility;
+        if (visibility === "hidden") {
+            element.classList.toggle("hidden");
+            element.style.opacity = "1";
+        }
     },
 
     screenFlash: function screenFlash() {
