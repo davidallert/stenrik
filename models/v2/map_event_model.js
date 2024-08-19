@@ -45,6 +45,7 @@ const mapEventModel = {
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
         locationTrackingBtn.addEventListener("click", async () => {
             if (init) {
+                init = false;
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
@@ -75,7 +76,6 @@ const mapEventModel = {
                     }, true);
                 }
 
-                init = false;
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
