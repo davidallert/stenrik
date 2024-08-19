@@ -39,12 +39,12 @@ const mapEventModel = {
      * @param {Object} map The Leaflet map object (this.map in map_view.js).
      */
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
-        this.init = true;
-        this.locationMarker = null;
+        let init = true;
+        let locationMarker = null;
         const zoomLevel = 17;
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
         locationTrackingBtn.addEventListener("click", async () => {
-            if (this.init) {
+            if (init) {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
@@ -52,13 +52,13 @@ const mapEventModel = {
                     className: 'fa-location-icon',
                 });
 
-                this.locationMarker = L.marker(
+                locationMarker = L.marker(
                     [position.coords.latitude, position.coords.longitude],
-                    { icon: locationMarkerIcon }
+                    { icon: locationMarkerIcon, rotationAngle: 0 }
                 );
-                this.locationMarker.addTo(map);
+                locationMarker.addTo(map);
                 locationModel.watchPosition((position) => {
-                    locationModel.updatePosition(position, this.locationMarker);
+                    locationModel.updatePosition(position, locationMarker);
                 });
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
@@ -70,11 +70,13 @@ const mapEventModel = {
 
                 // Listen for device orientation changes
                 if (window.DeviceOrientationEvent) {
-                    window.addEventListener('deviceorientation', this.updateOrientation, true);
+                    window.addEventListener('deviceorientation', (e) => {
+                        this.updateOrientation(e, locationMarker)
+                    }, true);
                 }
 
-                this.init = false;
-            } else if (!this.init) {
+                init = false;
+            } else if (!init) {
                 const position = locationModel.getCurrentPosition();
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                     animate: true,
@@ -85,9 +87,9 @@ const mapEventModel = {
     },
 
     // Function to update the marker's rotation based on the device orientation
-    updateOrientation: function updateOrientation(e) {
+    updateOrientation: (e, locationMarker) => {
         let alpha = e.alpha; // 0-360 degrees
-        this.locationMarker.setRotationAngle(alpha);
+        locationMarker.setRotationAngle(alpha);
     },
 
     removeSearchButtonOnPopupOpen: async function (map) {
