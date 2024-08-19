@@ -12,7 +12,7 @@
 }
 
 .fa-location-icon {
-    font-size: xx-large;
+    font-size: x-large;
     display: flex;
     align-items: center;     /* Center icon vertically */
     justify-content: center; /* Center icon horizontally */
@@ -21,6 +21,7 @@
 
 .fa-location-arrow {
     color: #000;
+    transform: rotate(-45deg);
 }
 
 .leaflet-marker-pane > img {
