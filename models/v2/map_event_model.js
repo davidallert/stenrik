@@ -78,6 +78,9 @@ const mapEventModel = {
                     }, true);
                 }
 
+                const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                locationMarkerIconEl.style.transform = `rotate(-45deg)`;
+
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
