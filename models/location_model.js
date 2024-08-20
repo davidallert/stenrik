@@ -23,6 +23,7 @@ const locationModel = {
         });
     },
     watchPosition: function(callback) {
+        this.currentPosition;
         const geolocationOptions = {
             enableHighAccuracy: true,
             maximumAge: 0, // Ensures that the position is always updated, never using a cached one.
@@ -35,7 +36,8 @@ const locationModel = {
         if ("geolocation" in navigator) {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
-                    this.currentPosition = position;
+                    this.setCurrentPosition(position);
+                    this.setCurrentDirection(position);
                     callback(position);
                 },
                 (error) => console.error('Geolocation update error:', error),
@@ -56,8 +58,18 @@ const locationModel = {
         return this.currentPosition;
     },
 
-    setCurrentPosition: function getCurrentPosition(currentPosition) {
+    setCurrentPosition: function setCurrentPosition(currentPosition) {
         this.currentPosition = currentPosition;
+    },
+
+    getCurrentDirection: function getCurrentDirection() {
+        return this.currentDirection;
+    },
+
+    setCurrentDirection: function setCurrentDirection(position) {
+        if (position.coords.heading) {
+            this.currentDirection = heading;
+        }
     },
 
     getWatchId: function getWatchId() {

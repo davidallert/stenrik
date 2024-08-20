@@ -21,8 +21,8 @@ export default class MapComponent extends HTMLElement {
 
     async connectedCallback() {
         await this.render();
-        mapEventModel.test(this.map);
-        // mapEventModel.addLocationTrackingEvent(this.map);
+        // mapEventModel.test(this.map);
+        mapEventModel.addLocationTrackingEvent(this.map);
         this.addSearchAreaOnMoveEvent();
         this.initSearchButton();
         mapEventModel.removeSearchButtonOnPopupOpen(this.map);
