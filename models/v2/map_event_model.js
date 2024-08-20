@@ -39,7 +39,7 @@ const mapEventModel = {
         let locationMarker = null;
     
         const locationMarkerIcon = L.divIcon({
-            html: `<i class="fa-solid fa-caret-up"></i>`,
+            html: `<i class="fa-solid fa-chevron-up"></i>`,
             className: 'fa-location-icon',
         });
     
@@ -56,6 +56,8 @@ const mapEventModel = {
             // Wait until we have a non-zero initial alpha
             if (initialAlpha === null && alpha !== 0) {
                 initialAlpha = alpha;
+                correctedAlpha = (360 - (alpha - initialAlpha)) % 360;
+                locationMarker.setRotationAngle(correctedAlpha);
             }
     
             if (initialAlpha !== null) {
