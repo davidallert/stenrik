@@ -40,7 +40,7 @@ const mapEventModel = {
         window.addEventListener("deviceorientation", (event) => {
             console.log(`${event.alpha} : ${event.beta} : ${event.gamma}`);
             alpha = event.alpha;
-            correctedAlpha = (360 - alpha) % 360;
+            correctedAlpha = (360 - alpha - 45) % 360;
             console.log(correctedAlpha);
             locationMarker.setRotationAngle(correctedAlpha);
             locationMarker.bindPopup(`${alpha, correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'})
