@@ -57,6 +57,7 @@ const mapEventModel = {
                     [position.coords.latitude, position.coords.longitude],
                     { icon: locationMarkerIcon, rotationAngle: 0 }
                 );
+
                 locationMarker.addTo(map);
                 locationModel.watchPosition((position) => {
                     locationModel.updatePosition(position, locationMarker);
@@ -94,7 +95,7 @@ const mapEventModel = {
         const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
         locationMarker.setRotationAngle(adjustedAlpha);
         console.log(adjustedAlpha);
-        locationMarkerIconEl.style.transform = `rotate${adjustedAlpha}deg`;
+        locationMarkerIconEl.style.transform = `rotate(${adjustedAlpha}deg)`;
 
     },
 
