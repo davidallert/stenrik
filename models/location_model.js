@@ -68,7 +68,7 @@ const locationModel = {
 
     setCurrentDirection: function setCurrentDirection(position) {
         if (position.coords.heading) {
-            this.currentDirection = heading;
+            this.currentDirection = position.coords.heading;
         }
     },
 
