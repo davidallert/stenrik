@@ -39,33 +39,34 @@ const mapEventModel = {
         let locationMarker = null;
     
         const locationMarkerIcon = L.divIcon({
-            html: `<i id="locationMarkerIconElement" class="fa-solid fa-up-long"></i>`,
+            html: `<i id="locationMarkerIconElement" class="fa-solid fa-angles-up"></i>`,
             className: 'fa-location-icon',
         });
     
         locationMarker = L.marker(
             [57.490224, 12.632039],
-            { icon: locationMarkerIcon, rotationOrigin: "center center" }
+            { icon: locationMarkerIcon }
         );
     
         locationMarker.addTo(map);
     
         window.addEventListener("deviceorientation", (event) => {
             alpha = event.alpha;
-    
+            let locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
+
             // Wait until we have a non-zero initial alpha
             if (initialAlpha === null && alpha !== 0) {
-                let locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
                 initialAlpha = alpha;
-                correctedAlpha = (360 - (alpha - initialAlpha)) % 360;
-                locationMarker.setRotationAngle(correctedAlpha);
+                // correctedAlpha = (360 - (alpha - initialAlpha)) % 360;
+                // locationMarker.setRotationAngle(correctedAlpha);
                 locationMarkerIconElement.style.transform = `rotate(${initialAlpha}deg)`;
             }
     
             if (initialAlpha !== null) {
                 // Calculate corrected angle based on initial alpha
                 correctedAlpha = (360 - (alpha - initialAlpha)) % 360;
-                locationMarker.setRotationAngle(correctedAlpha);
+                locationMarkerIconElement.style.transform = `rotate(${correctedAlpha}deg)`;
+                // locationMarker.setRotationAngle(correctedAlpha);
             }
     
             locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}, initialAlpha: ${initialAlpha}`, {'maxHeight': '500', 'maxWidth': '500'});
