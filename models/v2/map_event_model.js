@@ -55,7 +55,7 @@ const mapEventModel = {
                 });
                 locationMarker = L.marker(
                     [position.coords.latitude, position.coords.longitude],
-                    { icon: locationMarkerIcon, rotationAngle: -45 }
+                    { icon: locationMarkerIcon, rotationAngle: 0 }
                 );
 
                 locationMarker.addTo(map);
