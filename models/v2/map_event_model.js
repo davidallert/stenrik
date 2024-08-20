@@ -44,7 +44,7 @@ const mapEventModel = {
                 init = false;
                 alpha = event.alpha;
                 correctedAlpha = (360 - alpha) % 360;
-                adjustedAlpha = (360 - alpha - 45) % 360;
+                adjustedAlpha = (360 - alpha + 45) % 360;
                 const locationMarkerIcon = L.divIcon({
                     html: `<i class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: ${adjustedAlpha}deg;""></i>`,
                     className: 'fa-location-icon',
