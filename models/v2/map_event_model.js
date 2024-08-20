@@ -91,7 +91,8 @@ const mapEventModel = {
 
     updateOrientation: (e, locationMarker) => {
         let alpha = e.alpha; // 0-360 degrees
-        locationMarker.setRotationAngle(alpha);
+        let adjustedAlpha = (360 - alpha) % 360;
+        locationMarker.setRotationAngle(adjustedAlpha);
     },
 
     removeSearchButtonOnPopupOpen: async function (map) {
