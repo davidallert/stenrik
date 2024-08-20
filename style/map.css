@@ -20,7 +20,7 @@
 }
 
 .fa-location-arrow {
-    color: aquamarine;
+    color: var(--base-text-color);
     transform-origin: center;
 }
 
