@@ -32,42 +32,110 @@ const mapEventModel = {
     screenFlash: function screenFlash() {
         // Maybe create a function that makes the screen or borders flash when the user is too far or close enough to search. Green/red pulse/blink. Has to be easy on the eyes, though.
     },
+    // test: (map) => {
+    //     let alpha = null;
+    //     let initialAlpha = null;
+    //     let correctedAlpha = null;
+    //     let locationMarker = null;
+    //     let testOnce = true;
+
+    //     const locationMarkerIcon = L.divIcon({
+    //         html: `<i id="locationMarkerIconElement" class="fa-solid fa-upload"></i>`,
+    //         className: 'fa-location-icon',
+    //     });
+    
+    //     locationMarker = L.marker(
+    //         [57.490224, 12.632039],
+    //         { icon: locationMarkerIcon }
+    //     );
+    //     locationMarker.addTo(map);
+
+    //     let locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
+
+    //     window.addEventListener("deviceorientation", (event) => {
+    //         alpha = event.alpha;
+    //         console.log(alpha);
+    //         if (testOnce && alpha) {
+    //             testOnce = false;
+    //             correctedAlpha = (360 - alpha) % 360;
+    //             locationMarkerIconElement.style.transform = `rotate(${correctedAlpha}deg)`;
+    //             locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}, Initial: ${initialAlpha}, Absolute: ${event.absolute}`, {'maxHeight': '500', 'maxWidth': '300'});
+    //         }
+    //     });
+    // },
+    
     test: (map) => {
-        let alpha = null;
         let initialAlpha = null;
+        let locationMarker = null;
+        let locationMarkerIconElement = null;
+
+        const locationMarkerIcon = L.divIcon({
+          html: `<i id="locationMarkerIconElement" class="fa-solid fa-upload"></i>`,
+          className: 'fa-location-icon',
+        });
+
+        locationMarker = L.marker(
+          [57.490224, 12.632039],
+          { icon: locationMarkerIcon }
+        );
+        locationMarker.addTo(map);
+
+        locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
+
+        mapEventModel.waitForDeviceOrientation()
+          .then((event) => {
+            initialAlpha = event.alpha;
+            mapEventModel.handleOrientationEvent(event);
+          })
+          .catch((error) => {
+            console.error('Error waiting for deviceorientation event:', error);
+            // Handle the error, e.g., display a message to the user
+          });
+      },
+
+      handleOrientationEvent: (event) => {
+        let alpha = null;
         let correctedAlpha = null;
         let locationMarker = null;
-        let testOnce = true;
+        alpha = event.alpha;
 
+        if (alpha !== null) {
+          correctedAlpha = (360 - alpha) % 360;
+          locationMarkerIconElement.style.transform = `rotate(${correctedAlpha}deg)`;
+        //   locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}, Initial: ${initialAlpha}, Absolute: ${event.absolute}`, {'maxHeight': '500', 'maxWidth': '300'});
+        }
+      },
 
-        window.addEventListener("deviceorientation", (event) => {
-            alpha = event.alpha;
-            console.log(alpha);
-            if (testOnce && alpha) {
-                testOnce = false;
-
-                const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconElement" class="fa-solid fa-upload"></i>`,
-                    className: 'fa-location-icon',
-                });
-            
-                locationMarker = L.marker(
-                    [57.490224, 12.632039],
-                    { icon: locationMarkerIcon }
-                );
-                locationMarker.addTo(map);
-                let locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
-
-                correctedAlpha = (360 - alpha) % 360;
-                locationMarkerIconElement.style.transform = `rotate(${correctedAlpha}deg)`;
-                locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}, initialAlpha: ${initialAlpha}`, {'maxHeight': '500', 'maxWidth': '500'});
+      waitForDeviceOrientation: () => {
+        return new Promise((resolve, reject) => {
+          let orientationEventFired = false;
+    
+          const handleOrientationEvent = (event) => {
+            orientationEventFired = true;
+    
+            // Check if event.alpha is valid
+            if (typeof event.alpha === 'number') {
+              window.removeEventListener('deviceorientation', handleOrientationEvent);
+              resolve(event);
+            } else {
+              reject(new Error('event.alpha is not a valid number'));
             }
-
+          };
+    
+          if (window.addEventListener) {
+            window.addEventListener('deviceorientation', handleOrientationEvent, false);
+          } else if (window.attachEvent) {
+            window.attachEvent('deviceorientation', handleOrientationEvent);
+          }
+    
+          // Reject the promise after a timeout, in case the event doesn't fire
+          setTimeout(() => {
+            if (!orientationEventFired) {
+              reject(new Error('Timeout waiting for deviceorientation event'));
+            }
+          }, 5000);
         });
-    },
-    
-    
-    
+      },
 
 
     /**
