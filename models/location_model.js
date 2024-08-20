@@ -77,7 +77,6 @@ const locationModel = {
         if (orientation) {
             let correctedAlpha = (360 - orientation);
             locationModel.orientation = correctedAlpha;
-            console.log(locationModel.orientation);
         }
     },
 
