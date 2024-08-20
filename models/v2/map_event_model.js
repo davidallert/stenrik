@@ -54,7 +54,6 @@ const mapEventModel = {
                     html: '<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow"></i>',
                     className: 'fa-location-icon',
                 });
-
                 locationMarker = L.marker(
                     [position.coords.latitude, position.coords.longitude],
                     { icon: locationMarkerIcon, rotationAngle: 0 }
@@ -96,7 +95,7 @@ const mapEventModel = {
         locationMarker.setRotationAngle(adjustedAlpha);
         if (initRotation) {
             const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-            locationMarkerIconEl.style.transform = `rotate(${adjustedAlpha}deg)`;
+            locationMarkerIconEl.style.transform = `rotate(${alpha}deg)`;
         }
     },
 
