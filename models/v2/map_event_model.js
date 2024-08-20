@@ -41,16 +41,20 @@ const mapEventModel = {
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
         let init = true;
         let locationMarker = null;
-        this.lastAlpha = null;
         const zoomLevel = 17;
+        let alpha = 0;
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
+        window.addEventListener("deviceorientation", (event) => {
+            console.log(`${event.alpha} : ${event.beta} : ${event.gamma}`);
+            alpha = event.alpha;
+          });
         locationTrackingBtn.addEventListener("click", async () => {
             if (init) {
                 init = false;
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: '<i id="locationMarkerIconEl" <i class="fa-solid fa-location-arrow"></i>',
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: ${alpha - 45}deg;""></i>`,
                     className: 'fa-location-icon',
                 });
                 locationMarker = L.marker(
@@ -78,9 +82,6 @@ const mapEventModel = {
                     }, true);
                 }
 
-                const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                locationMarkerIconEl.style.transform = `rotate(-45deg)`;
-
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
@@ -94,10 +95,10 @@ const mapEventModel = {
     updateOrientation: (e, locationMarker) => {
         let alpha = e.alpha; // 0-360 degrees
         let adjustedAlpha = (360 - alpha) % 360;
+
         locationMarker.setRotationAngle(adjustedAlpha);
         // const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
         // locationMarkerIconEl.style.transform = `rotate(${adjustedAlpha}deg)`;
-        console.log(adjustedAlpha);
     },
 
     removeSearchButtonOnPopupOpen: async function (map) {
