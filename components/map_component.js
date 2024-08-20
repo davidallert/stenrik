@@ -21,7 +21,8 @@ export default class MapComponent extends HTMLElement {
 
     async connectedCallback() {
         await this.render();
-        mapEventModel.addLocationTrackingEvent(this.map);
+        mapEventModel.test(this.map);
+        // mapEventModel.addLocationTrackingEvent(this.map);
         this.addSearchAreaOnMoveEvent();
         this.initSearchButton();
         mapEventModel.removeSearchButtonOnPopupOpen(this.map);
@@ -38,9 +39,9 @@ export default class MapComponent extends HTMLElement {
 
         this.map = this.initMap(62.334591, 16.063240, 5);
 
-        const records = await supabaseModel.fetchData();
+        // const records = await supabaseModel.fetchData();
 
-        this.createMarkers(records);
+        // this.createMarkers(records);
 
         this.init = false;
     }

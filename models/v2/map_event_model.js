@@ -33,6 +33,28 @@ const mapEventModel = {
         // Maybe create a function that makes the screen or borders flash when the user is too far or close enough to search. Green/red pulse/blink. Has to be easy on the eyes, though.
     },
 
+    test: (map) => {
+        let alpha = null;
+        let locationMarker = null;
+        window.addEventListener("deviceorientation", (event) => {
+            console.log(`${event.alpha} : ${event.beta} : ${event.gamma}`);
+            alpha = event.alpha;
+          });
+
+        const locationMarkerIcon = L.divIcon({
+            html: `<i class="fa-solid fa-location-arrow"></i>`,
+            className: 'fa-location-icon',
+        });
+
+        locationMarker = L.marker(
+            [58, 13],
+            { icon: locationMarkerIcon, rotationAngle: alpha }
+        );
+
+        locationMarker.addTo(map);
+
+    },
+
     /**
      * Adds a click event to a button in the bottom right corner.
      * The button centers the map around the user's position and zooms in.
