@@ -40,6 +40,7 @@ const mapEventModel = {
      */
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
         let init = true;
+        let initRotation = true;
         let locationMarker = null;
         this.lastAlpha = null;
         const zoomLevel = 17;
@@ -50,7 +51,7 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: '<i class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: 315deg;""></i>',
+                    html: '<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow"></i>',
                     className: 'fa-location-icon',
                 });
 
@@ -75,7 +76,7 @@ const mapEventModel = {
                 // Listen for device orientation changes
                 if (window.DeviceOrientationEvent) {
                     window.addEventListener('deviceorientation', (e) => {
-                        this.updateOrientation(e, locationMarker)
+                        this.updateOrientation(e, locationMarker, initRotation)
                     }, true);
                 }
 
@@ -93,6 +94,10 @@ const mapEventModel = {
         let alpha = e.alpha; // 0-360 degrees
         let adjustedAlpha = (360 - alpha) % 360;
         locationMarker.setRotationAngle(adjustedAlpha);
+        if (initRotation) {
+            const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+            locationMarkerIconEl.style.transform = `rotate(${adjustedAlpha}deg)`;
+        }
     },
 
     removeSearchButtonOnPopupOpen: async function (map) {
