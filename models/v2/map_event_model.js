@@ -50,7 +50,7 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: '<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i>',
+                    html: '<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow"></i>',
                     className: 'fa-location-icon',
                 });
                 locationMarker = L.marker(
