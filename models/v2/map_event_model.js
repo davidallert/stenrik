@@ -70,7 +70,7 @@ const mapEventModel = {
         let locationMarkerIconElement = null;
 
         const locationMarkerIcon = L.divIcon({
-          html: `<i id="locationMarkerIconElement" class="fa-solid fa-upload"></i>`,
+          html: `<i id="locationMarkerIconElement" class="fa-solid fa-circle-up"></i>`,
           className: 'fa-location-icon',
         });
 
