@@ -34,29 +34,38 @@ const mapEventModel = {
     },
     test: (map) => {
         let alpha = null;
+        let initialAlpha = null;
         let correctedAlpha = 0;
         let locationMarker = null;
     
         const locationMarkerIcon = L.divIcon({
-            html: `<i class="fa-solid fa-arrow-up-from-bracket"></i>`,
+            html: `<i class="fa-solid fa-arrow-up"></i>`,
             className: 'fa-location-icon',
         });
+    
         locationMarker = L.marker(
             [57.490224, 12.632039],
             { icon: locationMarkerIcon, rotationOrigin: "center center" }
         );
+    
         locationMarker.addTo(map);
     
         window.addEventListener("deviceorientation", (event) => {
             alpha = event.alpha;
     
-            // Calculate the corrected angle
-            correctedAlpha = (alpha + 90) % 360;
+            // On first event, capture initial alpha as a reference
+            if (initialAlpha === null) {
+                initialAlpha = alpha;
+            }
+    
+            // Calculate corrected angle based on initial alpha
+            correctedAlpha = (360 - (alpha - initialAlpha)) % 360;
     
             locationMarker.setRotationAngle(correctedAlpha);
-            locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'});
+            locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}, Initial: ${initialAlpha}`, {'maxHeight': '500', 'maxWidth': '500'});
         });
     },
+    
     
 
 
