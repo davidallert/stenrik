@@ -51,7 +51,7 @@ const locationModel = {
 
     watchOrientation: function() {
         window.addEventListener("deviceorientation", (event) => {
-            this.setOrientation(event.alpha);
+            this.orientation = event.alpha;
           });
     },
 
@@ -69,16 +69,17 @@ const locationModel = {
         this.currentPosition = currentPosition;
     },
 
-    getOrientation: function getOrientation() {
-        return locationModel.orientation;
-    },
+    // getOrientation: function getOrientation() {
+    //     return locationModel.orientation;
+    // },
 
-    setOrientation: (orientation) => {
-        if (orientation) {
-            let correctedAlpha = (360 - orientation);
-            locationModel.orientation = correctedAlpha;
-        }
-    },
+    // setOrientation: (orientation) => {
+    //     console.log(orientation);
+    //     if (orientation) {
+    //         let correctedAlpha = (360 - orientation);
+    //         locationModel.orientation = correctedAlpha;
+    //     }
+    // },
 
     getWatchId: function getWatchId() {
         return this.watchId;
