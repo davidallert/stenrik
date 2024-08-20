@@ -41,8 +41,9 @@ const mapEventModel = {
             console.log(`${event.alpha} : ${event.beta} : ${event.gamma}`);
             alpha = event.alpha;
             correctedAlpha = (360 - alpha) % 360;
-            locationMarker.setRotationAngle(alpha);
-            locationMarker.bindPopup(`${alpha}`, {'maxHeight': '500', 'maxWidth': '500'})
+            console.log(correctedAlpha);
+            locationMarker.setRotationAngle(correctedAlpha);
+            locationMarker.bindPopup(`${alpha, correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'})
           });
 
         const locationMarkerIcon = L.divIcon({
