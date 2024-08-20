@@ -32,38 +32,29 @@ const mapEventModel = {
     screenFlash: function screenFlash() {
         // Maybe create a function that makes the screen or borders flash when the user is too far or close enough to search. Green/red pulse/blink. Has to be easy on the eyes, though.
     },
-
     test: (map) => {
         let alpha = null;
         let correctedAlpha = 0;
-        let adjustedAlpha = 0;
         let locationMarker = null;
-        let init = true;
-        window.addEventListener("deviceorientation", (event) => {
-            if (init) {
-                init = false;
-                alpha = event.alpha;
-                correctedAlpha = (360 - alpha) % 360;
-                adjustedAlpha = (360 - alpha + 45) % 360;
-                const locationMarkerIcon = L.divIcon({
-                    html: `<i class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: ${adjustedAlpha}deg;""></i>`,
-                    className: 'fa-location-icon',
-                });
-                locationMarker = L.marker(
-                    [57.490224, 12.632039],
-                    { icon: locationMarkerIcon, rotationAngle: correctedAlpha, rotationOrigin: "center center" }
-                );
-                locationMarker.addTo(map);
-            } 
-            locationMarker.bindPopup(`${alpha}, ${correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'})
-          });
 
-          window.addEventListener("deviceorientation", (event) => {
+        const locationMarkerIcon = L.divIcon({
+            html: `<i class="fa-solid fa-arrow-up"></i>`,
+            className: 'fa-location-icon',
+        });
+        locationMarker = L.marker(
+            [57.490224, 12.632039],
+            { icon: locationMarkerIcon, rotationOrigin: "center center" }
+        );
+        locationMarker.addTo(map);
+
+        window.addEventListener("deviceorientation", (event) => {
             alpha = event.alpha;
             correctedAlpha = (360 - alpha) % 360;
             locationMarker.setRotationAngle(correctedAlpha);
-          })
+            locationMarker.bindPopup(`${alpha}, ${correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'});
+        });
     },
+
 
     /**
      * Adds a click event to a button in the bottom right corner.
