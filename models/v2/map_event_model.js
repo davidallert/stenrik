@@ -91,7 +91,7 @@ const mapEventModel = {
     // Function to update the marker's rotation based on the device orientation
     updateOrientation: (e, locationMarker) => {
         let alpha = e.alpha; // 0-360 degrees
-        const adjustedAlpha = (360 - alpha - 45) % 360; // Adjust for the inverse rotation.
+        const adjustedAlpha = (360 - alpha) % 360; // Adjust for the inverse rotation.
         const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
         locationMarker.setRotationAngle(adjustedAlpha);
         console.log(adjustedAlpha);
