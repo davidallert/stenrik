@@ -74,13 +74,15 @@ const mapEventModel = {
         let locationMarker = null;
         const zoomLevel = 19; // 17
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
+        
         locationTrackingBtn.addEventListener("click", async () => {
             if (init) {
                 init = false;
+                locationModel.setUserInitTrue();
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up-long"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-angle-up"></i>`,
                     className: 'fa-location-icon',
                 });
 
@@ -95,13 +97,15 @@ const mapEventModel = {
                   [position.coords.latitude, position.coords.longitude],
                   { icon: locationMarkerIcon }
                 );
-
-
                 locationMarker.addTo(map);
-                let orientation = locationModel.orientation;
+
+                let initialOrientation = (locationModel.initialOrientation + 360) % 360;
+                let rotationAdjustment = (360 - initialOrientation) % 360;
+                let deviceOrientation = locationModel.orientation;
+                let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
                 let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                locationMarkerIconEl.style.transform = `rotate(${orientation}deg)`;
-                locationMarker.bindPopup(`Orientation: ${orientation}`);
+                locationMarkerIconEl.style.transform = `rotate(${correctedOrientation}deg)`;
+                locationMarker.bindPopup(`Initial: ${initialOrientation}, Adjusted: ${rotationAdjustment}, Corrected: ${correctedOrientation}`);
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
@@ -126,12 +130,13 @@ const mapEventModel = {
                       duration: 1
                   });
               }
-
-              let orientation = locationModel.orientation;
+              let initialOrientation = (locationModel.initialOrientation + 360) % 360;
+              let rotationAdjustment = (360 - initialOrientation) % 360;
+              let deviceOrientation = locationModel.orientation;
+              let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
               let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-              locationMarkerIconEl.style.transform = `rotate(${orientation}deg)`;
-              locationMarker.bindPopup(`Orientation: ${orientation}`);
-
+              locationMarkerIconEl.style.transform = `rotate(${correctedOrientation}deg)`;
+              locationMarker.bindPopup(`Initial: ${initialOrientation}, Adjusted: ${rotationAdjustment}, Corrected: ${correctedOrientation}`);
             }
         })
     },

@@ -4,7 +4,9 @@
 
 const locationModel = {
     currentPosition: null,
+    initialOrientation: null,
     orientation: null,
+    userInit: false,
 
     getInitialPosition: async function getInitialPosition() {
         const geolocationOptions = {
@@ -51,8 +53,16 @@ const locationModel = {
 
     watchOrientation: function() {
         window.addEventListener("deviceorientation", (event) => {
-            this.orientation = 360 - event.alpha;
+            if (!locationModel.initialOrientation && locationModel.userInit) {
+                locationModel.initialOrientation = event.alpha;
+            } else if (locationModel.initialOrientation) {
+                locationModel.orientation = event.alpha;
+            }
           });
+    },
+
+    setUserInitTrue: () => {
+        locationModel.userInit = true;
     },
 
     // Function to move the location marker in accordance with the user's position.
