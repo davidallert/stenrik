@@ -38,25 +38,28 @@ const mapEventModel = {
         let correctedAlpha = null;
         let locationMarker = null;
         let testOnce = true;
-        const locationMarkerIcon = L.divIcon({
-            html: `<i id="locationMarkerIconElement" class="fa-solid fa-hand-pointer"></i>`,
-            className: 'fa-location-icon',
-        });
-    
-        locationMarker = L.marker(
-            [57.490224, 12.632039],
-            { icon: locationMarkerIcon }
-        );
-    
-        locationMarker.addTo(map);
+
 
         window.addEventListener("deviceorientation", (event) => {
             alpha = event.alpha;
-            correctedAlpha = (360 - alpha) % 360;
-            let locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
-            if (testOnce && correctedAlpha) {
-                locationMarkerIconElement.style.transform = `rotate(${correctedAlpha}deg)`;
+            console.log(alpha);
+            if (testOnce && alpha) {
                 testOnce = false;
+
+                const locationMarkerIcon = L.divIcon({
+                    html: `<i id="locationMarkerIconElement" class="fa-solid fa-upload"></i>`,
+                    className: 'fa-location-icon',
+                });
+            
+                locationMarker = L.marker(
+                    [57.490224, 12.632039],
+                    { icon: locationMarkerIcon }
+                );
+                locationMarker.addTo(map);
+                let locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
+
+                correctedAlpha = (360 - alpha) % 360;
+                locationMarkerIconElement.style.transform = `rotate(${correctedAlpha}deg)`;
                 locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}, initialAlpha: ${initialAlpha}`, {'maxHeight': '500', 'maxWidth': '500'});
             }
 
