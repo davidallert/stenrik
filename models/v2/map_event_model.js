@@ -72,7 +72,7 @@ const mapEventModel = {
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
         let init = true;
         let locationMarker = null;
-        const zoomLevel = 17;
+        const zoomLevel = 19; // 17
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
         locationTrackingBtn.addEventListener("click", async () => {
             if (init) {
@@ -80,24 +80,30 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-file-arrow-up"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up"></i>`,
                     className: 'fa-location-icon',
                 });
 
                 // <i id="locationMarkerIconEl" class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: 315deg;""></i>
 
-                locationMarker = L.marker(
-                  [position.coords.latitude, position.coords.longitude],
-                  { icon: locationMarkerIcon }
-                );
-
-                locationMarker.addTo(map);
-
                 locationModel.watchPosition((position) => {
                     locationModel.updatePosition(position, locationMarker);
                 });
 
+                let orientation = locationModel.getOrientation();
+
+                locationMarker = L.marker(
+                  [position.coords.latitude, position.coords.longitude],
+                  { icon: locationMarkerIcon, rotationAngle: orientation }
+                );
+
+                locationMarker.addTo(map);
+
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
+
+                window.addEventListener("deviceorientation", (event) => {
+                    locationMarker.setRotationAngle(360 - event.alpha);
+                });
 
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                     animate: true,
@@ -112,9 +118,9 @@ const mapEventModel = {
                       duration: 1
                   });
               }
-              let orientation = locationModel.getOrientation();
-              let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-              locationMarkerIconEl.style.transform = `rotate(${orientation}deg)`;
+
+              // let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+              // locationMarkerIconEl.style.transform = `rotate(${orientation}deg)`;
             }
         })
     },
