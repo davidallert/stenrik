@@ -36,9 +36,9 @@ const mapEventModel = {
         let alpha = null;
         let correctedAlpha = 0;
         let locationMarker = null;
-
+    
         const locationMarkerIcon = L.divIcon({
-            html: `<i class="fa-solid fa-arrow-up"></i>`,
+            html: `<i class="fa-solid fa-arrow-up-from-bracket"></i>`,
             className: 'fa-location-icon',
         });
         locationMarker = L.marker(
@@ -46,14 +46,18 @@ const mapEventModel = {
             { icon: locationMarkerIcon, rotationOrigin: "center center" }
         );
         locationMarker.addTo(map);
-
+    
         window.addEventListener("deviceorientation", (event) => {
             alpha = event.alpha;
-            correctedAlpha = (360 - alpha) % 360;
+    
+            // Calculate the corrected angle
+            correctedAlpha = (alpha + 90) % 360;
+    
             locationMarker.setRotationAngle(correctedAlpha);
-            locationMarker.bindPopup(`${alpha}, ${correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'});
+            locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'});
         });
     },
+    
 
 
     /**
