@@ -51,7 +51,7 @@ const locationModel = {
 
     watchOrientation: function() {
         window.addEventListener("deviceorientation", (event) => {
-            this.orientation = event.alpha;
+            this.orientation = 360 - event.alpha;
           });
     },
 

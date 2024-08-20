@@ -105,7 +105,6 @@ const mapEventModel = {
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
-
               //   window.addEventListener("deviceorientation", (event) => {
               //     // locationMarker.setRotationAngle(360 - event.alpha);
               //     let orientation = 360 - event.alpha;
