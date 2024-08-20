@@ -80,7 +80,7 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up-long"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up"></i>`,
                     className: 'fa-location-icon',
                 });
 
@@ -104,12 +104,6 @@ const mapEventModel = {
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
-                window.addEventListener("deviceorientation", (event) => {
-                    // locationMarker.setRotationAngle(360 - event.alpha);
-                    orientation = 360 - event.alpha;
-                    locationMarkerIconEl.style.transform = `rotate(${orientation}deg)`;
-                });
-
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                     animate: true,
                     duration: 1
@@ -122,6 +116,12 @@ const mapEventModel = {
                       animate: true,
                       duration: 1
                   });
+
+                  window.addEventListener("deviceorientation", (event) => {
+                    // locationMarker.setRotationAngle(360 - event.alpha);
+                    orientation = 360 - event.alpha;
+                    locationMarkerIconEl.style.transform = `rotate(${orientation}deg)`;
+                });
               }
 
             }
