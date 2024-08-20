@@ -49,7 +49,7 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: '<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow"></i>',
+                    html: '<i class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i>',
                     className: 'fa-location-icon',
                 });
 
@@ -91,12 +91,8 @@ const mapEventModel = {
     // Function to update the marker's rotation based on the device orientation
     updateOrientation: (e, locationMarker) => {
         let alpha = e.alpha; // 0-360 degrees
-        const adjustedAlpha = (360 - alpha - 90) % 360; // Adjust for the inverse rotation.
-        const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-        locationMarker.setRotationAngle(adjustedAlpha);
-        console.log(adjustedAlpha);
-        locationMarkerIconEl.style.transform = `rotate(${adjustedAlpha}deg)`;
-
+        const adjustedAlpha = (360 - alpha) % 360;
+        locationMarker.setRotationAngle(alpha);
     },
 
     removeSearchButtonOnPopupOpen: async function (map) {
