@@ -63,80 +63,6 @@ const mapEventModel = {
     //         }
     //     });
     // },
-    
-    test: (map) => {
-        let initialAlpha = null;
-        let locationMarker = null;
-        let locationMarkerIconElement = null;
-
-        const locationMarkerIcon = L.divIcon({
-          html: `<i id="locationMarkerIconElement" class="fa-solid fa-circle-up"></i>`,
-          className: 'fa-location-icon',
-        });
-
-        locationMarker = L.marker(
-          [57.490224, 12.632039],
-          { icon: locationMarkerIcon }
-        );
-        locationMarker.addTo(map);
-
-        locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
-
-        mapEventModel.waitForDeviceOrientation()
-          .then((event) => {
-            initialAlpha = event.alpha;
-            mapEventModel.handleOrientationEvent(event);
-          })
-          .catch((error) => {
-            console.error('Error waiting for deviceorientation event:', error);
-            // Handle the error, e.g., display a message to the user
-          });
-      },
-
-      handleOrientationEvent: (event) => {
-        let alpha = null;
-        let correctedAlpha = null;
-        let locationMarker = null;
-        alpha = event.alpha;
-
-        if (alpha !== null) {
-          correctedAlpha = (360 - alpha) % 360;
-          locationMarkerIconElement.style.transform = `rotate(${correctedAlpha}deg)`;
-        //   locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}, Initial: ${initialAlpha}, Absolute: ${event.absolute}`, {'maxHeight': '500', 'maxWidth': '300'});
-        }
-      },
-
-      waitForDeviceOrientation: () => {
-        return new Promise((resolve, reject) => {
-          let orientationEventFired = false;
-    
-          const handleOrientationEvent = (event) => {
-            orientationEventFired = true;
-    
-            // Check if event.alpha is valid
-            if (typeof event.alpha === 'number') {
-              window.removeEventListener('deviceorientation', handleOrientationEvent);
-              resolve(event);
-            } else {
-              reject(new Error('event.alpha is not a valid number'));
-            }
-          };
-    
-          if (window.addEventListener) {
-            window.addEventListener('deviceorientation', handleOrientationEvent, false);
-          } else if (window.attachEvent) {
-            window.attachEvent('deviceorientation', handleOrientationEvent);
-          }
-    
-          // Reject the promise after a timeout, in case the event doesn't fire
-          setTimeout(() => {
-            if (!orientationEventFired) {
-              reject(new Error('Timeout waiting for deviceorientation event'));
-            }
-          }, 5000);
-        });
-      },
-
 
     /**
      * Adds a click event to a button in the bottom right corner.
@@ -154,26 +80,22 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: 315deg;""></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up"></i>`,
                     className: 'fa-location-icon',
                 });
 
+                // <i id="locationMarkerIconEl" class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: 315deg;""></i>
+
+                locationMarker = L.marker(
+                  [position.coords.latitude, position.coords.longitude],
+                  { icon: locationMarkerIcon }
+                );
+
+                locationMarker.addTo(map);
 
                 locationModel.watchPosition((position) => {
                     locationModel.updatePosition(position, locationMarker);
                 });
-                // locationMarker.setRotationOrigin("center center");
-
-                const heading = locationModel.getCurrentDirection();
-                locationMarker = L.marker(
-                  [position.coords.latitude, position.coords.longitude],
-                  { icon: locationMarkerIcon, rotationAngle: heading }
-                );
-
-                console.log(heading);
-                locationMarker.bindPopup(heading);
-
-                locationMarker.addTo(map);
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
@@ -190,6 +112,9 @@ const mapEventModel = {
                       duration: 1
                   });
               }
+              let orientation = locationModel.getOrientation();
+              let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+              locationMarkerIconEl.style.transform = `rotate(${orientation}deg)`;
             }
         })
     },

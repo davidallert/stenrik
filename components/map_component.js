@@ -8,6 +8,7 @@ import supabaseModel from '../models/v2/supabase_model.js';
 import popupModel from '../models/v2/popup_model.js';
 import checkIf from '../util/is_mobile.js';
 import positioningModel from '../models/positioning_model.js';
+import locationModel from '../models/location_model.js';
 
 export default class MapComponent extends HTMLElement {
     constructor() {
@@ -20,6 +21,7 @@ export default class MapComponent extends HTMLElement {
     }
 
     async connectedCallback() {
+        locationModel.watchOrientation();
         await this.render();
         // mapEventModel.test(this.map);
         mapEventModel.addLocationTrackingEvent(this.map);

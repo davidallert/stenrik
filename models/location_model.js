@@ -3,6 +3,9 @@
  */
 
 const locationModel = {
+    currentPosition: null,
+    orientation: null,
+
     getInitialPosition: async function getInitialPosition() {
         const geolocationOptions = {
             enableHighAccuracy: true,
@@ -23,7 +26,6 @@ const locationModel = {
         });
     },
     watchPosition: function(callback) {
-        this.currentPosition;
         const geolocationOptions = {
             enableHighAccuracy: true,
             maximumAge: 0, // Ensures that the position is always updated, never using a cached one.
@@ -37,7 +39,6 @@ const locationModel = {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
                     this.setCurrentPosition(position);
-                    this.setCurrentDirection(position);
                     callback(position);
                 },
                 (error) => console.error('Geolocation update error:', error),
@@ -46,6 +47,12 @@ const locationModel = {
         } else {
             reject(new Error ("Geolocation is not available"));
         }
+    },
+
+    watchOrientation: function() {
+        window.addEventListener("deviceorientation", (event) => {
+            this.setOrientation(event.alpha);
+          });
     },
 
     // Function to move the location marker in accordance with the user's position.
@@ -62,13 +69,14 @@ const locationModel = {
         this.currentPosition = currentPosition;
     },
 
-    getCurrentDirection: function getCurrentDirection() {
-        return this.currentDirection;
+    getOrientation: function getOrientation() {
+        return locationModel.orientation;
     },
 
-    setCurrentDirection: function setCurrentDirection(position) {
-        if (position.coords.heading) {
-            this.currentDirection = position.coords.heading;
+    setOrientation: (orientation) => {
+        if (orientation) {
+            locationModel.orientation = orientation;
+            console.log(locationModel.orientation);
         }
     },
 
