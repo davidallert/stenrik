@@ -12,7 +12,7 @@
 }
 
 .fa-location-icon {
-    font-size: xx-large;
+    font-size: x-large;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,7 +20,7 @@
 }
 
 .fa-location-arrow {
-    color: rgb(255, 106, 0);
+    color: rgb(8, 0, 255);
     transform-origin: center;
 }
 
