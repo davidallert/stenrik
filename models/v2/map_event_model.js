@@ -41,6 +41,7 @@ const mapEventModel = {
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
         let init = true;
         let locationMarker = null;
+        this.lastAlpha = null;
         const zoomLevel = 17;
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
         locationTrackingBtn.addEventListener("click", async () => {
@@ -49,13 +50,13 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: '<i class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i>',
+                    html: '<i class="fa-solid fa-location-arrow"></i>',
                     className: 'fa-location-icon',
                 });
 
                 locationMarker = L.marker(
                     [position.coords.latitude, position.coords.longitude],
-                    { icon: locationMarkerIcon, rotationAngle: 0 }
+                    { icon: locationMarkerIcon, rotationAngle: -45 }
                 );
 
                 locationMarker.addTo(map);
@@ -88,10 +89,8 @@ const mapEventModel = {
         })
     },
 
-    // Function to update the marker's rotation based on the device orientation
     updateOrientation: (e, locationMarker) => {
         let alpha = e.alpha; // 0-360 degrees
-        const adjustedAlpha = (360 - alpha) % 360;
         locationMarker.setRotationAngle(alpha);
     },
 
