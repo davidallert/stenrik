@@ -49,14 +49,18 @@ const mapEventModel = {
                 });
                 locationMarker = L.marker(
                     [57.490224, 12.632039],
-                    { icon: locationMarkerIcon, rotationAngle: correctedAlpha }
+                    { icon: locationMarkerIcon, rotationAngle: correctedAlpha, rotationOrigin: "center center" }
                 );
                 locationMarker.addTo(map);
-            } else {
-                locationMarker.setRotationAngle(correctedAlpha);
-            }
-            // locationMarker.bindPopup(`${alpha, correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'})
+            } 
+            locationMarker.bindPopup(`${alpha}, ${correctedAlpha}`, {'maxHeight': '500', 'maxWidth': '500'})
           });
+
+          window.addEventListener("deviceorientation", (event) => {
+            alpha = event.alpha;
+            correctedAlpha = (360 - alpha - 45) % 360;
+            locationMarker.setRotationAngle(correctedAlpha);
+          })
     },
 
     /**
