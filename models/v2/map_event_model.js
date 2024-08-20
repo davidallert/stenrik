@@ -36,6 +36,7 @@ const mapEventModel = {
     test: (map) => {
         let alpha = null;
         let correctedAlpha = 0;
+        let adjustedAlpha = 0;
         let locationMarker = null;
         let init = true;
         window.addEventListener("deviceorientation", (event) => {
