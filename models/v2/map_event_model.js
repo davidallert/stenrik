@@ -56,14 +56,14 @@ const mapEventModel = {
                 });
                 locationMarker = L.marker(
                     [position.coords.latitude, position.coords.longitude],
-                    { icon: locationMarkerIcon, rotationAngle: 0 }
+                    { icon: locationMarkerIcon }
                 );
 
                 locationMarker.addTo(map);
                 locationModel.watchPosition((position) => {
                     locationModel.updatePosition(position, locationMarker);
                 });
-                locationMarker.setRotationOrigin("center center");
+                // locationMarker.setRotationOrigin("center center");
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
@@ -92,11 +92,9 @@ const mapEventModel = {
     updateOrientation: (e, locationMarker) => {
         let alpha = e.alpha; // 0-360 degrees
         let adjustedAlpha = (360 - alpha) % 360;
-        locationMarker.setRotationAngle(adjustedAlpha);
-        if (initRotation) {
-            const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-            locationMarkerIconEl.style.transform = `rotate(${alpha}deg)`;
-        }
+        // locationMarker.setRotationAngle(adjustedAlpha);
+        const locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+        locationMarkerIconEl.style.transform = `rotate(${alpha}deg)`;
     },
 
     removeSearchButtonOnPopupOpen: async function (map) {
