@@ -79,9 +79,9 @@ const locationModel = {
         this.currentPosition = currentPosition;
     },
 
-    // getOrientation: function getOrientation() {
-    //     return locationModel.orientation;
-    // },
+    getOrientation: function getOrientation() {
+        return locationModel.orientation;
+    },
 
     // setOrientation: (orientation) => {
     //     console.log(orientation);

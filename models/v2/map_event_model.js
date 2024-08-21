@@ -82,7 +82,7 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-angle-up"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up"></i>`,
                     className: 'fa-location-icon',
                 });
 
@@ -109,13 +109,14 @@ const mapEventModel = {
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
-              //   window.addEventListener("deviceorientation", (event) => {
-              //     // locationMarker.setRotationAngle(360 - event.alpha);
-              //     let orientation = 360 - event.alpha;
-              //     let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-
-              //     locationMarkerIconEl.style.transform = `rotate(${orientation}deg)`;
-              // });
+                window.addEventListener("deviceorientation", (event) => {
+                  let rotationAdjustment = (360 - initialOrientation) % 360;
+                  let deviceOrientation = event.alpha;
+                  let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
+                  let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                  locationMarkerIconEl.style.transform = `rotate(${correctedOrientation}deg)`;
+                  locationMarker.bindPopup(`rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${initialOrientation}, correctedOrientation: ${correctedOrientation}`);
+              });
 
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                     animate: true,
@@ -130,13 +131,6 @@ const mapEventModel = {
                       duration: 1
                   });
               }
-              let initialOrientation = (locationModel.initialOrientation + 360) % 360;
-              let rotationAdjustment = (360 - initialOrientation) % 360;
-              let deviceOrientation = locationModel.orientation;
-              let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
-              let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-              locationMarkerIconEl.style.transform = `rotate(${correctedOrientation}deg)`;
-              locationMarker.bindPopup(`Initial: ${initialOrientation}, Adjusted: ${rotationAdjustment}, Corrected: ${correctedOrientation}`);
             }
         })
     },
