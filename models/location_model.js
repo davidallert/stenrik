@@ -8,6 +8,8 @@ const locationModel = {
     orientation: null,
     userInit: false,
     heading: null,
+    headingArr: [],
+
 
     getInitialPosition: async function getInitialPosition() {
         const geolocationOptions = {
@@ -42,8 +44,10 @@ const locationModel = {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
                     if (position.coords.heading !== undefined && position.coords.heading !== null) {
-                        locationModel.heading = position.coords.heading;
                         console.log('Heading:', position.coords.heading);
+                        if (!locationModel.heading) {
+                            calculateDirection(position.coords.heading);
+                        }
 
                     } else {
                         console.log('Heading data is not available on this device.');
@@ -57,6 +61,39 @@ const locationModel = {
         } else {
             reject(new Error ("Geolocation is not available"));
         }
+    },
+
+    calculateDirection: (heading) => {
+        if (locationModel.headingArr.length === 0) {
+            if (heading) {
+                locationModel.headingArr.push(heading);
+            }
+            return;
+        }
+
+        let lastHeadingIndex = locationModel.headingArr.length;
+        let lastHeadingValue = locationModel.headingArr[lastHeadingIndex - 1];
+        let degreeDifference = heading - lastHeadingValue;
+        console.log('Heading:', heading);
+        console.log('Difference:', degreeDifference);
+        if (degreeDifference <= 10 && degreeDifference >= -10) {
+            locationModel.headingArr.push(heading);
+            if (locationModel.headingArr.length >= 10) {
+                let totalVal = 0;
+                let averageVal = 0;
+                for (let headingVal of locationModel.headingArr) {
+                    totalVal = totalVal + headingVal;
+                }
+                averageVal = totalVal / locationModel.headingArr.length;
+                console.log('Total Value:', totalVal);
+                console.log('Average Value:', averageVal);
+                locationModel.heading = averageVal;
+                return;
+            }
+            return;
+        }
+
+        locationModel.headingArr = [];
     },
 
     watchOrientation: function() {

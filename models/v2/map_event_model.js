@@ -72,55 +72,86 @@ const mapEventModel = {
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
         let init = true;
         let initialOrientationTriggered = false;
+        let initialHeadingSet = false;
         let initialOrientation = null;
         let locationMarker = null;
         const zoomLevel = 19; // 17
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
-        
+        const listOfHeadingVals = [1, 2, 10, 11, 13, 23, 18, 12, 5, 3, 13, 20, 14, 20, 30, 40, 30, 25, 15, 10, 10, 100];
+        let i = 0;
         locationTrackingBtn.addEventListener("click", async () => {
+
+            locationModel.calculateDirection(listOfHeadingVals[i]);
+            console.log(locationModel.headingArr);
+            i++;
             if (init) {
                 init = false;
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-angle-up"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-dot"></i>`,
                     className: 'fa-location-icon',
                 });
-
-                // <i id="locationMarkerIconEl" class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: 315deg;""></i>
 
                 locationModel.watchPosition((position) => {
                     locationModel.updatePosition(position, locationMarker);
                 });
 
-
                 locationMarker = L.marker(
                   [position.coords.latitude, position.coords.longitude],
                   { icon: locationMarkerIcon }
                 );
+
                 locationMarker.addTo(map);
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
+                let relativeTrueNorth = 0;
+                let relativeFalseNorth = 0;
+                let relativeNorthDifference = 0;
+                let adjustedRotation = 0;
+
                 window.addEventListener("deviceorientation", (event) => {
-                  if (!initialOrientationTriggered) {
-                    initialOrientationTriggered = true;
-                    initialOrientation = event.alpha;
-                    let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                    locationMarkerIconEl.style.transform = `rotate(${event.alpha}deg)`;
-                  }
+                    if (locationModel.heading && !initialHeadingSet) {
+                        initialHeadingSet = true;
+                        const locationMarkerIcon = L.divIcon({
+                            html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up"></i>`,
+                            className: 'fa-location-icon',
+                        });
+                        locationMarker.setIcon(locationMarkerIcon);
+                        let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                        locationMarkerIconEl.style.transform = `rotate(${locationModel.heading}deg)`;
+                        relativeTrueNorth = locationModel.heading;
+                        relativeFalseNorth = event.alpha;
+                        relativeNorthDifference = relativeFalseNorth - relativeTrueNorth;
+                    } else if (initialHeadingSet) {
+                        adjustedRotation = 360 - event.alpha + relativeNorthDifference % 360;
+                        let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                        locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+
+                    }
+                });
+
+
+                // window.addEventListener("deviceorientation", (event) => {
+                //   if (!initialOrientationTriggered) {
+                //     initialOrientationTriggered = true;
+                //     initialOrientation = event.alpha;
+                //     let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                //     locationMarkerIconEl.style.transform = `rotate(${event.alpha}deg)`;
+                //   }
                 //   else {
                   // Calculations.
                 //   let rotationAdjustment = (360 - initialOrientation) % 360;
                 //   let deviceOrientation = 360 - event.alpha % 360;
                 //   let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
                   // Update the element.
-                  let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                  locationMarkerIconEl.style.transform = `rotate(${360 - event.alpha % 360}deg)`;
-                  locationMarker.bindPopup(`Event.alpha: ${Math.ceil(event.alpha)}, Actual rotation applied: ${Math.ceil((360 - event.alpha % 360))}, Event.absolute: ${event.absolute}, Initial Orientation: ${Math.ceil(initialOrientation)}, Heading: ${Math.ceil(locationModel.heading)}`);
+                //   let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                //   locationMarkerIconEl.style.transform = `rotate(${360 - event.alpha % 360}deg)`;
+                //   locationMarker.bindPopup(`Event.alpha: ${Math.ceil(event.alpha)}, Actual rotation applied: ${Math.ceil((360 - event.alpha % 360))}, Event.absolute: ${event.absolute}, Initial Orientation: ${Math.ceil(initialOrientation)}, Heading: ${Math.ceil(locationModel.heading)}`);
                 //   locationMarker.bindPopup(`event.alpha: ${event.alpha}, rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${initialOrientation}, correctedOrientation: ${correctedOrientation}`);
                 //   }
-              });
+            //   });
 
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                     animate: true,
