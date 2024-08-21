@@ -128,7 +128,7 @@ const mapEventModel = {
                         adjustedRotation = 360 - event.alpha + relativeNorthDifference % 360;
                         let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
-
+                        locationMarker.bindPopup(`event.alpha: ${Math.ceil(event.alpha)}, relativeTrueNorth: ${Math.ceil(relativeTrueNorth)}, relativeFalseNorth: ${Math.ceil(relativeFalseNorth)}, relativeNorthDifference: ${Math.ceil(relativeNorthDifference)}, adjustedRotation: ${Math.ceil(adjustedRotation)}, locationModel.headingArr: ${locationModel.headingArr}`);
                     }
                 });
 
