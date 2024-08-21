@@ -78,7 +78,7 @@ const locationModel = {
         if (degreeDifference <= 10 && degreeDifference >= -10) {
             locationModel.headingArr.push(heading);
             // alert(locationModel.headingArr);
-            if (locationModel.headingArr.length >= 5) {
+            if (locationModel.headingArr.length >= 10) {
                 let totalVal = 0;
                 let averageVal = 0;
                 for (let headingVal of locationModel.headingArr) {
