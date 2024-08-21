@@ -77,13 +77,13 @@ const mapEventModel = {
         let locationMarker = null;
         const zoomLevel = 19; // 17
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
-        // const listOfHeadingVals = [1, 2, 10, 11, 13, 23, 18, 12, 5, 3, 13, 20, 14, 20, 30, 40, 30, 25, 15, 10, 10, 100];
-        // let i = 0;
+        const listOfHeadingVals = [1, 2, 10, 11, 13, 23, 18, 12, 5, 3, 13, 20, 14, 20, 30, 40, 30, 25, 15, 10, 10, 100];
+        let i = 0;
         locationTrackingBtn.addEventListener("click", async () => {
 
-            // locationModel.calculateDirection(listOfHeadingVals[i]);
-            // console.log(locationModel.headingArr);
-            // i++;
+            locationModel.calculateDirection(listOfHeadingVals[i]);
+            console.log(locationModel.headingArr);
+            i++;
             if (init) {
                 init = false;
                 const position = await locationModel.getInitialPosition();
@@ -112,6 +112,7 @@ const mapEventModel = {
                 let adjustedRotation = 0;
 
                 window.addEventListener("deviceorientation", (event) => {
+                    locationMarker.bindPopup(`${locationModel.headingArr}`);
                     if (locationModel.heading && !initialHeadingSet) {
                         initialHeadingSet = true;
                         const locationMarkerIcon = L.divIcon({
