@@ -9,6 +9,7 @@ const locationModel = {
     userInit: false,
     heading: null,
     headingArr: [],
+    headingForTest: 0,
 
 
     getInitialPosition: async function getInitialPosition() {
@@ -44,6 +45,8 @@ const locationModel = {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
                     callback(position);
+                    locationModel.headingForTest = position.coords.heading;
+                    alert(position.coords.heading);
                     if (position.coords.heading !== undefined && position.coords.heading !== null) {
                         console.log('Heading:', position.coords.heading);
                         calculateDirection(position.coords.heading);
