@@ -43,6 +43,7 @@ const locationModel = {
         if ("geolocation" in navigator) {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
+                    callback(position);
                     if (position.coords.heading !== undefined && position.coords.heading !== null) {
                         console.log('Heading:', position.coords.heading);
                         calculateDirection(position.coords.heading);
@@ -50,7 +51,6 @@ const locationModel = {
                         console.log('Heading data is not available on this device.');
                     }
                     this.setCurrentPosition(position);
-                    callback(position);
                 },
                 (error) => console.error('Geolocation update error:', error),
                 geolocationOptions
