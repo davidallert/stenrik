@@ -38,8 +38,11 @@ export default class MapComponent extends HTMLElement {
             <div id="searchButton" class="search-button hidden">Sök i området</div>
             <div id="locationTrackingBtn" class="icon-button fly-to-user-button"><i class="fa-solid fa-location-crosshairs"></i></i></div>
         </main>`;
+        
 
         this.map = this.initMap(62.334591, 16.063240, 5);
+
+        this.map.addControl( new L.Control.Compass() );
 
         // const records = await supabaseModel.fetchData();
 
