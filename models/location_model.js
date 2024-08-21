@@ -45,7 +45,6 @@ const locationModel = {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
                     callback(position);
-                    locationModel.headingForTest = position.coords.heading;
                     if (position.coords.heading !== undefined && position.coords.heading !== null) {
                         console.log('Heading:', position.coords.heading);
                         calculateDirection(position.coords.heading);
@@ -63,6 +62,7 @@ const locationModel = {
     },
 
     calculateDirection: (heading) => {
+        locationModel.headingForTest = heading;
         if (locationModel.headingArr.length === 0) {
             if (heading) {
                 locationModel.headingArr.push(heading);
@@ -77,7 +77,7 @@ const locationModel = {
         console.log('Difference:', degreeDifference);
         if (degreeDifference <= 10 && degreeDifference >= -10) {
             locationModel.headingArr.push(heading);
-            alert(locationModel.headingArr);
+            // alert(locationModel.headingArr);
             if (locationModel.headingArr.length >= 5) {
                 let totalVal = 0;
                 let averageVal = 0;
