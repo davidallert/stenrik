@@ -116,7 +116,7 @@ const mapEventModel = {
                     if (locationModel.heading && !initialHeadingSet) {
                         initialHeadingSet = true;
                         const locationMarkerIcon = L.divIcon({
-                            html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up"></i>`,
+                            html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-up"></i>`,
                             className: 'fa-location-icon',
                         });
                         locationMarker.setIcon(locationMarkerIcon);

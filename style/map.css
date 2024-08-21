@@ -21,8 +21,9 @@
 
 .fa-location-arrow,
 .fa-circle-dot,
-.fa-arrow-up {
-    color: rgb(255, 0, 0);
+.fa-arrow-up,
+.fa-circle-up {
+    color: var(--base-text-color);
     transform-origin: center;
 }
 
