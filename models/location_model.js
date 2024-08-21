@@ -46,7 +46,6 @@ const locationModel = {
                 (position) => {
                     callback(position);
                     locationModel.headingForTest = position.coords.heading;
-                    alert(position.coords.heading);
                     if (position.coords.heading !== undefined && position.coords.heading !== null) {
                         console.log('Heading:', position.coords.heading);
                         calculateDirection(position.coords.heading);
@@ -64,7 +63,6 @@ const locationModel = {
     },
 
     calculateDirection: (heading) => {
-        alert('IN CALCULATE DIRECTION');
         if (locationModel.headingArr.length === 0) {
             if (heading) {
                 locationModel.headingArr.push(heading);
