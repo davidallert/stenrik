@@ -47,7 +47,7 @@ const locationModel = {
                     callback(position);
                     if (position.coords.heading !== undefined && position.coords.heading !== null) {
                         console.log('Heading:', position.coords.heading);
-                        calculateDirection(position.coords.heading);
+                        locationModel.calculateDirection(position.coords.heading);
                     } else {
                         console.log('Heading data is not available on this device.');
                     }
