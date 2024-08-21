@@ -61,6 +61,7 @@ const locationModel = {
     },
 
     calculateDirection: (heading) => {
+        alert('IN CALCULATE DIRECTION');
         if (locationModel.headingArr.length === 0) {
             if (heading) {
                 locationModel.headingArr.push(heading);
