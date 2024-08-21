@@ -19,8 +19,10 @@
     transform-origin: center;
 }
 
-.fa-location-arrow {
-    color: rgb(210, 146, 34);
+.fa-location-arrow,
+.fa-circle-dot,
+.fa-arrow-up {
+    color: rgb(0, 94, 255);
     transform-origin: center;
 }
 
