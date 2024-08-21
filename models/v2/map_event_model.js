@@ -100,22 +100,16 @@ const mapEventModel = {
                 locationMarker.addTo(map);
 
                 let initialOrientation = (locationModel.initialOrientation + 360) % 360;
-                let rotationAdjustment = (360 - initialOrientation) % 360;
-                let deviceOrientation = locationModel.orientation;
-                let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
-                let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                locationMarkerIconEl.style.transform = `rotate(${correctedOrientation}deg)`;
-                locationMarker.bindPopup(`Initial: ${initialOrientation}, Adjusted: ${rotationAdjustment}, Corrected: ${correctedOrientation}`);
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
                 window.addEventListener("deviceorientation", (event) => {
                   let rotationAdjustment = (360 - initialOrientation) % 360;
-                  let deviceOrientation = event.alpha;
+                  let deviceOrientation = 360 - event.alpha % 360; // Prev version: just event.alpha.
                   let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
                   let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                   locationMarkerIconEl.style.transform = `rotate(${correctedOrientation}deg)`;
-                  locationMarker.bindPopup(`rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${initialOrientation}, correctedOrientation: ${correctedOrientation}`);
+                  locationMarker.bindPopup(`event.alpha: ${event.alpha}, rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${initialOrientation}, correctedOrientation: ${correctedOrientation}`);
               });
 
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
