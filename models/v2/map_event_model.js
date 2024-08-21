@@ -117,7 +117,7 @@ const mapEventModel = {
                   // Update the element.
                   let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                   locationMarkerIconEl.style.transform = `rotate(${360 - event.alpha % 360}deg)`;
-                  locationMarker.bindPopup(`Event.alpha: ${event.alpha}, Actual rotation applied: ${360 - event.alpha % 360}, Event.absolute: ${event.absolute}, Initial Orientation: ${initialOrientation}, Heading: ${locationModel.heading}`);
+                  locationMarker.bindPopup(`Event.alpha: ${Math.ceil(event.alpha)}, Actual rotation applied: ${Math.ceil((360 - event.alpha % 360))}, Event.absolute: ${event.absolute}, Initial Orientation: ${Math.ceil(initialOrientation)}, Heading: ${Math.ceil(locationModel.heading)}`);
                 //   locationMarker.bindPopup(`event.alpha: ${event.alpha}, rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${initialOrientation}, correctedOrientation: ${correctedOrientation}`);
                 //   }
               });

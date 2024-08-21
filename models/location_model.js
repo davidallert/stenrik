@@ -41,7 +41,7 @@ const locationModel = {
         if ("geolocation" in navigator) {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
-                    if (position.coords.heading !== undefined) {
+                    if (position.coords.heading !== undefined && position.coords.heading !== null) {
                         locationModel.heading = position.coords.heading;
                         console.log('Heading:', position.coords.heading);
 
