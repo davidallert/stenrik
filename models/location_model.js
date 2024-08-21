@@ -53,7 +53,7 @@ const locationModel = {
 
     watchOrientation: function() {
         window.addEventListener("deviceorientation", (event) => {
-            if (!locationModel.initialOrientation && locationModel.userInit) {
+            if (!locationModel.initialOrientation && locationModel.initialOrientation > 0 && locationModel.userInit) {
                 locationModel.initialOrientation = event.alpha;
             } else if (locationModel.initialOrientation) {
                 locationModel.orientation = event.alpha;
