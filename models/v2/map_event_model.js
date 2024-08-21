@@ -78,11 +78,10 @@ const mapEventModel = {
         locationTrackingBtn.addEventListener("click", async () => {
             if (init) {
                 init = false;
-                locationModel.setUserInitTrue();
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrows-up-to-line"></i>`,
                     className: 'fa-location-icon',
                 });
 
@@ -99,14 +98,17 @@ const mapEventModel = {
                 );
                 locationMarker.addTo(map);
 
-                let initialOrientation = (locationModel.initialOrientation + 360) % 360;
-
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
                 window.addEventListener("deviceorientation", (event) => {
-                  let rotationAdjustment = (360 - initialOrientation) % 360;
+                  locationModel.setUserInitTrue();
+
+                  // Calculations.
+                  let rotationAdjustment = (360 - locationModel.initialOrientation) % 360;
                   let deviceOrientation = 360 - event.alpha % 360; // Prev version: just event.alpha.
                   let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
+
+                  // Update the element.
                   let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                   locationMarkerIconEl.style.transform = `rotate(${correctedOrientation}deg)`;
                   locationMarker.bindPopup(`event.alpha: ${event.alpha}, rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${locationModel.initialOrientation}, correctedOrientation: ${correctedOrientation}`);
