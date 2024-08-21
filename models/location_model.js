@@ -45,10 +45,7 @@ const locationModel = {
                 (position) => {
                     if (position.coords.heading !== undefined && position.coords.heading !== null) {
                         console.log('Heading:', position.coords.heading);
-                        if (!locationModel.heading) {
-                            calculateDirection(position.coords.heading);
-                        }
-
+                        calculateDirection(position.coords.heading);
                     } else {
                         console.log('Heading data is not available on this device.');
                     }
@@ -78,7 +75,8 @@ const locationModel = {
         console.log('Difference:', degreeDifference);
         if (degreeDifference <= 10 && degreeDifference >= -10) {
             locationModel.headingArr.push(heading);
-            if (locationModel.headingArr.length >= 10) {
+            alert(locationModel.headingArr);
+            if (locationModel.headingArr.length >= 5) {
                 let totalVal = 0;
                 let averageVal = 0;
                 for (let headingVal of locationModel.headingArr) {
