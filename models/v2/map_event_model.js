@@ -103,12 +103,14 @@ const mapEventModel = {
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
                 window.addEventListener("deviceorientation", (event) => {
-                //   if (!initialOrientationTriggered) {
-                //     initialOrientationTriggered = true;
-                //     initialOrientation = event.alpha;
-                //     let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                //     locationMarkerIconEl.style.transform = `rotate(${360 - initialOrientation % 360}deg)`;
-                //   } else {
+                  if (!initialOrientationTriggered) {
+                    initialOrientationTriggered = true;
+                    initialOrientation = event.alpha;
+                    console.log(initialOrientation);
+                    let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                    locationMarkerIconEl.style.transform = `rotate(${event.alpha}deg)`;
+                  }
+                //   else {
                   // Calculations.
                 //   let rotationAdjustment = (360 - initialOrientation) % 360;
                 //   let deviceOrientation = 360 - event.alpha % 360;
@@ -116,7 +118,7 @@ const mapEventModel = {
                   // Update the element.
                   let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                   locationMarkerIconEl.style.transform = `rotate(${360 - event.alpha % 360}deg)`;
-                  locationMarker.bindPopup(`Event.alpha: ${event.alpha}, Actual rotation applied: ${360 - event.alpha % 360}, Event.absolute: ${event.absolute}`);
+                  locationMarker.bindPopup(`Event.alpha: ${event.alpha}, Actual rotation applied: ${360 - event.alpha % 360}, Event.absolute: ${event.absolute}, Initial Orientation: ${initialOrientation}`);
                 //   locationMarker.bindPopup(`event.alpha: ${event.alpha}, rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${initialOrientation}, correctedOrientation: ${correctedOrientation}`);
                 //   }
               });
