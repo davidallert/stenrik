@@ -42,8 +42,6 @@ export default class MapComponent extends HTMLElement {
 
         this.map = this.initMap(62.334591, 16.063240, 5);
 
-        this.map.addControl( new L.Control.Compass() );
-
         // const records = await supabaseModel.fetchData();
 
         // this.createMarkers(records);

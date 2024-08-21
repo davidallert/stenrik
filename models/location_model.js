@@ -7,6 +7,7 @@ const locationModel = {
     initialOrientation: null,
     orientation: null,
     userInit: false,
+    heading: null,
 
     getInitialPosition: async function getInitialPosition() {
         const geolocationOptions = {
@@ -40,6 +41,13 @@ const locationModel = {
         if ("geolocation" in navigator) {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
+                    if (position.coords.heading !== undefined) {
+                        locationModel.heading = position.coords.heading;
+                        console.log('Heading:', position.coords.heading);
+
+                    } else {
+                        console.log('Heading data is not available on this device.');
+                    }
                     this.setCurrentPosition(position);
                     callback(position);
                 },
@@ -81,6 +89,10 @@ const locationModel = {
 
     getOrientation: function getOrientation() {
         return locationModel.orientation;
+    },
+
+    getHeading: () => {
+        return this.heading;
     },
 
     // setOrientation: (orientation) => {

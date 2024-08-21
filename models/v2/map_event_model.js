@@ -83,7 +83,7 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-arrow-up"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-angle-up"></i>`,
                     className: 'fa-location-icon',
                 });
 
@@ -106,7 +106,6 @@ const mapEventModel = {
                   if (!initialOrientationTriggered) {
                     initialOrientationTriggered = true;
                     initialOrientation = event.alpha;
-                    console.log(initialOrientation);
                     let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                     locationMarkerIconEl.style.transform = `rotate(${event.alpha}deg)`;
                   }
@@ -118,7 +117,7 @@ const mapEventModel = {
                   // Update the element.
                   let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                   locationMarkerIconEl.style.transform = `rotate(${360 - event.alpha % 360}deg)`;
-                  locationMarker.bindPopup(`Event.alpha: ${event.alpha}, Actual rotation applied: ${360 - event.alpha % 360}, Event.absolute: ${event.absolute}, Initial Orientation: ${initialOrientation}`);
+                  locationMarker.bindPopup(`Event.alpha: ${event.alpha}, Actual rotation applied: ${360 - event.alpha % 360}, Event.absolute: ${event.absolute}, Initial Orientation: ${initialOrientation}, Heading: ${locationModel.heading}`);
                 //   locationMarker.bindPopup(`event.alpha: ${event.alpha}, rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${initialOrientation}, correctedOrientation: ${correctedOrientation}`);
                 //   }
               });
