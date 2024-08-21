@@ -62,6 +62,7 @@ const locationModel = {
     },
 
     calculateDirection: (heading) => {
+        heading = Math.ceil(heading);
         locationModel.headingForTest = heading;
         if (locationModel.headingArr.length === 0) {
             if (heading) {
