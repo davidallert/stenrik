@@ -106,13 +106,9 @@ const mapEventModel = {
 
                 let adjustedRotation = 0;
 
-                const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+                const compassEvent = this.getCompassSupport();
 
-                if (isIOS) {
-                    console.log("Running on iOS, using webkitCompassHeading.");
-                } else {
-                    console.log("Using standard DeviceOrientation API.");
-
+                if (compassEvent === "DeviceOrientationAbsoluteEvent") {
                     window.addEventListener("deviceorientationabsolute", (event) => {
                         // The event will always trigger once when it's initialized. This happens on all devices.
                         // On desktop, it will never trigger twice.
@@ -127,12 +123,16 @@ const mapEventModel = {
                         adjustedRotation = (360 - event.alpha - 45) % 360;
                         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
                     });
+                } else if (compassEvent === "webkitCompassHeading") {
+                    alert("STEVE JOBS WAS HERE")
+                } else if (compassEvent === "unsupported") {
+                    alert("UNSUPPORTED DEVICE")
+                }
 
                     map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                         animate: true,
                         duration: 1
                     });
-            }
 
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
@@ -146,6 +146,16 @@ const mapEventModel = {
             }
         })
     },
+
+    getCompassSupport: () => {
+        if ('ondeviceorientationabsolute' in window) {
+          return 'DeviceOrientationAbsoluteEvent';
+        } else if ('webkitCompassHeading' in DeviceOrientationEvent.prototype) {
+          return 'webkitCompassHeading';
+        } else {
+          return 'unsupported';
+        }
+      },
 
     removeSearchButtonOnPopupOpen: async function (map) {
         map.on('popupopen', () => {
