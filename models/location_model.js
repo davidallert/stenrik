@@ -45,12 +45,11 @@ const locationModel = {
             this.watchId = navigator.geolocation.watchPosition(
                 (position) => {
                     callback(position);
-                    if (position.coords.heading !== undefined && position.coords.heading !== null) {
-                        console.log('Heading:', position.coords.heading);
-                        locationModel.calculateDirection(position.coords.heading);
-                    } else {
-                        console.log('Heading data is not available on this device.');
-                    }
+                    // if (position.coords.heading !== undefined && position.coords.heading !== null) {
+                    //     locationModel.calculateDirection(position.coords.heading);
+                    // } else {
+                    //     console.log('Heading data is not available on this device.');
+                    // }
                     this.setCurrentPosition(position);
                 },
                 (error) => console.error('Geolocation update error:', error),

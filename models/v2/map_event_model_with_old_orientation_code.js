@@ -71,19 +71,25 @@ const mapEventModel = {
      */
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
         let init = true;
-        let deviceOrientationTriggerIndex = 0;
+        let initialOrientationTriggered = false;
+        let initialHeadingSet = false;
+        let initialOrientation = null;
         let locationMarker = null;
-        const zoomLevel = 17;
+        const zoomLevel = 19; // 17
         const locationTrackingBtn = document.getElementById("locationTrackingBtn");
-
+        // const listOfHeadingVals = [1, 348, 2, 10, 11, 13, 23, 18, 12, 5, 3, 13, 20, 14, 20, 30, 40, 30, 25, 15, 10, 10, 100];
+        // let i = 0;
         locationTrackingBtn.addEventListener("click", async () => {
+
+            // locationModel.calculateDirection(listOfHeadingVals[i]);
+            // console.log(locationModel.headingArr);
+            // i++;
             if (init) {
                 init = false;
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
-
                 const locationMarkerIconDot = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-dot"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow"></i>`,
                     className: 'fa-location-icon',
                 });
                 const locationMarkerIconArrow = L.divIcon({
@@ -104,21 +110,64 @@ const mapEventModel = {
 
                 locationTrackingBtn.childNodes[0].style.color = "#abd2df";
 
+
                 let adjustedRotation = 0;
 
                 window.addEventListener("deviceorientationabsolute", (event) => {
-                    // The event will always trigger once when it's initialized. This happens on all devices.
-                    // On desktop, it will never trigger twice.
-                    // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-                    if (deviceOrientationTriggerIndex === 1) {
-                        locationMarker.setIcon(locationMarkerIconArrow);
-                        deviceOrientationTriggerIndex++;
-                    }
-
+                    locationMarker.setIcon(locationMarkerIconArrow);
                     let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                     adjustedRotation = 360 - event.alpha % 360;
                     locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
                 });
+
+                // window.addEventListener("deviceorientation", (event) => {
+                // let relativeTrueNorth = 0;
+                // let relativeFalseNorth = 0;
+                // let relativeNorthDifference = 0;
+                //     locationMarker.bindPopup(`Arr: ${locationModel.headingArr}, lastHeading: ${locationModel.headingForTest}`);
+                //     if (locationModel.heading && !initialHeadingSet) {
+                //         initialHeadingSet = true;
+                //         const locationMarkerIcon = L.divIcon({
+                //             html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-up"></i>`,
+                //             className: 'fa-location-icon',
+                //         });
+                //         locationMarker.setIcon(locationMarkerIcon);
+                //         let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                //         locationMarkerIconEl.style.transform = `rotate(${locationModel.heading}deg)`;
+                //         relativeTrueNorth = locationModel.heading;
+                //         relativeFalseNorth = event.alpha;
+                //         relativeNorthDifference = relativeFalseNorth - relativeTrueNorth;
+                //     } else if (initialHeadingSet) {
+                //         adjustedRotation = (360 - event.alpha + relativeNorthDifference) % 360;
+                //         if (adjustedRotation < 0) {
+                //             adjustedRotation += 360;
+                //         }
+                //         let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                //         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+                //         locationMarker.bindPopup(`event.alpha: ${Math.ceil(event.alpha)}, relativeTrueNorth: ${Math.ceil(relativeTrueNorth)}, relativeFalseNorth: ${Math.ceil(relativeFalseNorth)}, relativeNorthDifference: ${Math.ceil(relativeNorthDifference)}, adjustedRotation: ${Math.ceil(adjustedRotation)}, locationModel.headingArr: ${locationModel.headingArr}`);
+                //     }
+                // });
+
+
+                // window.addEventListener("deviceorientation", (event) => {
+                //   if (!initialOrientationTriggered) {
+                //     initialOrientationTriggered = true;
+                //     initialOrientation = event.alpha;
+                //     let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                //     locationMarkerIconEl.style.transform = `rotate(${event.alpha}deg)`;
+                //   }
+                //   else {
+                  // Calculations.
+                //   let rotationAdjustment = (360 - initialOrientation) % 360;
+                //   let deviceOrientation = 360 - event.alpha % 360;
+                //   let correctedOrientation = (deviceOrientation + rotationAdjustment) % 360;
+                  // Update the element.
+                //   let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                //   locationMarkerIconEl.style.transform = `rotate(${360 - event.alpha % 360}deg)`;
+                //   locationMarker.bindPopup(`Event.alpha: ${Math.ceil(event.alpha)}, Actual rotation applied: ${Math.ceil((360 - event.alpha % 360))}, Event.absolute: ${event.absolute}, Initial Orientation: ${Math.ceil(initialOrientation)}, Heading: ${Math.ceil(locationModel.heading)}`);
+                //   locationMarker.bindPopup(`event.alpha: ${event.alpha}, rotationAdjustment: ${rotationAdjustment}, deviceOrientation: ${deviceOrientation}, initialOrientation: ${initialOrientation}, correctedOrientation: ${correctedOrientation}`);
+                //   }
+            //   });
 
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                     animate: true,
@@ -127,7 +176,6 @@ const mapEventModel = {
 
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
-
                 if (position) {
                   map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                       animate: true,
