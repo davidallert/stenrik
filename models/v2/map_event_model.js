@@ -112,8 +112,8 @@ const mapEventModel = {
                     // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
                     if (deviceOrientationTriggerIndex === 1) {
                         locationMarker.setIcon(locationMarkerIconArrow);
-                        deviceOrientationTriggerIndex++;
                     }
+                    deviceOrientationTriggerIndex++;
 
                     let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                     adjustedRotation = 360 - event.alpha % 360;
