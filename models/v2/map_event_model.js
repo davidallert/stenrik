@@ -89,7 +89,7 @@ const mapEventModel = {
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
                 const locationMarkerIcon = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-dot"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-up"></i>`,
                     className: 'fa-location-icon',
                 });
 
@@ -111,27 +111,35 @@ const mapEventModel = {
                 let relativeNorthDifference = 0;
                 let adjustedRotation = 0;
 
-                window.addEventListener("deviceorientation", (event) => {
-                    locationMarker.bindPopup(`Arr: ${locationModel.headingArr}, lastHeading: ${locationModel.headingForTest}`);
-                    if (locationModel.heading && !initialHeadingSet) {
-                        initialHeadingSet = true;
-                        const locationMarkerIcon = L.divIcon({
-                            html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-up"></i>`,
-                            className: 'fa-location-icon',
-                        });
-                        locationMarker.setIcon(locationMarkerIcon);
-                        let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                        locationMarkerIconEl.style.transform = `rotate(${locationModel.heading}deg)`;
-                        relativeTrueNorth = locationModel.heading;
-                        relativeFalseNorth = event.alpha;
-                        relativeNorthDifference = relativeFalseNorth - relativeTrueNorth;
-                    } else if (initialHeadingSet) {
-                        adjustedRotation = (360 - event.alpha + relativeNorthDifference) % 360;
-                        let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                        locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
-                        locationMarker.bindPopup(`event.alpha: ${Math.ceil(event.alpha)}, relativeTrueNorth: ${Math.ceil(relativeTrueNorth)}, relativeFalseNorth: ${Math.ceil(relativeFalseNorth)}, relativeNorthDifference: ${Math.ceil(relativeNorthDifference)}, adjustedRotation: ${Math.ceil(adjustedRotation)}, locationModel.headingArr: ${locationModel.headingArr}`);
-                    }
+                window.addEventListener("deviceorientationabsolute", (event) => {
+                    locationMarker.bindPopup(`event.alpha absolute: ${event.alpha}`);
                 });
+
+                // window.addEventListener("deviceorientation", (event) => {
+                //     locationMarker.bindPopup(`Arr: ${locationModel.headingArr}, lastHeading: ${locationModel.headingForTest}`);
+                //     if (locationModel.heading && !initialHeadingSet) {
+                //         initialHeadingSet = true;
+                //         const locationMarkerIcon = L.divIcon({
+                //             html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-up"></i>`,
+                //             className: 'fa-location-icon',
+                //         });
+                //         locationMarker.setIcon(locationMarkerIcon);
+                //         let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                //         locationMarkerIconEl.style.transform = `rotate(${locationModel.heading}deg)`;
+                //         relativeTrueNorth = locationModel.heading;
+                //         relativeFalseNorth = event.alpha;
+                //         relativeNorthDifference = relativeFalseNorth - relativeTrueNorth;
+                //     } else if (initialHeadingSet) {
+                //         adjustedRotation = (360 - event.alpha + relativeNorthDifference) % 360;
+                //         // TODO TESTA DETTA IMORGON.
+                //         if (adjustedRotation < 0) {
+                //             adjustedRotation += 360;
+                //         }
+                //         let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                //         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+                //         locationMarker.bindPopup(`event.alpha: ${Math.ceil(event.alpha)}, relativeTrueNorth: ${Math.ceil(relativeTrueNorth)}, relativeFalseNorth: ${Math.ceil(relativeFalseNorth)}, relativeNorthDifference: ${Math.ceil(relativeNorthDifference)}, adjustedRotation: ${Math.ceil(adjustedRotation)}, locationModel.headingArr: ${locationModel.headingArr}`);
+                //     }
+                // });
 
 
                 // window.addEventListener("deviceorientation", (event) => {
