@@ -124,7 +124,21 @@ const mapEventModel = {
                         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
                     });
                 } else if (compassEvent === "webkitCompassHeading") {
-                    alert("STEVE JOBS WAS HERE")
+                    alert("STEVE JOBS WAS HERE");
+                    window.addEventListener("deviceorientation", (event) => {
+                        // The event will always trigger once when it's initialized. This happens on all devices.
+                        // On desktop, it will never trigger twice.
+                        // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
+                        locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}, Riktning: ${Math.ceil((360 - event.webkitCompassHeading) % 360)}</h3>`);
+                        if (deviceOrientationTriggerIndex === 1) {
+                            locationMarker.setIcon(locationMarkerIconArrow);
+                        }
+                        deviceOrientationTriggerIndex++;
+
+                        let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                        adjustedRotation = (360 - event.webkitCompassHeading - 45) % 360;
+                        locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+                    });
                 } else if (compassEvent === "unsupported") {
                     alert("UNSUPPORTED DEVICE")
                 }
