@@ -124,7 +124,6 @@ const mapEventModel = {
                         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
                     });
                 } else if (compassEvent === "webkitCompassHeading") {
-                    alert("STEVE JOBS WAS HERE");
                     window.addEventListener("deviceorientation", (event) => {
                         // The event will always trigger once when it's initialized. This happens on all devices.
                         // On desktop, it will never trigger twice.
