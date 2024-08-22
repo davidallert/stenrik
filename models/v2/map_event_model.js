@@ -124,20 +124,26 @@ const mapEventModel = {
                         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
                     });
                 } else if (compassEvent === "webkitCompassHeading") {
-                    window.addEventListener("deviceorientation", (event) => {
-                        // The event will always trigger once when it's initialized. This happens on all devices.
-                        // On desktop, it will never trigger twice.
-                        // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-                        locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}, Riktning: ${Math.ceil((360 - event.webkitCompassHeading) % 360)}</h3>`);
-                        if (deviceOrientationTriggerIndex === 1) {
-                            locationMarker.setIcon(locationMarkerIconArrow);
-                        }
-                        deviceOrientationTriggerIndex++;
+                    const permission = await this.requestDeviceOrientationPermission();
+                    alert(permission)
+                    if (permission === 'granted') {
+                        alert('permission granted');
+                        window.addEventListener("deviceorientation", (event) => {
+                            // The event will always trigger once when it's initialized. This happens on all devices.
+                            // On desktop, it will never trigger twice.
+                            // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
+                            locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}, Riktning: ${Math.ceil((360 - event.webkitCompassHeading) % 360)}</h3>`);
+                            if (deviceOrientationTriggerIndex === 1) {
+                                locationMarker.setIcon(locationMarkerIconArrow);
+                            }
+                            deviceOrientationTriggerIndex++;
+    
+                            let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                            adjustedRotation = (360 - event.webkitCompassHeading - 45) % 360;
+                            locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+                        });
+                    }
 
-                        let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                        adjustedRotation = (360 - event.webkitCompassHeading - 45) % 360;
-                        locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
-                    });
                 } else if (compassEvent === "unsupported") {
                     alert("UNSUPPORTED DEVICE")
                 }
@@ -169,6 +175,25 @@ const mapEventModel = {
           return 'unsupported';
         }
       },
+
+      requestDeviceOrientationPermission: async () => {
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            try {
+                const permissionState = await DeviceMotionEvent.requestPermission();
+                if (permissionState === 'granted') {
+                    return 'granted';
+                } else {
+                    console.log('Permission denied');
+                    return 'denied';
+                }
+            } catch (error) {
+                console.error('Error requesting device orientation permission:', error);
+            }
+        } else {
+            // Non-iOS 13+ devices (or iOS 12 and below)
+            return 'granted';
+        }
+    },
 
     removeSearchButtonOnPopupOpen: async function (map) {
         map.on('popupopen', () => {
