@@ -110,6 +110,7 @@ const mapEventModel = {
                     // The event will always trigger once when it's initialized. This happens on all devices.
                     // On desktop, it will never trigger twice.
                     // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
+                    locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}, Riktning: ${event.alpha}</h3>`);
                     if (deviceOrientationTriggerIndex === 1) {
                         locationMarker.setIcon(locationMarkerIconArrow);
                     }
@@ -127,8 +128,6 @@ const mapEventModel = {
 
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
-
-                locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}</h3>`);
 
                 if (position) {
                   map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
