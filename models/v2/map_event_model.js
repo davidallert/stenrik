@@ -113,6 +113,9 @@ const mapEventModel = {
 
                 window.addEventListener("deviceorientationabsolute", (event) => {
                     locationMarker.bindPopup(`event.alpha absolute: ${event.alpha}`);
+                    let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                    adjustedRotation = 360 - event.alpha % 360;
+                    locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
                 });
 
                 // window.addEventListener("deviceorientation", (event) => {
