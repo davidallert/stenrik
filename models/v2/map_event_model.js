@@ -87,7 +87,7 @@ const mapEventModel = {
                     className: 'fa-location-icon',
                 });
                 const locationMarkerIconArrow = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow"></i>`,
+                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i>`,
                     className: 'fa-location-icon',
                 });
 
