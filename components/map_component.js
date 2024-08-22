@@ -42,9 +42,9 @@ export default class MapComponent extends HTMLElement {
 
         this.map = this.initMap(62.334591, 16.063240, 5);
 
-        // const records = await supabaseModel.fetchData();
+        const records = await supabaseModel.fetchData();
 
-        // this.createMarkers(records);
+        this.createMarkers(records);
 
         this.init = false;
     }

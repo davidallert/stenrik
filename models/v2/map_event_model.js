@@ -128,6 +128,8 @@ const mapEventModel = {
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
 
+                locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}</h3>`);
+
                 if (position) {
                   map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                       animate: true,
