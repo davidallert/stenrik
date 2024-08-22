@@ -87,7 +87,7 @@ const mapEventModel = {
                     className: 'fa-location-icon',
                 });
                 const locationMarkerIconArrow = L.divIcon({
-                    html: `<i id="locationMarkerIconEl" class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i>`,
+                    html: `<i id="locationMarkerIconEl" <i class="fa-solid fa-location-arrow fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i>`,
                     className: 'fa-location-icon',
                 });
 
@@ -117,7 +117,7 @@ const mapEventModel = {
                     deviceOrientationTriggerIndex++;
 
                     let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                    adjustedRotation = (360 - event.alpha) % 360;
+                    adjustedRotation = (360 - event.alpha - 45) % 360;
                     locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
                 });
 
