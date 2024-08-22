@@ -68,7 +68,7 @@ const popupModel = {
                 break;
             case "Fångstgrop":
                 icon = L.divIcon({
-                    html: '<i class="fa-regular fa-circle-dot"></i>',
+                    html: '<i class="fa-solid fa-road-spikes"></i>',
                     className: 'fa-marker-icon',
                     iconAnchor: [12.5, 17], // Point of the icon which will correspond to marker's location
                     });
