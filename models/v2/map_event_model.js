@@ -106,25 +106,33 @@ const mapEventModel = {
 
                 let adjustedRotation = 0;
 
-                window.addEventListener("deviceorientationabsolute", (event) => {
-                    // The event will always trigger once when it's initialized. This happens on all devices.
-                    // On desktop, it will never trigger twice.
-                    // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-                    locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}, Riktning: ${Math.ceil((360 - event.alpha) % 360)}</h3>`);
-                    if (deviceOrientationTriggerIndex === 1) {
-                        locationMarker.setIcon(locationMarkerIconArrow);
-                    }
-                    deviceOrientationTriggerIndex++;
+                const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-                    let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                    adjustedRotation = (360 - event.alpha - 45) % 360;
-                    locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
-                });
+                if (isIOS) {
+                    console.log("Running on iOS, using webkitCompassHeading.");
+                } else {
+                    console.log("Using standard DeviceOrientation API.");
 
-                map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
-                    animate: true,
-                    duration: 1
-                });
+                    window.addEventListener("deviceorientationabsolute", (event) => {
+                        // The event will always trigger once when it's initialized. This happens on all devices.
+                        // On desktop, it will never trigger twice.
+                        // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
+                        locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}, Riktning: ${Math.ceil((360 - event.alpha) % 360)}</h3>`);
+                        if (deviceOrientationTriggerIndex === 1) {
+                            locationMarker.setIcon(locationMarkerIconArrow);
+                        }
+                        deviceOrientationTriggerIndex++;
+
+                        let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                        adjustedRotation = (360 - event.alpha - 45) % 360;
+                        locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+                    });
+
+                    map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
+                        animate: true,
+                        duration: 1
+                    });
+            }
 
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
