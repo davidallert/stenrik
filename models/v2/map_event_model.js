@@ -79,6 +79,11 @@ const mapEventModel = {
         locationTrackingBtn.addEventListener("click", async () => {
             if (init) {
                 init = false;
+
+                const compassEvent = this.getCompassSupport();
+                const permission = await this.requestDeviceOrientationPermission();
+                alert(permission)
+
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
 
@@ -106,8 +111,6 @@ const mapEventModel = {
 
                 let adjustedRotation = 0;
 
-                const compassEvent = this.getCompassSupport();
-                alert(compassEvent);
                 if (compassEvent === "DeviceOrientationAbsoluteEvent") {
                     window.addEventListener("deviceorientationabsolute", (event) => {
                         // The event will always trigger once when it's initialized. This happens on all devices.
@@ -124,8 +127,6 @@ const mapEventModel = {
                         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
                     });
                 } else if (compassEvent === "webkitCompassHeading") {
-                    const permission = await this.requestDeviceOrientationPermission();
-                    alert(permission)
                     if (permission === 'granted') {
                         alert('permission granted');
                         window.addEventListener("deviceorientation", (event) => {
