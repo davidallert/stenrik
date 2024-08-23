@@ -44,6 +44,11 @@
         right: 80px;
     }
 
+    .compass {
+        top: 20px;
+        right: 140px;
+    }
+
     .left-button-text, .right-button-text {
         font-size: 1.8rem;
     }
