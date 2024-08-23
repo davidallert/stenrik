@@ -126,7 +126,7 @@ const mapEventModel = {
                         locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
 
                         let compass = document.getElementById("compass");
-                        compass.style.transform = `rotate(${event.alpha}deg)`;
+                        compass.style.transform = `rotate(${event.alpha - 45}deg)`;
                     });
                 } else if (compassEvent === "webkitCompassHeading") {
                     if (permission === 'granted') {
