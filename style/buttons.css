@@ -54,6 +54,23 @@
     transition-duration: 0.3s;
 }
 
+.compass {
+    bottom: 150px;
+    right: 20px;
+}
+
+.compass i::after {
+    position: absolute;
+    left: 42%;
+    top: 11%;
+    content: "";
+    height: 9px;
+    width: 10px;
+    background-color: red;
+    z-index: -1;
+    transform: rotate(45deg);
+}
+
 .hamburger-menu-btn {
     bottom: 30px;
     right: 20px;

@@ -20,9 +20,7 @@
 }
 
 .fa-location-arrow,
-.fa-circle-dot,
-.fa-arrow-up,
-.fa-circle-up {
+.fa-circle-dot {
     color: var(--base-text-color);
     transform-origin: center;
 }

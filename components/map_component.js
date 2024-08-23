@@ -37,6 +37,7 @@ export default class MapComponent extends HTMLElement {
             <div id="map" class="map" style="height: 100vh; width: 100%;"></div>
             <div id="searchButton" class="search-button hidden">Sök i området</div>
             <div id="locationTrackingBtn" class="icon-button fly-to-user-button"><i class="fa-solid fa-location-crosshairs"></i></i></div>
+            <div class="icon-button compass"><i id="compass" class="fa-solid fa-compass fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i></div>
         </main>`;
         
 
