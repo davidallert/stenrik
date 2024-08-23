@@ -114,7 +114,7 @@ const mapEventModel = {
                         // On desktop, it will never trigger twice.
                         // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
                         locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}, Riktning: ${Math.ceil((360 - event.alpha) % 360)}</h3>`);
-                        if (deviceOrientationTriggerIndex === 1) {
+                        if (deviceOrientationTriggerIndex === 2) {
                             locationMarker.setIcon(locationMarkerIconArrow);
                         }
                         deviceOrientationTriggerIndex++;
@@ -147,7 +147,6 @@ const mapEventModel = {
                 } else if (compassEvent === "unsupported") {
                     alert("UNSUPPORTED DEVICE")
                 }
-
                     map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                         animate: true,
                         duration: 1
@@ -188,7 +187,7 @@ const mapEventModel = {
                 }
             } catch (error) {
                 console.error('Error requesting device orientation permission:', error);
-                return 'error';
+                return `Error requesting device orientation permission: ${error}`;
             }
         } else {
             // Non-iOS 13+ devices (or iOS 12 and below)

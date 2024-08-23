@@ -23,7 +23,7 @@
 .fa-circle-dot,
 .fa-arrow-up,
 .fa-circle-up {
-    color: var(--base-text-color);
+    color: blue;
     transform-origin: center;
 }
 
