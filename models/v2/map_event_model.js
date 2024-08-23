@@ -107,7 +107,7 @@ const mapEventModel = {
                 let adjustedRotation = 0;
 
                 const compassEvent = this.getCompassSupport();
-
+                alert(compassEvent);
                 if (compassEvent === "DeviceOrientationAbsoluteEvent") {
                     window.addEventListener("deviceorientationabsolute", (event) => {
                         // The event will always trigger once when it's initialized. This happens on all devices.
