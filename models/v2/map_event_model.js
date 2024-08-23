@@ -82,7 +82,6 @@ const mapEventModel = {
 
                 const compassEvent = this.getCompassSupport();
                 const permission = await this.requestDeviceOrientationPermission();
-                alert(permission)
 
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
@@ -131,7 +130,6 @@ const mapEventModel = {
                     });
                 } else if (compassEvent === "webkitCompassHeading") {
                     if (permission === 'granted') {
-                        alert('permission granted');
                         window.addEventListener("deviceorientation", (event) => {
                             // The event will always trigger once when it's initialized. This happens on all devices.
                             // On desktop, it will never trigger twice.
