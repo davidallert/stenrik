@@ -188,6 +188,7 @@ const mapEventModel = {
                 }
             } catch (error) {
                 console.error('Error requesting device orientation permission:', error);
+                return 'error';
             }
         } else {
             // Non-iOS 13+ devices (or iOS 12 and below)
