@@ -144,7 +144,8 @@ const mapEventModel = {
                             locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
 
                             let compass = document.getElementById("compass");
-                            compass.style.transform = `rotate(${event.webkitCompassHeading - 45}deg)`;
+                            adjustedRotation = 360 - event.webkitCompassHeading - 45;
+                            compass.style.transform = `rotate(${-adjustedRotation}deg)`;
                         });
                     }
                 } else if (compassEvent === "unsupported") {
