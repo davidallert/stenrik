@@ -106,7 +106,7 @@ const mapEventModel = {
 
                 locationMarker.addTo(map);
 
-                locationTrackingBtn.childNodes[0].style.color = "#abd2df";
+                locationTrackingBtn.childNodes[0].style.color = "blue";
 
                 let adjustedRotation = 0;
 
