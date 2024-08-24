@@ -188,7 +188,7 @@ export default class MapComponent extends HTMLElement {
     async searchButtonClickEvent() {
         // Fade the search button, then remove it after a duration of 300ms (Its transition-duration is 0.3s).
         let searchButton = document.getElementById("searchButton");
-        mapEventModel.fadeElement(searchButton);
+        elementModel.fadeElement(searchButton);
 
         // Get the coords of the current bounding box via the mapModel.
         const boundingBox = this.getBoundingBoxCoords();
