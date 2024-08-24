@@ -142,6 +142,9 @@ const mapEventModel = {
                             let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                             adjustedRotation = (event.webkitCompassHeading - 45);
                             locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+
+                            let compass = document.getElementById("compass");
+                            compass.style.transform = `rotate(${event.webkitCompassHeading - 45}deg)`;
                         });
                     }
                 } else if (compassEvent === "unsupported") {
