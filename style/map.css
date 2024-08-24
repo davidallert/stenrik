@@ -21,7 +21,7 @@
 
 .fa-location-arrow,
 .fa-circle-dot {
-    color: var(--base-text-color);
+    color: blueviolet;
     transform-origin: center;
 }
 
