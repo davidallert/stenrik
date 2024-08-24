@@ -9,6 +9,8 @@ import popupModel from '../models/v2/popup_model.js';
 import checkIf from '../util/is_mobile.js';
 import positioningModel from '../models/positioning_model.js';
 import locationModel from '../models/location_model.js';
+import loading from '../util/loading.js';
+import elementModel from '../models/v2/element_model.js';
 
 export default class MapComponent extends HTMLElement {
     constructor() {
@@ -21,14 +23,13 @@ export default class MapComponent extends HTMLElement {
     }
 
     async connectedCallback() {
-        locationModel.watchOrientation();
+        loading.createSpinner();
         await this.render();
-        // mapEventModel.test(this.map);
         mapEventModel.addLocationTrackingEvent(this.map);
         this.addSearchAreaOnMoveEvent();
         this.initSearchButton();
         mapEventModel.removeSearchButtonOnPopupOpen(this.map);
-        mapEventModel.addSearchButtonOnPopupOpen(this.map);
+        mapEventModel.addSearchButtonOnPopupClose(this.map);
     }
 
     async render() {
@@ -36,10 +37,9 @@ export default class MapComponent extends HTMLElement {
         <main id="mapOverlay" class="map-overlay">
             <div id="map" class="map" style="height: 100vh; width: 100%;"></div>
             <div id="searchButton" class="search-button hidden">Sök i området</div>
-            <div id="locationTrackingBtn" class="icon-button fly-to-user-button"><i class="fa-solid fa-location-crosshairs"></i></i></div>
-            <div class="icon-button compass"><i id="compass" class="fa-solid fa-compass fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i></div>
+            <div id="locationTrackingBtn" class="icon-button fly-to-user-button"><i class="fa-solid fa-location-crosshairs"></i></div>
+            <div class="icon-button compass-div hidden"><i id="compass" class="fa-solid fa-compass fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i></div>
         </main>`;
-        
 
         this.map = this.initMap(62.334591, 16.063240, 5);
 
@@ -155,9 +155,9 @@ export default class MapComponent extends HTMLElement {
             // TODO Make sure the event is only triggered once for a unique set of bounds.
             const searchButton = document.getElementById("searchButton");
             if (this.map.getZoom() >= 9) {
-                mapEventModel.fadeInElement(searchButton);
+                elementModel.fadeInElement(searchButton);
             } else if (this.map.getZoom() < 9) {
-                mapEventModel.fadeElement(searchButton);
+                elementModel.fadeElement(searchButton);
             }
         });
     }

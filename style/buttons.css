@@ -48,18 +48,21 @@
 .fly-to-user-button {
     bottom: 90px;
     right: 20px;
+    z-index: 1000;
 }
 
 .fly-to-user-button i {
     transition-duration: 0.3s;
 }
 
-.compass {
-    bottom: 150px;
+.compass-div {
+    bottom: 90px; /* Change to 150px via JavaScript. (Mobile only).*/
     right: 20px;
+    transition-duration: 0.3s;
+    /* opacity: 0; */
 }
 
-.compass i::after {
+.compass-div i::after {
     position: absolute;
     left: 42%;
     top: 11%;

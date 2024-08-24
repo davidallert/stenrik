@@ -32,13 +32,18 @@ const popupModel = {
             siteDescOrientation = ` <h2>Hitta hit</h2>
                                     <p>${site.desc_orientation}</p>`
         }
+        if (site.municipality && site.parish && site.province && site.county) {
+            siteZones = `<h3>(${site.municipality}, ${site.parish}, ${site.province}, ${site.county})</h3>`
+        }
 
         const popupContent = `<div class="pin">
                                 ${siteTitle}
+                                ${siteZones}
                                 ${siteDescText}
                                 ${siteDescTradition}
                                 ${siteDescTerrain}
                                 ${siteDescOrientation}
+                                <p><i>${site.site_id} | ${site.raa_id}</i></p>
                              </div>`
         return popupContent;
     },

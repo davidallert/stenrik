@@ -5,64 +5,14 @@
 "use strict";
 
 import locationModel from "../location_model.js";
+import loading from "../../util/loading.js";
+import elementModel from "./element_model.js";
+import checkIf from "../../util/is_mobile.js";
 
 const mapEventModel = {
-    fadeElement: function fadeElement(element) {
-        const computedStyle = window.getComputedStyle(element);
-        const visibility = computedStyle.visibility;
-        if (visibility === "visible") {
-            element.style.backgroundColor = "#D19FAE";
-            element.style.opacity = "0";
-            setTimeout(() => {
-                element.classList.toggle("hidden");
-                element.style.backgroundColor = "#ffffff";
-            }, 300);
-        }
-    },
-
-    fadeInElement: function fadeInElement(element) {
-        const computedStyle = window.getComputedStyle(element);
-        const visibility = computedStyle.visibility;
-        if (visibility === "hidden") {
-            element.classList.toggle("hidden");
-            element.style.opacity = "1";
-        }
-    },
-
     screenFlash: function screenFlash() {
         // Maybe create a function that makes the screen or borders flash when the user is too far or close enough to search. Green/red pulse/blink. Has to be easy on the eyes, though.
     },
-    // test: (map) => {
-    //     let alpha = null;
-    //     let initialAlpha = null;
-    //     let correctedAlpha = null;
-    //     let locationMarker = null;
-    //     let testOnce = true;
-
-    //     const locationMarkerIcon = L.divIcon({
-    //         html: `<i id="locationMarkerIconElement" class="fa-solid fa-upload"></i>`,
-    //         className: 'fa-location-icon',
-    //     });
-    
-    //     locationMarker = L.marker(
-    //         [57.490224, 12.632039],
-    //         { icon: locationMarkerIcon }
-    //     );
-    //     locationMarker.addTo(map);
-
-    //     let locationMarkerIconElement = document.getElementById("locationMarkerIconElement");
-
-    //     window.addEventListener("deviceorientation", (event) => {
-    //         alpha = event.alpha;
-    //         console.log(alpha);
-    //         if (testOnce && alpha) {
-    //             testOnce = false;
-    //             correctedAlpha = (360 - alpha) % 360;
-    //             locationMarkerIconElement.style.transform = `rotate(${correctedAlpha}deg)`;
-    //             locationMarker.bindPopup(`Alpha: ${alpha}, Corrected: ${correctedAlpha}, Initial: ${initialAlpha}, Absolute: ${event.absolute}`, {'maxHeight': '500', 'maxWidth': '300'});
-    //         }
-    //     });
-    // },
 
     /**
      * Adds a click event to a button in the bottom right corner.
@@ -70,6 +20,7 @@ const mapEventModel = {
      * @param {Object} map The Leaflet map object (this.map in map_view.js).
      */
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
+
         let init = true;
         let deviceOrientationTriggerIndex = 0;
         let locationMarker = null;
@@ -79,6 +30,7 @@ const mapEventModel = {
         locationTrackingBtn.addEventListener("click", async () => {
             if (init) {
                 init = false;
+                loading.displaySpinner();
 
                 const compassEvent = this.getCompassSupport();
                 const permission = await this.requestDeviceOrientationPermission();
@@ -106,58 +58,32 @@ const mapEventModel = {
 
                 locationMarker.addTo(map);
 
-                locationTrackingBtn.childNodes[0].style.color = "blue";
-
-                let adjustedRotation = 0;
+                // locationTrackingBtn.childNodes[0].style.color = "black";
 
                 if (compassEvent === "DeviceOrientationAbsoluteEvent") {
-                    window.addEventListener("deviceorientationabsolute", (event) => {
-                        // The event will always trigger once when it's initialized. This happens on all devices.
-                        // On desktop, it will never trigger twice.
-                        // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-                        locationMarker.bindPopup(`<h3>Longitud: ${position.coords.longitude} | Latitud: ${position.coords.latitude}, Riktning: ${Math.ceil((360 - event.alpha) % 360)}</h3>`);
-                        if (deviceOrientationTriggerIndex === 2) {
-                            locationMarker.setIcon(locationMarkerIconArrow);
-                        }
-                        deviceOrientationTriggerIndex++;
-
-                        let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                        adjustedRotation = (360 - event.alpha - 45) % 360;
-                        locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
-
-                        let compass = document.getElementById("compass");
-                        compass.style.transform = `rotate(${event.alpha - 45}deg)`;
-                    });
+                    this.deviceOrientationAbsoluteEvent(locationMarker, locationMarkerIconArrow, deviceOrientationTriggerIndex);
                 } else if (compassEvent === "webkitCompassHeading") {
-                    if (permission === 'granted') {
-                        window.addEventListener("deviceorientation", (event) => {
-                            // The event will always trigger once when it's initialized. This happens on all devices.
-                            // On desktop, it will never trigger twice.
-                            // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-                            if (deviceOrientationTriggerIndex === 2) {
-                                locationMarker.setIcon(locationMarkerIconArrow);
-                            }
-                            deviceOrientationTriggerIndex++;
-    
-                            let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
-                            adjustedRotation = (event.webkitCompassHeading - 45);
-                            locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
-
-                            let compass = document.getElementById("compass");
-                            adjustedRotation = 360 - event.webkitCompassHeading - 45;
-                            compass.style.transform = `rotate(${adjustedRotation}deg)`;
-
-                            locationMarker.bindPopup(`<h3>event.webkitCompassHeading: ${Math.ceil(event.webkitCompassHeading)}</h3>`);
-                        });
-                    }
+                    this.webkitCompassHeadingEvent(locationMarker, locationMarkerIconArrow, deviceOrientationTriggerIndex, permission);
                 } else if (compassEvent === "unsupported") {
                     alert("UNSUPPORTED DEVICE")
                 }
-                    map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
-                        animate: true,
-                        duration: 1
-                    });
 
+                if (compassEvent !== "unsupported" && checkIf.deviceIsMobile()) {
+                    let compassDiv = document.getElementsByClassName("compass-div")[0];
+                    compassDiv.classList.toggle("hidden");
+                    compassDiv.style.bottom = "150px";
+                }
+
+                loading.removeSpinner();
+
+                // Fly to the user's position.
+                map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
+                    animate: true,
+                    duration: 1
+                });
+
+
+            // Fly to the user's location if the button is clicked again.
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
 
@@ -171,6 +97,50 @@ const mapEventModel = {
         })
     },
 
+    deviceOrientationAbsoluteEvent: (locationMarker, locationMarkerIconArrow, deviceOrientationTriggerIndex) => {
+        window.addEventListener("deviceorientationabsolute", (event) => {
+            // The event will always trigger once when it's initialized.
+            // On desktop, it will never trigger twice.
+            // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
+            if (deviceOrientationTriggerIndex === 2) {
+                locationMarker.setIcon(locationMarkerIconArrow);
+            }
+            deviceOrientationTriggerIndex++;
+
+            let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+            let adjustedRotation = (360 - event.alpha - 45) % 360;
+            locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+
+            let compass = document.getElementById("compass");
+            compass.style.transform = `rotate(${event.alpha - 45}deg)`;
+        });
+    },
+
+    webkitCompassHeadingEvent: (locationMarker, locationMarkerIconArrow, deviceOrientationTriggerIndex, permission) => {
+        if (permission === 'granted') {
+            window.addEventListener("deviceorientation", (event) => {
+                // The event will always trigger once when it's initialized. This happens on all devices.
+                // On desktop, it will never trigger twice.
+                // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
+                if (deviceOrientationTriggerIndex === 2) {
+                    locationMarker.setIcon(locationMarkerIconArrow);
+                }
+                deviceOrientationTriggerIndex++;
+
+                let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+                let adjustedRotation = (event.webkitCompassHeading - 45);
+                locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
+
+                let compass = document.getElementById("compass");
+                adjustedRotation = 360 - event.webkitCompassHeading - 45;
+                compass.style.transform = `rotate(${adjustedRotation}deg)`;
+            });
+        }
+    },
+    /**
+     * Checks whether the device supports the device orientation absolute event, webkit compass heading, or neither.
+     * @returns 
+     */
     getCompassSupport: () => {
         if ('ondeviceorientationabsolute' in window) {
           return 'DeviceOrientationAbsoluteEvent';
@@ -181,6 +151,10 @@ const mapEventModel = {
         }
       },
 
+      /**
+       * Used to request permission to track device motion from iOS devices.
+       * @returns 
+       */
       requestDeviceOrientationPermission: async () => {
         if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
             try {
@@ -201,10 +175,14 @@ const mapEventModel = {
         }
     },
 
+    /**
+     * Fix, removes the search button when a popup is clicked, to avoid obstructing its content.
+     * @param {*} map 
+     */
     removeSearchButtonOnPopupOpen: async function (map) {
         map.on('popupopen', () => {
             const searchButton = document.getElementById("searchButton");
-            mapEventModel.fadeElement(searchButton);
+            elementModel.fadeElement(searchButton);
             // Workaround to force the button to be hidden whenever a marker is open,
             // even if the moveend event is triggered and the zoomlevel is valid.
             // This prevents the search button from blocking the popup content.
@@ -212,12 +190,16 @@ const mapEventModel = {
           });
     },
 
-    addSearchButtonOnPopupOpen: async function addSearchButtonOnPopupOpen(map) {
+    /**
+     * Display the search button when a popup is closed, if the zoom level is appropriate.
+     * @param {*} map 
+     */
+    addSearchButtonOnPopupClose: async function addSearchButtonOnPopupClose(map) {
         map.on('popupclose', () => {
             const searchButton = document.getElementById("searchButton");
             searchButton.style.display = "flex"; // Must change from display: none; before fadeInElement is called.
             if (map.getZoom() >= 9) {
-                mapEventModel.fadeInElement(searchButton);
+                elementModel.fadeInElement(searchButton);
             }
           });
     }

@@ -5,17 +5,20 @@
 "use strict";
 
 import supabase from "../../util/supabase_client.js";
+import loading from "../../util/loading.js";
 
 // Doc: https://supabase.com/docs/guides/auth/passwords
 
 const supabaseModel = {
     fetchData: async function fetchData() {
+        loading.displaySpinner();
         let { data: site_data, error } = await supabase
         .from('site_data')
         .select('id, site_id, raa_id, site_name, site_type, municipality, parish, province, county, desc_terrain, desc_orientation, desc_tradition, desc_text, coordinates')
         .eq('site_type', ['Runristning'])
         .limit(100);
         // .in('site_type', ['Kloster', 'Kyrka/kapell'])
+        loading.removeSpinner();
 
         if (!error) {
             console.log(site_data);

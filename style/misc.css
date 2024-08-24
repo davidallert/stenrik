@@ -1,0 +1,14 @@
+.spinner {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: auto;
+    z-index: 1000;
+    transition-duration: 0.3s;
+}
+
+.spinner i {
+    font-size: 5rem;
+    filter: drop-shadow(1px 1px 5px var(--black));
+}
