@@ -115,17 +115,17 @@ export default class MapComponent extends HTMLElement {
                         longitude = coordinates[0][0];
                         latitude = coordinates[0][1];
 
-                        // this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
-                        // .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
+                        this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
+                        .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
 
                         break;
                     case "MultiPolygon":
                         coordinates = coordinates[0][0]
-                        // this.handleComplexGeoJsonGeometry(coordinates, site.coordinates, popupContent, fontAwesomeIcon, maxWidth);
+                        this.handleComplexGeoJsonGeometry(coordinates, site.coordinates, popupContent, fontAwesomeIcon, maxWidth);
                         break;
                     case "MultiLineString":
                         coordinates = coordinates[0]
-                        // this.handleComplexGeoJsonGeometry(coordinates, site.coordinates, popupContent, fontAwesomeIcon, maxWidth);
+                        this.handleComplexGeoJsonGeometry(coordinates, site.coordinates, popupContent, fontAwesomeIcon, maxWidth);
                         break;
                     case "GeometryCollection":
                         let geometries = site.coordinates.features[0].geometry.geometries;
