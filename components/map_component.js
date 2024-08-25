@@ -257,7 +257,8 @@ export default class MapComponent extends HTMLElement {
                 onEachFeature: function (feature, layer) {
                     // Bind popup to each feature
                     layer.bindPopup(popupContent, { maxHeight: '500', maxWidth: maxWidth });
-                    if (layer.feature.geometry.type === "Polygon" || layer.feature.geometry.type === "LineString") {
+                    console.log(layer);
+                    if (layer.feature.geometry.type === "Polygon" || layer.feature.geometry.type === "LineString" || layer.feature.geometry.type === "MultiPolygon" || layer.feature.geometry.type === "MultiLineString") {
                         layer.setStyle({ color: '#ffffff' });
                     } else if (layer.feature.geometry.type === "Point") {
                         layer.setIcon(icon);

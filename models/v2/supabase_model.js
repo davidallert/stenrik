@@ -15,8 +15,8 @@ const supabaseModel = {
         let { data: site_data, error } = await supabase
         .from('site_data')
         .select('id, site_id, raa_id, site_name, site_type, municipality, parish, province, county, desc_terrain, desc_orientation, desc_tradition, desc_text, coordinates')
-        .eq('site_type', ['Runristning'])
-        .limit(1000);
+        // .eq('site_type', ['Runristning'])
+        .limit(5000);
         // .in('site_type', ['Kloster', 'Kyrka/kapell'])
         loading.removeSpinner();
 
