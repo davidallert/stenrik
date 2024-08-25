@@ -114,10 +114,8 @@ export default class MapComponent extends HTMLElement {
                     case "MultiPoint":
                         longitude = coordinates[0][0];
                         latitude = coordinates[0][1];
-
                         this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
                         .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
-
                         break;
                     case "MultiPolygon":
                         coordinates = coordinates[0][0]
