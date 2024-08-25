@@ -115,23 +115,17 @@ export default class MapComponent extends HTMLElement {
                         longitude = coordinates[0][0];
                         latitude = coordinates[0][1];
 
-                            this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
-                            .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
+                        this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
+                        .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
 
                         break;
                     case "MultiPolygon":
-                        let centroid = this.getCentroid(coordinates[0][0]);
-                        let marker = L.marker([centroid[0], centroid[1]], {icon: fontAwesomeIcon});
-                        marker.bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth});
-
-                        const boundCreatePolygon = this.createPolygon.bind(this, this.map, site, popupContent, maxWidth);
-                        marker.addEventListener("click", function handleClick() {
-                            boundCreatePolygon();
-                            marker.removeEventListener("click", handleClick); // Use the same reference
-                        });
-
-                        this.markers.addLayer(marker);
-
+                        coordinates = coordinates[0][0]
+                        this.handleGeoJsonGeometry(site, coordinates, popupContent, fontAwesomeIcon, maxWidth);
+                        break;
+                    case "MultiLineString":
+                        coordinates = coordinates[0]
+                        this.handleGeoJsonGeometry(site, coordinates, popupContent, fontAwesomeIcon, maxWidth);
                         break;
                     default:
                         continue;
@@ -218,8 +212,22 @@ export default class MapComponent extends HTMLElement {
         loading.removeSpinner();
     }
 
+    handleGeoJsonGeometry(site, coordinates, popupContent, fontAwesomeIcon, maxWidth) {
+        let center = this.getCenter(coordinates);
+        let marker = L.marker([center[0], center[1]], {icon: fontAwesomeIcon});
+        marker.bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth});
+
+        const boundCreateGeoJson = this.createGeoJson.bind(this, this.map, site, popupContent, maxWidth);
+        marker.addEventListener("click", function handleClick() {
+            boundCreateGeoJson();
+            marker.removeEventListener("click", handleClick); // Use the same reference
+        });
+
+        this.markers.addLayer(marker);
+    }
+
     // Function to calculate the centroid of a polygon
-    getCentroid(coordinates) {
+    getCenter(coordinates) {
         let x = 0, y = 0, n = coordinates.length;
         coordinates.forEach(coord => {
             x += coord[0];
@@ -228,9 +236,9 @@ export default class MapComponent extends HTMLElement {
         return [y / n, x / n];
     }
 
-    createPolygon(map, site, popupContent, maxWidth) {
-            let geoJsonPolygon  = site.coordinates;
-            let polygonLayer = L.geoJSON(geoJsonPolygon, {
+    createGeoJson(map, site, popupContent, maxWidth) {
+            let geoJsonGeometry  = site.coordinates;
+            let layer = L.geoJSON(geoJsonGeometry, {
                 onEachFeature: function (feature, layer) {
                     // Bind popup to each feature
                     layer.bindPopup(popupContent, { maxHeight: '500', maxWidth: maxWidth });
@@ -238,7 +246,7 @@ export default class MapComponent extends HTMLElement {
                 }
             });
 
-            polygonLayer.addTo(map);
+            layer.addTo(map);
     }
 
 }
