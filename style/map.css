@@ -11,6 +11,11 @@
     font-size: x-large;
 }
 
+.fa-geometry-collection-marker-icon i {
+    font-size: x-large;
+    color: var(--white);
+}
+
 .fa-location-icon {
     font-size: x-large;
     display: flex;

@@ -115,17 +115,29 @@ export default class MapComponent extends HTMLElement {
                         longitude = coordinates[0][0];
                         latitude = coordinates[0][1];
 
-                        this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
-                        .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
+                        // this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
+                        // .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
 
                         break;
                     case "MultiPolygon":
                         coordinates = coordinates[0][0]
-                        this.handleGeoJsonGeometry(site, coordinates, popupContent, fontAwesomeIcon, maxWidth);
+                        // this.handleComplexGeoJsonGeometry(coordinates, site.coordinates, popupContent, fontAwesomeIcon, maxWidth);
                         break;
                     case "MultiLineString":
                         coordinates = coordinates[0]
-                        this.handleGeoJsonGeometry(site, coordinates, popupContent, fontAwesomeIcon, maxWidth);
+                        // this.handleComplexGeoJsonGeometry(coordinates, site.coordinates, popupContent, fontAwesomeIcon, maxWidth);
+                        break;
+                    case "GeometryCollection":
+                        let geometries = site.coordinates.features[0].geometry.geometries;
+                        for (let geometry of geometries) {
+                            if (geometry.type === "Polygon") {
+                                this.handleComplexGeoJsonGeometry(geometry.coordinates[0], geometries, popupContent, fontAwesomeIcon, maxWidth);
+                                break;
+                            } else if (geometry.type === "LineString") {
+                                this.handleComplexGeoJsonGeometry(geometry.coordinates, geometries, popupContent, fontAwesomeIcon, maxWidth);
+                                break;
+                            }
+                        }
                         break;
                     default:
                         continue;
@@ -212,12 +224,12 @@ export default class MapComponent extends HTMLElement {
         loading.removeSpinner();
     }
 
-    handleGeoJsonGeometry(site, coordinates, popupContent, fontAwesomeIcon, maxWidth) {
+    handleComplexGeoJsonGeometry(coordinates, geoJson, popupContent, fontAwesomeIcon, maxWidth) {
         let center = this.getCenter(coordinates);
-        let marker = L.marker([center[0], center[1]], {icon: fontAwesomeIcon});
+        let marker = L.marker([center[0], center[1]], {icon: fontAwesomeIcon, zIndexOffset: 1000});
         marker.bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth});
 
-        const boundCreateGeoJson = this.createGeoJson.bind(this, this.map, site, popupContent, maxWidth);
+        const boundCreateGeoJson = this.createGeoJson.bind(this, this.map, geoJson, popupContent, maxWidth);
         marker.addEventListener("click", function handleClick() {
             boundCreateGeoJson();
             marker.removeEventListener("click", handleClick); // Use the same reference
@@ -236,13 +248,22 @@ export default class MapComponent extends HTMLElement {
         return [y / n, x / n];
     }
 
-    createGeoJson(map, site, popupContent, maxWidth) {
-            let geoJsonGeometry  = site.coordinates;
+    createGeoJson(map, geoJson, popupContent, maxWidth) {
+        let icon = L.divIcon({
+            html: '<i class="fa-solid fa-location-dot"></i>',
+            className: 'fa-geometry-collection-marker-icon',
+            iconAnchor: [9.5, 12], // Point of the icon which will correspond to marker's location
+          });
+            let geoJsonGeometry = geoJson;
             let layer = L.geoJSON(geoJsonGeometry, {
                 onEachFeature: function (feature, layer) {
                     // Bind popup to each feature
                     layer.bindPopup(popupContent, { maxHeight: '500', maxWidth: maxWidth });
-                    layer.setStyle({ color: '#ffffff' });
+                    if (layer.feature.geometry.type === "Polygon" || layer.feature.geometry.type === "LineString") {
+                        layer.setStyle({ color: '#ffffff' });
+                    } else if (layer.feature.geometry.type === "Point") {
+                        layer.setIcon(icon);
+                    }
                 }
             });
 
