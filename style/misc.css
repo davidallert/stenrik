@@ -10,5 +10,5 @@
 
 .spinner i {
     font-size: 5rem;
-    filter: drop-shadow(1px 1px 5px var(--black));
+    /* filter: drop-shadow(1px 1px 5px var(--black)); */
 }

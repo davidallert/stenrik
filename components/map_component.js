@@ -103,6 +103,9 @@ export default class MapComponent extends HTMLElement {
                 latitude = null;
                 fontAwesomeIcon = "";
 
+                fontAwesomeIcon = popupModel.selectIcon(site.site_type);
+                popupContent = popupModel.addPopupContent(site, siteTitle, siteZones, siteDescText, siteDescTradition, siteDescTerrain, siteDescOrientation);
+
                 geometryType = site.coordinates.features[0].geometry.type;
                 coordinates = site.coordinates.features[0].geometry.coordinates;
 
@@ -111,16 +114,29 @@ export default class MapComponent extends HTMLElement {
                     case "MultiPoint":
                         longitude = coordinates[0][0];
                         latitude = coordinates[0][1];
+
+                            this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
+                            .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
+
+                        break;
+                    case "MultiPolygon":
+                        let centroid = this.getCentroid(coordinates[0][0]);
+                        let marker = L.marker([centroid[0], centroid[1]], {icon: fontAwesomeIcon});
+                        marker.bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth});
+
+                        const boundCreatePolygon = this.createPolygon.bind(this, this.map, site, popupContent, maxWidth);
+                        marker.addEventListener("click", function handleClick() {
+                            boundCreatePolygon();
+                            marker.removeEventListener("click", handleClick); // Use the same reference
+                        });
+
+                        this.markers.addLayer(marker);
+
                         break;
                     default:
                         continue;
                 };
 
-                fontAwesomeIcon = popupModel.selectIcon(site.site_type);
-                popupContent = popupModel.addPopupContent(site, siteTitle, siteZones, siteDescText, siteDescTradition, siteDescTerrain, siteDescOrientation);
-
-                this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
-                .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
             }
         }
         if (this.markers) {
@@ -186,6 +202,7 @@ export default class MapComponent extends HTMLElement {
      * @param {Object} map The Leaflet map object (this.map in map_view.js).
      */
     async searchButtonClickEvent() {
+        loading.displaySpinner();
         // Fade the search button, then remove it after a duration of 300ms (Its transition-duration is 0.3s).
         let searchButton = document.getElementById("searchButton");
         elementModel.fadeElement(searchButton);
@@ -198,6 +215,30 @@ export default class MapComponent extends HTMLElement {
         if (records) {
             this.createMarkers(records);
         }
+        loading.removeSpinner();
+    }
+
+    // Function to calculate the centroid of a polygon
+    getCentroid(coordinates) {
+        let x = 0, y = 0, n = coordinates.length;
+        coordinates.forEach(coord => {
+            x += coord[0];
+            y += coord[1];
+        });
+        return [y / n, x / n];
+    }
+
+    createPolygon(map, site, popupContent, maxWidth) {
+            let geoJsonPolygon  = site.coordinates;
+            let polygonLayer = L.geoJSON(geoJsonPolygon, {
+                onEachFeature: function (feature, layer) {
+                    // Bind popup to each feature
+                    layer.bindPopup(popupContent, { maxHeight: '500', maxWidth: maxWidth });
+                    layer.setStyle({ color: '#ffffff' });
+                }
+            });
+
+            polygonLayer.addTo(map);
     }
 
 }

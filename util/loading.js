@@ -6,7 +6,7 @@ import elementModel from "../models/v2/element_model.js";
 const loading = {
     createSpinner() {
         let spinner = document.createElement("div");
-        let spinnerIcon = '<i class="fa-solid fa-arrows-to-dot fa-spin"></i>';
+        let spinnerIcon = '<i class="fa-regular fa-compass fa-spin"></i>';
 
         spinner.classList.add("spinner");
         spinner.classList.add("hidden");
