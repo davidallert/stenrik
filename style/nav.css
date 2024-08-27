@@ -3,7 +3,7 @@
     width: 100vw;
     background-color: #00000083;
     color: var(--base-color);
-    z-index: 401;
+    z-index: 1000;
     position: fixed;
     opacity: 0;
     visibility: hidden;

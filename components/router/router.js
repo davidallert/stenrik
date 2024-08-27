@@ -5,8 +5,13 @@ export default class AppRouter extends HTMLElement {
         this.currentRoute = '';
         this.wildcard = '';
 
+        // Check if the user is on the initial page and redirect to the map view
+        if (window.location.hash === '') {
+            window.location.hash = '#stenrik';
+        }
+
         this.allRoutes = {
-            '': {
+            'stenrik': {
                 view: '<map-view-db></map-view-db>',
                 name: 'Stenrik'
             },

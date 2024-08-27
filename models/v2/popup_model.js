@@ -12,9 +12,9 @@ const popupModel = {
         siteDescOrientation = "";
 
         if (site.site_name) {
-            siteTitle = `<h1>${site.site_name} (${site.site_type})</h1>`
+            siteTitle = `<div class="popup-header"><h1>${site.site_name} (${site.site_type})</h1><i id="bookmarkIcon" data-site="${site.site_id}" class="bookmark-icon fa-regular fa-bookmark"></i></div>`
         } else {
-            siteTitle = `<h1>${site.site_type}</h1>`
+            siteTitle = `<div class="popup-header"><h1>${site.site_type}</h1><i id="bookmarkIcon" data-site="${site.site_id}" class="bookmark-icon fa-regular fa-bookmark"></i></div>`
         }
         if (site.desc_text) {
             siteDescText = `    <h2>Beskrivning</h2>

@@ -61,3 +61,27 @@
 .marker-cluster-large div {
     background-color: var(--color-alt-green);
 }
+
+.popup-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-header h1 {
+    text-align: center;
+    padding: 0 10%;
+    overflow-wrap: break-word;
+    hyphens: auto; /* Automatically adds hyphens for long words */
+    overflow-x: hidden;
+}
+
+.popup-header .fa-bookmark {
+    font-size: 2.5rem;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%); /* Adjusts the icon vertically to center it */
+    cursor: pointer;
+}

@@ -1,5 +1,4 @@
 import positioningModel from "../models/positioning_model.js";
-import locationModel from "../models/location_model.js";
 import authModel from "../models/auth_model.js";
 
 export default class NavComponent extends HTMLElement {
@@ -15,7 +14,7 @@ export default class NavComponent extends HTMLElement {
         this.innerHTML = `
             <div id="navPopup" class="nav-popup">
                 <ul class="nav-wrapper">
-                    <a href=""><li class="nav-item">Karta</li></a>
+                    <a href="#stenrik"><li class="nav-item">Karta</li></a>
                     <a href="#logga-in"><li class="nav-item">Logga in</li></a>
                     <a href="#logga-in" id="logout"><li class="nav-item">Logga ut</li></a>
                     <a href="#mina-sidor"><li class="nav-item">Mina sidor</li></a>

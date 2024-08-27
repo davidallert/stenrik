@@ -8,6 +8,8 @@ import locationModel from "../location_model.js";
 import loading from "../../util/loading.js";
 import elementModel from "./element_model.js";
 import checkIf from "../../util/is_mobile.js";
+import supabaseModel from "./supabase_model.js";
+import authModel from "../auth_model.js";
 
 const mapEventModel = {
     screenFlash: function screenFlash() {
@@ -20,7 +22,6 @@ const mapEventModel = {
      * @param {Object} map The Leaflet map object (this.map in map_view.js).
      */
     addLocationTrackingEvent: function addLocationTrackingEvent(map) {
-
         let init = true;
         let deviceOrientationTriggerIndex = 0;
         let locationMarker = null;
@@ -82,7 +83,6 @@ const mapEventModel = {
                     duration: 1
                 });
 
-
             // Fly to the user's location if the button is clicked again.
             } else if (!init) {
                 const position = locationModel.getCurrentPosition();
@@ -102,7 +102,7 @@ const mapEventModel = {
             // The event will always trigger once when it's initialized.
             // On desktop, it will never trigger twice.
             // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-            if (deviceOrientationTriggerIndex === 2) {
+            if (deviceOrientationTriggerIndex === 2 && checkIf.deviceIsMobile()) {
                 locationMarker.setIcon(locationMarkerIconArrow);
             }
             deviceOrientationTriggerIndex++;
@@ -122,7 +122,7 @@ const mapEventModel = {
                 // The event will always trigger once when it's initialized. This happens on all devices.
                 // On desktop, it will never trigger twice.
                 // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-                if (deviceOrientationTriggerIndex === 2) {
+                if (deviceOrientationTriggerIndex === 2 && checkIf.deviceIsMobile()) {
                     locationMarker.setIcon(locationMarkerIconArrow);
                 }
                 deviceOrientationTriggerIndex++;
@@ -202,7 +202,49 @@ const mapEventModel = {
                 elementModel.fadeInElement(searchButton);
             }
           });
-    }
+    },
+
+    addBookmarkEvents(map) {
+        map.on('popupopen', (e) => {
+            let popupContent = e.popup.getElement();
+            let bookmarkIcon = popupContent.getElementsByClassName("bookmark-icon")[0];
+            if (supabaseModel.userFavoriteSites.includes(bookmarkIcon.dataset.site)) {
+                bookmarkIcon.classList.remove('fa-regular');
+                bookmarkIcon.classList.add('fa-solid');
+            } else {
+                bookmarkIcon.classList.remove('fa-solid');
+                bookmarkIcon.classList.add('fa-regular');
+            }
+
+            bookmarkIcon.addEventListener("click", this.saveBookmarkEvent);
+        });
+    },
+
+    async saveBookmarkEvent(e) {
+        if (authModel.accessToken) {
+            let result = await supabaseModel.toggleFavoriteSite(e.target.dataset.site);
+            if (result === "success") {
+                console.log(result);
+
+                if (supabaseModel.userFavoriteSites.includes(e.target.dataset.site)) {
+                    e.target.classList.remove('fa-solid');
+                    e.target.classList.add('fa-regular');
+                    let index = supabaseModel.userFavoriteSites.indexOf(e.target.dataset.site);
+                    if (index !== -1) {
+                        supabaseModel.userFavoriteSites.splice(index, 1); // Removes the first occurrence of 'banana'
+                    }
+                } else {
+                    e.target.classList.remove('fa-regular');
+                    e.target.classList.add('fa-solid');
+                    supabaseModel.userFavoriteSites.push(e.target.dataset.site);
+                    console.log(supabaseModel.userFavoriteSites);
+                }
+            }
+            else if (result === "User is not authenticated") {
+                console.log(result);
+            } 
+        }
+    },
 }
 
 export default mapEventModel;

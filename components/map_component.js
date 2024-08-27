@@ -30,6 +30,7 @@ export default class MapComponent extends HTMLElement {
         this.initSearchButton();
         mapEventModel.removeSearchButtonOnPopupOpen(this.map);
         mapEventModel.addSearchButtonOnPopupClose(this.map);
+        mapEventModel.addBookmarkEvents(this.map);
     }
 
     async render() {
@@ -115,7 +116,7 @@ export default class MapComponent extends HTMLElement {
                         longitude = coordinates[0][0];
                         latitude = coordinates[0][1];
                         this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
-                        .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth}));
+                        .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth, closeButton: false}));
                         break;
                     case "MultiPolygon":
                         coordinates = coordinates[0][0]
@@ -225,7 +226,7 @@ export default class MapComponent extends HTMLElement {
     handleComplexGeoJsonGeometry(coordinates, geoJson, popupContent, fontAwesomeIcon, maxWidth) {
         let center = this.getCenter(coordinates);
         let marker = L.marker([center[0], center[1]], {icon: fontAwesomeIcon, zIndexOffset: 1000});
-        marker.bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth});
+        marker.bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth, closeButton: false});
 
         const boundCreateGeoJson = this.createGeoJson.bind(this, this.map, geoJson, popupContent, maxWidth);
         marker.addEventListener("click", function handleClick() {
@@ -256,8 +257,7 @@ export default class MapComponent extends HTMLElement {
             let layer = L.geoJSON(geoJsonGeometry, {
                 onEachFeature: function (feature, layer) {
                     // Bind popup to each feature
-                    layer.bindPopup(popupContent, { maxHeight: '500', maxWidth: maxWidth });
-                    console.log(layer);
+                    layer.bindPopup(popupContent, { 'maxHeight': '500', 'maxWidth': maxWidth, closeButton: false });
                     if (layer.feature.geometry.type === "Polygon" || layer.feature.geometry.type === "LineString" || layer.feature.geometry.type === "MultiPolygon" || layer.feature.geometry.type === "MultiLineString") {
                         layer.setStyle({ color: '#ffffff' });
                     } else if (layer.feature.geometry.type === "Point") {

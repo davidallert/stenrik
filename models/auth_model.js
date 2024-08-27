@@ -3,6 +3,7 @@
  */
 
 import supabase from "../util/supabase_client.js";
+import supabaseModel from "./v2/supabase_model.js";
 
 const authModel = {
     accessToken: "",
@@ -18,6 +19,7 @@ const authModel = {
         } else if (!error) {
             console.log(data);
             authModel.accessToken = data.session.access_token;
+            supabaseModel.collectUserFavoriteSites();
         }
 
     },
