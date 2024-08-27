@@ -74,7 +74,7 @@
     padding: 0 10%;
     overflow-wrap: break-word;
     hyphens: auto; /* Automatically adds hyphens for long words */
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .popup-header .fa-bookmark {
