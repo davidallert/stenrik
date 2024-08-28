@@ -11,17 +11,6 @@ export default class MyPagesView extends HTMLElement {
             window.location.hash = "logga-in";
         } else {
             this.render();
-            let favoriteSitesContainer = document.getElementById("favoriteSitesContainer");
-            const data = await supabaseModel.getUserFavoriteSiteData();
-
-            for (let site of data) {
-                if (site.site_name) {
-                    favoriteSitesContainer.innerHTML += `<h2>${site.site_name}</h2>`
-                } else {
-                    favoriteSitesContainer.innerHTML += `<h2>${site.site_type}</h2>`
-                }
-            }
-            console.log(data);
         }
     }
 
@@ -34,7 +23,7 @@ export default class MyPagesView extends HTMLElement {
                 </div>
                 <div class="col-two">
                     <h1>Sparade platser</h1>
-                    <div id="favoriteSitesContainer" style="background-color: #f2efe8;height: 500px; width: 100%;"></div>
+                    <favorites-list></favorites-list>
                 </div>
             </div>
         `

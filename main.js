@@ -7,6 +7,8 @@ import AppRouter    from "./components/router/router.js";
 import NavComponent     from './components/nav_component.js';
 import ProfileComponent from "./components/profile_component.js";
 import MapComponent     from "./components/map_component.js";
+import SingleSite       from "./components/single_site.js";
+import FavoritesList    from "./components/favorites_list.js";
 
 // Views.
 import AboutView     from "./views/misc/about_view.js";
@@ -29,3 +31,5 @@ customElements.define('map-view-db',        MapViewDb);
 customElements.define('nav-component',      NavComponent);
 customElements.define('profile-component',  ProfileComponent);
 customElements.define('map-component',      MapComponent);
+customElements.define('single-site',        SingleSite);
+customElements.define('favorites-list',     FavoritesList);

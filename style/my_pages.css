@@ -1,0 +1,8 @@
+.site-list-wrapper {
+    background-color: var(--base-color);
+    padding: 5%;
+}
+
+.single-site-container h2 {
+    margin: 0;
+}

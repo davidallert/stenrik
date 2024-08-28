@@ -21,6 +21,11 @@ h4,
 h5,
 h6 {
     font-family: 'Abril Fatface', 'Dm Serif Display', serif;
+    color: var(--base-text-color);
+}
+
+p {
+    color: var(--base-text-color);
 }
 
 p,
