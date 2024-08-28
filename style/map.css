@@ -80,7 +80,7 @@
 .popup-header .fa-bookmark {
     font-size: 2.5rem;
     position: absolute;
-    right: 0;
+    right: 2%;
     top: 50%;
     transform: translateY(-50%); /* Adjusts the icon vertically to center it */
     cursor: pointer;
