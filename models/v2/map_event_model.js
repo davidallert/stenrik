@@ -224,16 +224,16 @@ const mapEventModel = {
         if (authModel.accessToken) {
             let result = await supabaseModel.toggleFavoriteSite(e.target.dataset.site);
             if (result === "success") {
-                console.log(result);
-
                 if (supabaseModel.userFavoriteSites.includes(e.target.dataset.site)) {
+                    elementModel.fadeInFadeOut(e.target);
                     e.target.classList.remove('fa-solid');
                     e.target.classList.add('fa-regular');
                     let index = supabaseModel.userFavoriteSites.indexOf(e.target.dataset.site);
                     if (index !== -1) {
-                        supabaseModel.userFavoriteSites.splice(index, 1); // Removes the first occurrence of 'banana'
+                        supabaseModel.userFavoriteSites.splice(index, 1); // Removes the first occurrence.
                     }
                 } else {
+                    elementModel.fadeInFadeOut(e.target);
                     e.target.classList.remove('fa-regular');
                     e.target.classList.add('fa-solid');
                     supabaseModel.userFavoriteSites.push(e.target.dataset.site);
@@ -242,7 +242,7 @@ const mapEventModel = {
             }
             else if (result === "User is not authenticated") {
                 console.log(result);
-            } 
+            }
         }
     },
 }

@@ -18,6 +18,13 @@ const elementModel = {
             element.style.opacity = "1";
         }
     },
+
+    fadeInFadeOut: (element) => {
+        element.style.opacity = "0";
+        setTimeout(() => {
+            element.style.opacity = "1";
+        }, 600);
+    },
 }
 
 export default elementModel;

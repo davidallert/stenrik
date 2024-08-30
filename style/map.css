@@ -84,4 +84,6 @@
     top: 50%;
     transform: translateY(-50%); /* Adjusts the icon vertically to center it */
     cursor: pointer;
+    opacity: 1;
+    transition-duration: 0.6s;
 }
