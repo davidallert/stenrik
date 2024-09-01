@@ -3,18 +3,30 @@
  */
 
 const positioningModel = {
+    /**
+     * Center an element horizontally.
+     * @param {HTMLElement} element An HTML element.
+     */
     centerElementHorizontally: function centerElementHorizontally(element) {
         const left = (window.innerWidth / 2) - (element.clientWidth / 2);
 
         element.style.left = `${left}px`;
     },
 
+    /**
+     * Continuously center an element horizontally.
+     * @param {HTMLElement} element An HTML element.
+     */
     addCenterElementHorizontallyEvent: function addCenterElementHorizontallyEvent(element) {
         window.addEventListener("resize", (e) => {
             positioningModel.centerElementHorizontally(element);
         });
     },
 
+    /**
+     * Center an element.
+     * @param {HTMLElement} element An HTML element.
+     */
     centerElement: function centerElement(element) {
         const left = (window.innerWidth / 2) - (element.clientWidth / 2);
         const top = (window.innerHeight / 2) - (element.clientHeight / 2);
@@ -23,6 +35,10 @@ const positioningModel = {
         element.style.top = `${top}px`;
     },
 
+    /**
+     * Continuously center an element.
+     * @param {HTMLElement} element An HTML element.
+     */
     addCenterElementEvent: function addCenterElementEvent(element) {
         window.addEventListener("resize", (e) => {
             positioningModel.centerElement(element);

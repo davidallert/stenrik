@@ -1,3 +1,6 @@
+/**
+ * Simple router class to handle hash changes and wildcards.
+ */
 export default class AppRouter extends HTMLElement {
     constructor() {
         super();
@@ -7,11 +10,11 @@ export default class AppRouter extends HTMLElement {
 
         // Check if the user is on the initial page and redirect to the map view
         if (window.location.hash === '') {
-            window.location.hash = '#stenrik';
+            window.location.hash = '#karta';
         }
 
         this.allRoutes = {
-            'stenrik': {
+            'karta': {
                 view: '<map-view-db></map-view-db>',
                 name: 'Stenrik'
             },
@@ -27,9 +30,9 @@ export default class AppRouter extends HTMLElement {
                 view: '<about-view></about-view>',
                 name: 'Om oss'
             },
-            'karta': {
+            'karta1': {
                 view: '<map-view></map-view>',
-                name: 'Karta 2.0'
+                name: 'Karta 1.0'
             },
         };
     }

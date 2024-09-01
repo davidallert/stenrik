@@ -33,12 +33,16 @@ const mapEventModel = {
                 init = false;
                 loading.displaySpinner();
 
+                // Check which compass event should be used (essentially Android vs iOS).
                 const compassEvent = this.getCompassSupport();
+                // Need explicit permission granted from Apple users to be able to use device orientation.
                 const permission = await this.requestDeviceOrientationPermission();
 
+                // Get the initial position and save it.
                 const position = await locationModel.getInitialPosition();
                 locationModel.setCurrentPosition(position);
 
+                // Init two icons. A dot, used for desktops and unsupported devices, and an arrow, used for device orientation.
                 const locationMarkerIconDot = L.divIcon({
                     html: `<i id="locationMarkerIconEl" class="fa-regular fa-circle-dot"></i>`,
                     className: 'fa-location-icon',
@@ -48,10 +52,12 @@ const mapEventModel = {
                     className: 'fa-location-icon',
                 });
 
+                // Watch the user's precision with high accuracy.
                 locationModel.watchPosition((position) => {
                     locationModel.updatePosition(position, locationMarker);
                 });
 
+                // Create the location marker. Always initialized as the dot.
                 locationMarker = L.marker(
                   [position.coords.latitude, position.coords.longitude],
                   { icon: locationMarkerIconDot }
@@ -59,6 +65,7 @@ const mapEventModel = {
 
                 locationMarker.addTo(map);
 
+                // Optional, change the style of the location tracking button when it's active.
                 // locationTrackingBtn.childNodes[0].style.color = "black";
 
                 if (compassEvent === "DeviceOrientationAbsoluteEvent") {
@@ -66,9 +73,10 @@ const mapEventModel = {
                 } else if (compassEvent === "webkitCompassHeading") {
                     this.webkitCompassHeadingEvent(locationMarker, locationMarkerIconArrow, deviceOrientationTriggerIndex, permission);
                 } else if (compassEvent === "unsupported") {
-                    alert("UNSUPPORTED DEVICE")
+                    alert("Unsupported device :(")
                 }
 
+                // Add a compass if the device is mobile.
                 if (compassEvent !== "unsupported" && checkIf.deviceIsMobile()) {
                     let compassDiv = document.getElementsByClassName("compass-div")[0];
                     compassDiv.classList.toggle("hidden");
@@ -97,40 +105,61 @@ const mapEventModel = {
         })
     },
 
+    /**
+     * Starts tracking the device's orientation. Android.
+     * @param {L.marker} locationMarker The Leaflet marker object displaying location.
+     * @param {string} locationMarkerIconArrow Font awesome arrow icon.
+     * @param {number} deviceOrientationTriggerIndex Index that checks how many times the orientation event has been triggered.
+     */
     deviceOrientationAbsoluteEvent: (locationMarker, locationMarkerIconArrow, deviceOrientationTriggerIndex) => {
         window.addEventListener("deviceorientationabsolute", (event) => {
             // The event will always trigger once when it's initialized.
             // On desktop, it will never trigger twice.
             // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-            if (deviceOrientationTriggerIndex === 2 && checkIf.deviceIsMobile()) {
+            if (deviceOrientationTriggerIndex === 1 && checkIf.deviceIsMobile()) {
                 locationMarker.setIcon(locationMarkerIconArrow);
             }
             deviceOrientationTriggerIndex++;
 
+            // Change the rotation of the marker.
+            // (360 - (other calc)) % 360 is used to reverse the rotation and make sure it's always positive.
             let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
+            // Remove 45 degrees to account for the default rotation of the arrow.
             let adjustedRotation = (360 - event.alpha - 45) % 360;
             locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
 
+            // Rotate the compass so that it always points north.
             let compass = document.getElementById("compass");
             compass.style.transform = `rotate(${event.alpha - 45}deg)`;
         });
     },
 
+    /**
+     * Starts tracking the device's orientation. Apple.
+     * @param {L.marker} locationMarker The Leaflet marker object displaying location.
+     * @param {string} locationMarkerIconArrow Font awesome arrow icon.
+     * @param {number} deviceOrientationTriggerIndex Index that checks how many times the orientation event has been triggered.
+     * @param {string} permission Explicit permission from the user.
+     */
     webkitCompassHeadingEvent: (locationMarker, locationMarkerIconArrow, deviceOrientationTriggerIndex, permission) => {
         if (permission === 'granted') {
             window.addEventListener("deviceorientation", (event) => {
                 // The event will always trigger once when it's initialized. This happens on all devices.
                 // On desktop, it will never trigger twice.
                 // This will cause the dot icon to change to an arrow icon the first time it's triggered by an actual device orientation change.
-                if (deviceOrientationTriggerIndex === 2 && checkIf.deviceIsMobile()) {
+                if (deviceOrientationTriggerIndex === 1 && checkIf.deviceIsMobile()) {
                     locationMarker.setIcon(locationMarkerIconArrow);
                 }
                 deviceOrientationTriggerIndex++;
 
+                // Change the rotation of the marker.
+                // (360 - (other calc)) % 360 is used to reverse the rotation and make sure it's always positive.
+                // Remove 45 degrees to account for the default rotation of the arrow.
                 let locationMarkerIconEl = document.getElementById("locationMarkerIconEl");
                 let adjustedRotation = (event.webkitCompassHeading - 45);
                 locationMarkerIconEl.style.transform = `rotate(${adjustedRotation}deg)`;
 
+                // Rotate the compass so that it always points north.
                 let compass = document.getElementById("compass");
                 adjustedRotation = 360 - event.webkitCompassHeading - 45;
                 compass.style.transform = `rotate(${adjustedRotation}deg)`;
@@ -139,7 +168,7 @@ const mapEventModel = {
     },
     /**
      * Checks whether the device supports the device orientation absolute event, webkit compass heading, or neither.
-     * @returns 
+     * @returns {string} The name of the orientation event or unsupported.
      */
     getCompassSupport: () => {
         if ('ondeviceorientationabsolute' in window) {
@@ -153,7 +182,7 @@ const mapEventModel = {
 
       /**
        * Used to request permission to track device motion from iOS devices.
-       * @returns 
+       * @returns {string} Is granted or denied.
        */
       requestDeviceOrientationPermission: async () => {
         if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
@@ -204,6 +233,10 @@ const mapEventModel = {
           });
     },
 
+    /**
+     * Select which bookmark icon to display and add an event listener to it.
+     * @param {L.map} map The Leaflet map object.
+     */
     addBookmarkEvents(map) {
         map.on('popupopen', (e) => {
             let popupContent = e.popup.getElement();
@@ -220,6 +253,11 @@ const mapEventModel = {
         });
     },
 
+    /**
+     * Save/bookmark the site if it isn't already bookmarked when the bookmark icon is clicked.
+     * Remove the bookmark if it is.
+     * @param {Event} e The click event.
+     */
     async saveBookmarkEvent(e) {
         if (authModel.accessToken) {
             let result = await supabaseModel.toggleFavoriteSite(e.target.dataset.site);
@@ -240,6 +278,7 @@ const mapEventModel = {
                     console.log(supabaseModel.userFavoriteSites);
                 }
             }
+            // TODO add flash message here.
             else if (result === "User is not authenticated") {
                 console.log(result);
             }

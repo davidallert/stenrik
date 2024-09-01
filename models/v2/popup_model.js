@@ -2,8 +2,20 @@
 
 const popupModel = {
 
+    /**
+     * Creates popup data for each site.
+     * @param {Object} site An object containing all site data.
+     * @param {string} siteTitle Part of the popup content. Popup header text.
+     * @param {string} siteDescText Part of the popup content. Description of the site.
+     * @param {string} siteZones Part of the popup content. Municipality, county, etc.
+     * @param {string} siteDescTradition Part of the popup content. Tradition or story connected to the site.
+     * @param {string} siteDescTerrain Part of the popup content. Terrain in the area surrounding the site.
+     * @param {string} siteDescOrientation Part of the popup content. How to find the site.
+     * @returns {string} A string with the full HTML content of the popup.
+     */
     addPopupContent: function addPopupContent(site, siteTitle, siteDescText, siteZones, siteDescTradition, siteDescTerrain, siteDescOrientation) {
 
+        // Make sure no data is saved from a previous iteration.
         siteTitle = "";
         siteZones = "";
         siteDescText = "";
@@ -11,6 +23,8 @@ const popupModel = {
         siteDescTerrain = "";
         siteDescOrientation = "";
 
+        // Use the unique site name for the title, if there is one.
+        // Also add the site_id to the bookmark icon HTML dataset.
         if (site.site_name) {
             siteTitle = `<div class="popup-header"><h1>${site.site_name} (${site.site_type})</h1><i id="bookmarkIcon" data-site="${site.site_id}" class="bookmark-icon fa-regular fa-bookmark"></i></div>`
         } else {
@@ -48,6 +62,12 @@ const popupModel = {
         return popupContent;
     },
 
+    /**
+     * Select a font awesome icon based on the site type.
+     * The default is: <i class="fa-solid fa-location-dot"></i>
+     * @param {string} siteType The site type (category) of the current site.
+     * @returns {string} The selected  font awesome icon.
+     */
     selectIcon: function selectIcon(siteType) {
         let icon;
         switch(siteType) {

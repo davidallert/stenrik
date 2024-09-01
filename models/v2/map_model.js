@@ -3,6 +3,14 @@
  */
 
 const mapModel = {
+    /**
+     * 
+     * @param {L.map} map The Leaflet map object.
+     * @param {*} latlng ?
+     * @param {number} zoomLevel Map zoom level.
+     * @param {Object} options 
+     * @returns {Promise} ?
+     */
     flyToAsync(map, latlng, zoomLevel, options) {
         return new Promise((resolve) => {
             map.flyTo(latlng, zoomLevel, options);
@@ -10,6 +18,13 @@ const mapModel = {
         });
     },
 
+    /**
+     * Set the view.
+     * @param {L.map} map The Leaflet map object.
+     * @param {*} latlng ?
+     * @param {number} zoomLevel Map zoom level.
+     * @returns 
+     */
     setViewAsync(map, latlng, zoomLevel) {
         return new Promise((resolve) => {
             map.setView(latlng, zoomLevel);

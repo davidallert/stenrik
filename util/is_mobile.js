@@ -1,6 +1,13 @@
 "use strict";
 
+/**
+ * Checks various things.
+ */
 const checkIf = {
+    /**
+     * Checks the user's device type.
+     * @returns {bool} True or false depening on whether the device is mobile or not.
+     */
     deviceIsMobile() {
         var check = false;
         (function(a){

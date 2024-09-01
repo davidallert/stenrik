@@ -7,6 +7,9 @@ export default class SingleSite extends HTMLElement {
         return JSON.parse(this.getAttribute('site'))
     }
 
+    /**
+     * Create HTML content based on site data for a single site.
+     */
     connectedCallback() {
         let siteTitle = this.site.site_type;
         let siteType = this.site.site_type
@@ -20,13 +23,13 @@ export default class SingleSite extends HTMLElement {
             siteZones = `${this.site.municipality}, ${this.site.parish}, ${this.site.province}, ${this.site.county}`
         }
         this.innerHTML = `
-        <div class="single-site-container">
-        <h2>${siteTitle}</h2>
-        <p>${siteZones}</p>
-        <p>Kategori: ${siteType}</p>
-        <p>Lämningsnummer: ${siteId}</p>
-        <p>RAÄ-nummer: ${raaId}</p>
-        </div>
+            <div class="single-site-container">
+            <h2>${siteTitle}</h2>
+            <p>${siteZones}</p>
+            <p>Kategori: ${siteType}</p>
+            <p>Lämningsnummer: ${siteId}</p>
+            <p>RAÄ-nummer: ${raaId}</p>
+            </div>
         `
     }
 }

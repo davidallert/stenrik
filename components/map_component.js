@@ -8,10 +8,12 @@ import supabaseModel from '../models/v2/supabase_model.js';
 import popupModel from '../models/v2/popup_model.js';
 import checkIf from '../util/is_mobile.js';
 import positioningModel from '../models/positioning_model.js';
-import locationModel from '../models/location_model.js';
 import loading from '../util/loading.js';
 import elementModel from '../models/v2/element_model.js';
 
+/**
+ * Handles the map and related features.
+ */
 export default class MapComponent extends HTMLElement {
     constructor() {
         super();
@@ -23,13 +25,13 @@ export default class MapComponent extends HTMLElement {
     }
 
     async connectedCallback() {
-        loading.createSpinner();
-        await this.render();
-        mapEventModel.addLocationTrackingEvent(this.map);
-        this.addSearchAreaOnMoveEvent();
+        loading.createSpinner(); // Create (init) the loading spinner element.
+        await this.render(); // Render the map.
+        mapEventModel.addLocationTrackingEvent(this.map); // Add the location tracking event to the location button.
+        this.addSearchAreaOnMoveEvent(); // Add an event which displays the search button when the map is moved.
         this.initSearchButton();
-        mapEventModel.removeSearchButtonOnPopupOpen(this.map);
-        mapEventModel.addSearchButtonOnPopupClose(this.map);
+        mapEventModel.removeSearchButtonOnPopupOpen(this.map); // Remove the search button when a popup is opened.
+        mapEventModel.addSearchButtonOnPopupClose(this.map); // Add it back once it's closed.
         mapEventModel.addBookmarkEvents(this.map);
     }
 
@@ -42,15 +44,21 @@ export default class MapComponent extends HTMLElement {
             <div class="icon-button compass-div hidden"><i id="compass" class="fa-solid fa-compass fa-rotate-by" style="--fa-rotate-angle: -45deg;""></i></div>
         </main>`;
 
-        this.map = this.initMap(62.334591, 16.063240, 5);
+        this.map = this.initMap(62.334591, 16.063240, 5); // Init the map, centered on Sweden.
 
-        const records = await supabaseModel.fetchData();
+        const { result, records } = await supabaseModel.fetchData(); // Fetch the first batch of data.
 
-        this.createMarkers(records);
+        if (result) { // Result is a boolean. Records contains an array of data.
+            this.createMarkers(records); // Create markers and popups based on the data.
+            this.init = false; // Only set init to false if the operation is successful.
+        }
 
-        this.init = false;
     }
 
+    /**
+     * Get the bounding box coordinates for the current viewport.
+     * @returns {Object} Object containing west, east, south and north bounding box coordinates.
+     */
     getBoundingBoxCoords() {
         let bounds = this.map.getBounds();
         let boundingBox = {
@@ -63,55 +71,66 @@ export default class MapComponent extends HTMLElement {
         return boundingBox;
     }
 
+    /**
+     * Creates markers on the map and popupates their corresponding popups with data.
+     * @param {Array} records An array of record objects, fetched from Supabase.
+     */
     createMarkers(records) {
-        let geometryType;
-        let coordinates;
+        // Define variables once, slight performance improvement(?)
+        let geometryType; // One of four types: MultiPoint, MultiPolygon, MultiLineString, GeometryCollection.
+        let coordinates; // GeoJSON coordinate data.
         let longitude;
         let latitude;
-        let fontAwesomeIcon;
-        let popupContent;
-        let siteTitle = "";
-        let siteZones = "";
-        let siteDescText = "";
-        let siteDescTradition;
-        let siteDescTerrain = "";
-        let siteDescOrientation = "";
-        let maxWidth = "500";
+        let fontAwesomeIcon; // Icon to be displayed as a marker.
+        let popupContent; // All popup content.
+        let siteTitle = ""; // Part of the popup content. Popup header text.
+        let siteZones = ""; // Part of the popup content. Municipality, county, etc.
+        let siteDescText = ""; // Part of the popup content. Description of the site.
+        let siteDescTradition; // Part of the popup content. Tradition or story connected to the site.
+        let siteDescTerrain = ""; // Part of the popup content. Terrain in the area surrounding the site.
+        let siteDescOrientation = ""; // Part of the popup content. How to find the site.
+        let maxWidth = "500"; // The max width of the popup.
 
         if (checkIf.deviceIsMobile()) {
-            maxWidth = "320";
+            maxWidth = "320"; // Set a smaller max width on mobile devices.
         }
         if (records) {
             for (let site of records) {
                 if (this.init) {
+                    // Create a new marker cluster group the first time the map is initialized.
                     this.markers = new L.MarkerClusterGroup({
                         disableClusteringAtZoom: 16,
                         spiderfyOnMaxZoom: false,
                         showCoverageOnHover: false,
                     });
-                    this.init = false;
+                    this.init = false; // Make sure only one marker cluster group is created.
                 }
 
+                // Make sure a site is only added once if a user searches the same area multiple times.
                 if (this.addedSites.includes(site.site_id)) {
-                    continue;
+                    continue; // Move on to the next record immediately if the site has been added.
                 }
-
                 this.addedSites.push(site.site_id);
 
+                // Make sure no data remains from a previous iteration.
                 geometryType = "";
                 coordinates = [];
                 longitude = null;
                 latitude = null;
                 fontAwesomeIcon = "";
 
-                fontAwesomeIcon = popupModel.selectIcon(site.site_type);
+                fontAwesomeIcon = popupModel.selectIcon(site.site_type); // Select an icon based on the site type (category).
+                // Add content to the popup.
                 popupContent = popupModel.addPopupContent(site, siteTitle, siteZones, siteDescText, siteDescTradition, siteDescTerrain, siteDescOrientation);
 
+                // Clean up.
                 geometryType = site.coordinates.features[0].geometry.type;
                 coordinates = site.coordinates.features[0].geometry.coordinates;
 
                 // Handle the different geometry types.
                 switch (geometryType) {
+                    // MultiPoints are simple to deal with.
+                    // Set lon and lat based on the GeoJSON data and add them to this.markers.
                     case "MultiPoint":
                         longitude = coordinates[0][0];
                         latitude = coordinates[0][1];
@@ -129,6 +148,8 @@ export default class MapComponent extends HTMLElement {
                     case "GeometryCollection":
                         let geometries = site.coordinates.features[0].geometry.geometries;
                         for (let geometry of geometries) {
+                            // Leaflet has built-in support for GeoJSON, including GeometryCollections.
+                            // Because of this, each GeometryCollection only needs to be added once, despite containing several geometries. I.e. if it finds a Polygon, its centroid will be used to position the marker, then all other geometries will be added. Then the loop will break. Same thing with LineString.
                             if (geometry.type === "Polygon") {
                                 this.handleComplexGeoJsonGeometry(geometry.coordinates[0], geometries, popupContent, fontAwesomeIcon, maxWidth);
                                 break;
@@ -145,10 +166,17 @@ export default class MapComponent extends HTMLElement {
             }
         }
         if (this.markers) {
-            this.map.addLayer(this.markers);
+            this.map.addLayer(this.markers); // Add to the existing marker cluster group.
         }
     }
 
+    /**
+     * Initialize the Leaflet map, setting a default lon, lat and zoom level.
+     * @param {number} latitude 
+     * @param {number} longitude 
+     * @param {number} zoomLevel 
+     * @returns {L.map}
+     */
     initMap(latitude, longitude, zoomLevel) {
         const map = L.map('map', {
             center: [latitude, longitude],
@@ -176,13 +204,16 @@ export default class MapComponent extends HTMLElement {
             // TODO Make sure the event is only triggered once for a unique set of bounds.
             const searchButton = document.getElementById("searchButton");
             if (this.map.getZoom() >= 9) {
-                elementModel.fadeInElement(searchButton);
+                elementModel.fadeInElement(searchButton); // Fade in the button if a user zooms in close enough.
             } else if (this.map.getZoom() < 9) {
-                elementModel.fadeElement(searchButton);
+                elementModel.fadeElement(searchButton); // Fade the button if a user zooms out too far.
             }
         });
     }
 
+    /**
+     * Get and init the search button. Initially, it is hidden.
+     */
     initSearchButton() {
         let searchButton = document.getElementById("searchButton");
 
@@ -200,15 +231,15 @@ export default class MapComponent extends HTMLElement {
     }
 
     /**
-     * Adds a click event to the search button which is created by addSearchAreaEventOnMove.
+     * Adds a click event to the search button which is created by addSearchAreaOnMoveEvent.
      * The button fades out and is then removed from the page.
      * An API call is made, using the current bounding box coordinates.
      * The records that were found is then turned into markers and added to the map.
-     * @param {Object} map The Leaflet map object (this.map in map_view.js).
+     * @param {L.map} map The Leaflet map object (this.map in map_component.js).
      */
     async searchButtonClickEvent() {
-        loading.displaySpinner();
-        // Fade the search button, then remove it after a duration of 300ms (Its transition-duration is 0.3s).
+        loading.displaySpinner(); // Display a loading spinner icon.
+        // Fade the search button when clicked, then remove it after a duration of 300ms (Its transition-duration is 0.3s).
         let searchButton = document.getElementById("searchButton");
         elementModel.fadeElement(searchButton);
 
@@ -220,15 +251,25 @@ export default class MapComponent extends HTMLElement {
         if (records) {
             this.createMarkers(records);
         }
-        loading.removeSpinner();
+        loading.removeSpinner(); // Remove the loading spinner icon.
     }
 
+    /**
+     * Get the center of the geometry, i.e. the centroid of a polygon or the middle of a line string.
+     * @param {Array} coordinates An array of coordinates. Used to get the center point.
+     * @param {Object} geoJson The raw GeoJSON data. Complatible with Leaflet. Used to create the complex geometry.
+     * @param {string} popupContent All (html) popup content.
+     * @param {string} fontAwesomeIcon A site type specific font awesome icon.
+     * @param {string} maxWidth The max width of the popup. Smaller for mobile.
+     */
     handleComplexGeoJsonGeometry(coordinates, geoJson, popupContent, fontAwesomeIcon, maxWidth) {
-        let center = this.getCenter(coordinates);
+        let center = this.getCenter(coordinates); // Get the center point/centroid.
+        // Create a single marker, representing the complex geometry.
         let marker = L.marker([center[0], center[1]], {icon: fontAwesomeIcon, zIndexOffset: 1000});
         marker.bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth, closeButton: false});
-
+        // Bind the current data to an event listener.
         const boundCreateGeoJson = this.createGeoJson.bind(this, this.map, geoJson, popupContent, maxWidth);
+        // Create and display the complete geometry or geometry collection when the marker icon is clicked.
         marker.addEventListener("click", function handleClick() {
             boundCreateGeoJson();
             marker.removeEventListener("click", handleClick); // Use the same reference
@@ -237,7 +278,11 @@ export default class MapComponent extends HTMLElement {
         this.markers.addLayer(marker);
     }
 
-    // Function to calculate the centroid of a polygon
+    /**
+     * Function to calculate the average point from an array of points.
+     * @param {Array} coordinates Array of coordinates.
+     * @returns {Array} An array containing a single point.
+     */
     getCenter(coordinates) {
         let x = 0, y = 0, n = coordinates.length;
         coordinates.forEach(coord => {
@@ -247,6 +292,15 @@ export default class MapComponent extends HTMLElement {
         return [y / n, x / n];
     }
 
+    /**
+     * Create a new map layer based off of GeoJSON data.
+     * Bind the same popup to all related features created from the data.
+     * This means that, for example, all features in a GeometryCollection will have popups that all look the same.
+     * @param {L.map} map The Leaflet map object.
+     * @param {Object} geoJson Pure geoJSON data.
+     * @param {string} popupContent All (html) popup content.
+     * @param {string} maxWidth The max width of the popup. Smaller for mobile.
+     */
     createGeoJson(map, geoJson, popupContent, maxWidth) {
         let icon = L.divIcon({
             html: '<i class="fa-solid fa-location-dot"></i>',
@@ -254,12 +308,13 @@ export default class MapComponent extends HTMLElement {
             iconAnchor: [9.5, 12], // Point of the icon which will correspond to marker's location
           });
             let geoJsonGeometry = geoJson;
-            let layer = L.geoJSON(geoJsonGeometry, {
+            let layer = L.geoJSON(geoJsonGeometry, { // Leaflet is directly compatible with the pure GeoJSON data.
+                // Built-in Leaflet functionality:
                 onEachFeature: function (feature, layer) {
                     // Bind popup to each feature
                     layer.bindPopup(popupContent, { 'maxHeight': '500', 'maxWidth': maxWidth, closeButton: false });
                     if (layer.feature.geometry.type === "Polygon" || layer.feature.geometry.type === "LineString" || layer.feature.geometry.type === "MultiPolygon" || layer.feature.geometry.type === "MultiLineString") {
-                        layer.setStyle({ color: '#ffffff' });
+                        layer.setStyle({ color: '#ffffff' }); // Change the color of some geometries to white instead of dark grey. Makes the map feel less cluttered.
                     } else if (layer.feature.geometry.type === "Point") {
                         layer.setIcon(icon);
                     }

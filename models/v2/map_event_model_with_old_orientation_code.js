@@ -1,5 +1,6 @@
 /**
- * The Map Event Model object includes functions that handle event listeners related to the map.
+ * Ignore this. Used for testing. Maybe delete?
+ * It contains the experimental direction function code.
  */
 
 "use strict";

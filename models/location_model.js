@@ -12,6 +12,10 @@ const locationModel = {
     headingForTest: 0,
 
 
+    /**
+     * Get the user's initial position.
+     * @returns {Promise}
+     */
     getInitialPosition: async function getInitialPosition() {
         const geolocationOptions = {
             enableHighAccuracy: true,
@@ -31,6 +35,11 @@ const locationModel = {
             }
         });
     },
+
+    /**
+     * Continuously watch the user's position.
+     * @param {callback} callback ?
+     */
     watchPosition: function(callback) {
         const geolocationOptions = {
             enableHighAccuracy: true,
@@ -60,6 +69,11 @@ const locationModel = {
         }
     },
 
+    /**
+     * Obsolete?
+     * @param {*} heading 
+     * @returns 
+     */
     calculateDirection: (heading) => {
         heading = Math.ceil(heading);
         locationModel.headingForTest = heading;
@@ -95,6 +109,9 @@ const locationModel = {
         locationModel.headingArr = [];
     },
 
+    /**
+     * Obsolete?
+     */
     watchOrientation: function() {
         window.addEventListener("deviceorientation", (event) => {
             if (!locationModel.initialOrientation && event.alpha > 1 && locationModel.userInit) {
@@ -105,32 +122,58 @@ const locationModel = {
           });
     },
 
+    /**
+     * Obsolete?
+     */
     setUserInitTrue: () => {
         locationModel.userInit = true;
     },
 
-    // Function to move the location marker in accordance with the user's position.
+    /**
+     * Function to move the location marker in accordance with the user's position.
+     * @param {Object} position Position object.
+     * @param {L.marker} locationMarker Leaflet marker displaying location.
+     */
     updatePosition: function(position, locationMarker) {
         const {latitude, longitude } = position.coords;
         locationMarker.setLatLng([latitude, longitude]); // Set the updated latitude and longitude for the marker.
     },
 
+    /**
+     * Gets the most recent position.
+     * @returns {Object} Position object.
+     */
     getCurrentPosition: function getCurrentPosition() {
         return this.currentPosition;
     },
 
+    /**
+     * Sets the most recent position.
+     * @param {*} currentPosition ?
+     */
     setCurrentPosition: function setCurrentPosition(currentPosition) {
         this.currentPosition = currentPosition;
     },
 
+    /**
+     * Obsolete?
+     * @returns 
+     */
     getOrientation: function getOrientation() {
         return locationModel.orientation;
     },
 
+    /**
+     * Obsolete?
+     * @returns 
+     */
     getHeading: () => {
         return this.heading;
     },
 
+    /**
+     *  Obsolete? 
+     */
     // setOrientation: (orientation) => {
     //     console.log(orientation);
     //     if (orientation) {
@@ -139,6 +182,10 @@ const locationModel = {
     //     }
     // },
 
+    /**
+     * ?
+     * @returns 
+     */
     getWatchId: function getWatchId() {
         return this.watchId;
     }

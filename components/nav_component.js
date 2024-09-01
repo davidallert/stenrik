@@ -14,7 +14,7 @@ export default class NavComponent extends HTMLElement {
         this.innerHTML = `
             <div id="navPopup" class="nav-popup">
                 <ul class="nav-wrapper">
-                    <a href="#stenrik"><li class="nav-item">Karta</li></a>
+                    <a href="#karta"><li class="nav-item">Karta</li></a>
                     <a href="#logga-in"><li class="nav-item">Logga in</li></a>
                     <a href="#logga-in" id="logout"><li class="nav-item">Logga ut</li></a>
                     <a href="#mina-sidor"><li class="nav-item">Mina sidor</li></a>
@@ -27,6 +27,9 @@ export default class NavComponent extends HTMLElement {
         this.addLogoutEvent();
     }
 
+    /**
+     * Logout functionality.
+     */
     addLogoutEvent() {
         let logoutBtn = document.getElementById("logout");
         logoutBtn.addEventListener("click", async () => {
@@ -102,7 +105,6 @@ export default class NavComponent extends HTMLElement {
         }, 300);
     }
 
-    // TODO this code isn't DRY.
     /**
      * Add an event listener to each menu event. It hides the menu when a link is clicked.
      * As the menu element isn't deleted, it only needs to be called once.
