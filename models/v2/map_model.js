@@ -23,7 +23,7 @@ const mapModel = {
      * @param {L.map} map The Leaflet map object.
      * @param {*} latlng ?
      * @param {number} zoomLevel Map zoom level.
-     * @returns 
+     * @returns {Promise} ?
      */
     setViewAsync(map, latlng, zoomLevel) {
         return new Promise((resolve) => {

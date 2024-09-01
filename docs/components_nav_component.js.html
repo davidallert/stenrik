@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/nav_component.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/nav_component.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import positioningModel from "../models/positioning_model.js";
+import authModel from "../models/auth_model.js";
+
+export default class NavComponent extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        this.render();
+    }
+
+    render() {
+        this.innerHTML = `
+            &lt;div id="navPopup" class="nav-popup">
+                &lt;ul class="nav-wrapper">
+                    &lt;a href="#karta">&lt;li class="nav-item">Karta&lt;/li>&lt;/a>
+                    &lt;a href="#logga-in">&lt;li class="nav-item">Logga in&lt;/li>&lt;/a>
+                    &lt;a href="#logga-in" id="logout">&lt;li class="nav-item">Logga ut&lt;/li>&lt;/a>
+                    &lt;a href="#mina-sidor">&lt;li class="nav-item">Mina sidor&lt;/li>&lt;/a>
+                &lt;/ul>
+            &lt;/div>
+            &lt;div id="hamburgerMenuBtn" class="icon-button hamburger-menu-btn">&lt;i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon noselect fa-solid fa-bars">&lt;/i>&lt;/div>`
+
+        this.addHamburgerMenuEvent();
+        this.addCloseNavPopupOnClickEvent();
+        this.addLogoutEvent();
+    }
+
+    /**
+     * Logout functionality.
+     */
+    addLogoutEvent() {
+        let logoutBtn = document.getElementById("logout");
+        logoutBtn.addEventListener("click", async () => {
+            await authModel.logout();
+            authModel.accessToken = "";
+        })
+    }
+
+    /**
+     * Adds a click event to the hamburger menu icon.
+     * The event animates and changes the icon from a hamburger menu to an X.
+     * It also shows/hides the entire menu.
+     */
+    addHamburgerMenuEvent() {
+        const navPopup = document.getElementById("navPopup");
+        const hamburgerMenu = document.getElementById('hamburgerMenuBtn');
+
+        // Center the popup menu/nav.
+        positioningModel.addCenterElementEvent(navPopup);
+        positioningModel.centerElement(navPopup);
+
+        hamburgerMenu.addEventListener("click", (e) => {
+            const navPopup = document.getElementById("navPopup");
+
+            // !navPopup.style.visibility is used the first time, before visibility has been set.
+            if (navPopup.style.visibility === 'hidden'  || !navPopup.style.visibility) {
+
+                // Nav popup animation from hidden to visible.
+                navPopup.style.transition = 'opacity 0.3s';
+                navPopup.style.visibility = 'visible';
+                navPopup.style.opacity = 1;
+
+                this.switchIcon('fa-solid fa-xmark');
+
+            } else if (navPopup.style.visibility === 'visible') {
+
+                // Nav popup animation from visible to hidden.
+                navPopup.style.transition = 'opacity 0.3s';
+                navPopup.style.opacity = 0;
+                setTimeout(() => {
+                    navPopup.style.visibility = 'hidden';
+                }, 300);
+
+                this.switchIcon('fa-solid fa-bars');
+            }
+
+        })
+    }
+
+    /**
+     * Switches the hamburger menu icon to an X when it is clicked.
+     * @param {String} icon The fontawesome icon name, as a string. I.e. 'fa-solid fa-bars'.
+     */
+    switchIcon(icon) {
+        const hamburgerMenuBtn = document.getElementById("hamburgerMenuBtn");
+        let hamburgerMenuBtnIcon = document.getElementById("hamburgerMenuBtnIcon");
+
+        // Fade out the icon. The transition duration is preset through CSS.
+        hamburgerMenuBtnIcon.style.opacity = 0;
+        setTimeout(() => {
+            // Replace the icon after the fade out is completed.
+            hamburgerMenuBtn.innerHTML = `&lt;i id="hamburgerMenuBtnIcon" class="hamburger-menu-btn-icon noselect ${icon}">&lt;/i>`;
+
+            // The previous icon has been replaced. Get the new icon.
+            hamburgerMenuBtnIcon = document.getElementById("hamburgerMenuBtnIcon");
+            hamburgerMenuBtnIcon.style.opacity = 0;
+
+            // Use requestAnimationFrame to ensure the opacity transition is applied
+            requestAnimationFrame(() => {
+                hamburgerMenuBtnIcon.style.opacity = 1;
+            })
+
+        }, 300);
+    }
+
+    /**
+     * Add an event listener to each menu event. It hides the menu when a link is clicked.
+     * As the menu element isn't deleted, it only needs to be called once.
+     */
+    addCloseNavPopupOnClickEvent() {
+        let navItems = document.getElementsByClassName('nav-item');
+        for (let item of navItems) {
+            item.addEventListener("click", (e) => {
+                let navPopup = document.getElementById("navPopup");
+
+                // Nav popup animation from visible to hidden.
+                navPopup.style.transition = 'opacity 0.3s';
+                navPopup.style.opacity = 0;
+                setTimeout(() => {
+                    navPopup.style.visibility = 'hidden';
+                }, 300);
+
+                this.switchIcon('fa-solid fa-bars');
+            })
+        }
+    }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCloseNavPopupOnClickEvent">addCloseNavPopupOnClickEvent</a></li><li><a href="global.html#addHamburgerMenuEvent">addHamburgerMenuEvent</a></li><li><a href="global.html#addLogoutEvent">addLogoutEvent</a></li><li><a href="global.html#addSearchAreaOnMoveEvent">addSearchAreaOnMoveEvent</a></li><li><a href="global.html#connectedCallback">connectedCallback</a></li><li><a href="global.html#createGeoJson">createGeoJson</a></li><li><a href="global.html#createMarkers">createMarkers</a></li><li><a href="global.html#elementModel">elementModel</a></li><li><a href="global.html#getBoundingBoxCoords">getBoundingBoxCoords</a></li><li><a href="global.html#getCenter">getCenter</a></li><li><a href="global.html#getUserData">getUserData</a></li><li><a href="global.html#handleComplexGeoJsonGeometry">handleComplexGeoJsonGeometry</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSearchButton">initSearchButton</a></li><li><a href="global.html#locationModel">locationModel</a></li><li><a href="global.html#mapModel">mapModel</a></li><li><a href="global.html#positioningModel">positioningModel</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#searchButtonClickEvent">searchButtonClickEvent</a></li><li><a href="global.html#switchIcon">switchIcon</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Sep 01 2024 15:50:37 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

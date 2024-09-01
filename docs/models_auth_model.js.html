@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/auth_model.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/auth_model.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * The Auth Model object includes functions that handle authentication of users and fetching of user data.
+ */
+
+import supabase from "../util/supabase_client.js";
+import supabaseModel from "./v2/supabase_model.js";
+
+const authModel = {
+    accessToken: "",
+
+    /**
+     * Login a user.
+     * @param {string} email The email input.
+     * @param {string} password The password input.
+     */
+    login: async function login(email, password) {
+        let { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            console.error(error);
+        } else if (!error) {
+            // console.log(data);
+            authModel.accessToken = data.session.access_token; // Set the accessToken.
+            supabaseModel.collectUserFavoriteSites(); // Fetch all favorite sites.
+        }
+
+    },
+
+    /**
+     * Sign out a user.
+     */
+    logout: async function logout() {
+        let { error } = await supabase.auth.signOut();
+    },
+
+    /**
+     * Register a new user.
+     * @param {string} username The username input.
+     * @param {string} email The email input.
+     * @param {string} password The password input.
+     */
+    register: async function register(username, email, password) {
+        let { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+        });
+
+        if (error) {
+            console.error(error);
+        } else if (!error) {
+            await this.setDisplayName(username);
+            authModel.accessToken = data.session.access_token;
+        }
+    },
+
+    /**
+     * Set the user's display name.
+     * @param {string} username The username input.
+     */
+    setDisplayName: async function setDisplayName(username) {
+        const data = {
+            display_name: username,
+          };
+          const { error } = await supabase.auth.updateUser({ data });
+
+          console.log(data);
+          console.log(error);
+    },
+
+    /**
+     * Gets all user data.
+     * @returns {Object} All user data.
+     */
+    getAllUserData: async function getAllUserData() {
+        const { data: { user } } = await supabase.auth.getUser();
+        return user;
+    },
+
+    /**
+     * Outdated func?
+     * @param {string} location A unique site ID.
+     */
+    addFavoriteLocation: async function addFavoriteLocation(location) {
+        const data = {};
+        const { error } = await supabase.auth.updateUser({ data });
+
+          console.log(data);
+          console.log(error);
+    },
+}
+
+export default authModel;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCloseNavPopupOnClickEvent">addCloseNavPopupOnClickEvent</a></li><li><a href="global.html#addHamburgerMenuEvent">addHamburgerMenuEvent</a></li><li><a href="global.html#addLogoutEvent">addLogoutEvent</a></li><li><a href="global.html#addSearchAreaOnMoveEvent">addSearchAreaOnMoveEvent</a></li><li><a href="global.html#connectedCallback">connectedCallback</a></li><li><a href="global.html#createGeoJson">createGeoJson</a></li><li><a href="global.html#createMarkers">createMarkers</a></li><li><a href="global.html#elementModel">elementModel</a></li><li><a href="global.html#getBoundingBoxCoords">getBoundingBoxCoords</a></li><li><a href="global.html#getCenter">getCenter</a></li><li><a href="global.html#getUserData">getUserData</a></li><li><a href="global.html#handleComplexGeoJsonGeometry">handleComplexGeoJsonGeometry</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSearchButton">initSearchButton</a></li><li><a href="global.html#locationModel">locationModel</a></li><li><a href="global.html#mapModel">mapModel</a></li><li><a href="global.html#positioningModel">positioningModel</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#searchButtonClickEvent">searchButtonClickEvent</a></li><li><a href="global.html#switchIcon">switchIcon</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Sep 01 2024 15:50:37 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

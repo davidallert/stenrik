@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/v2/popup_model.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/v2/popup_model.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+
+const popupModel = {
+
+    /**
+     * Creates popup data for each site.
+     * @param {Object} site An object containing all site data.
+     * @param {string} siteTitle Part of the popup content. Popup header text.
+     * @param {string} siteDescText Part of the popup content. Description of the site.
+     * @param {string} siteZones Part of the popup content. Municipality, county, etc.
+     * @param {string} siteDescTradition Part of the popup content. Tradition or story connected to the site.
+     * @param {string} siteDescTerrain Part of the popup content. Terrain in the area surrounding the site.
+     * @param {string} siteDescOrientation Part of the popup content. How to find the site.
+     * @returns {string} A string with the full HTML content of the popup.
+     */
+    addPopupContent: function addPopupContent(site, siteTitle, siteDescText, siteZones, siteDescTradition, siteDescTerrain, siteDescOrientation) {
+
+        // Make sure no data is saved from a previous iteration.
+        siteTitle = "";
+        siteZones = "";
+        siteDescText = "";
+        siteDescTradition = "";
+        siteDescTerrain = "";
+        siteDescOrientation = "";
+
+        // Use the unique site name for the title, if there is one.
+        // Also add the site_id to the bookmark icon HTML dataset.
+        if (site.site_name) {
+            siteTitle = `&lt;div class="popup-header">&lt;h1>${site.site_name} (${site.site_type})&lt;/h1>&lt;i id="bookmarkIcon" data-site="${site.site_id}" class="bookmark-icon fa-regular fa-bookmark">&lt;/i>&lt;/div>`
+        } else {
+            siteTitle = `&lt;div class="popup-header">&lt;h1>${site.site_type}&lt;/h1>&lt;i id="bookmarkIcon" data-site="${site.site_id}" class="bookmark-icon fa-regular fa-bookmark">&lt;/i>&lt;/div>`
+        }
+        if (site.desc_text) {
+            siteDescText = `    &lt;h2>Beskrivning&lt;/h2>
+                                &lt;p>${site.desc_text}&lt;/p>`
+        }
+        if (site.desc_tradition) {
+            siteDescTradition = `   &lt;h2>Tradition/berättelse kopplad till platsen&lt;/h2>
+                                    &lt;p>${site.desc_tradition}&lt;/p>`
+        }
+        if (site.desc_terrain) {
+            siteDescTerrain = ` &lt;h2>Terräng i området&lt;/h2>
+                                &lt;p>${site.desc_terrain}&lt;/p>`
+        }
+        if (site.desc_orientation) {
+            siteDescOrientation = ` &lt;h2>Hitta hit&lt;/h2>
+                                    &lt;p>${site.desc_orientation}&lt;/p>`
+        }
+        if (site.municipality &amp;&amp; site.parish &amp;&amp; site.province &amp;&amp; site.county) {
+            siteZones = `&lt;h3>(${site.municipality}, ${site.parish}, ${site.province}, ${site.county})&lt;/h3>`
+        }
+
+        const popupContent = `&lt;div class="pin">
+                                ${siteTitle}
+                                ${siteZones}
+                                ${siteDescText}
+                                ${siteDescTradition}
+                                ${siteDescTerrain}
+                                ${siteDescOrientation}
+                                &lt;p>&lt;i>${site.site_id} | ${site.raa_id}&lt;/i>&lt;/p>
+                             &lt;/div>`
+        return popupContent;
+    },
+
+    /**
+     * Select a font awesome icon based on the site type.
+     * The default is: &lt;i class="fa-solid fa-location-dot">&lt;/i>
+     * @param {string} siteType The site type (category) of the current site.
+     * @returns {string} The selected  font awesome icon.
+     */
+    selectIcon: function selectIcon(siteType) {
+        let icon;
+        switch(siteType) {
+            case "Runristning":
+            case "Minnesmärke":
+            case "Bildsten":
+            case "Bildsten runristad":
+            case "Rest sten":
+                icon = L.divIcon({
+                    html: '&lt;i class="fa-solid fa-monument">&lt;/i>',
+                    className: 'fa-marker-icon',
+                    iconAnchor: [9.5, 12], // Point of the icon which will correspond to marker's location
+                  });
+                break;
+            case "Hällristning":
+            case "Hällmålning":
+            case "Bildristning":
+                icon = L.divIcon({
+                    html: '&lt;i class="fa-solid fa-gavel">&lt;/i>',
+                    className: 'fa-marker-icon',
+                    iconAnchor: [13.5, 15], // Point of the icon which will correspond to marker's location
+                    });
+                break;
+            case "Fångstgrop":
+                icon = L.divIcon({
+                    html: '&lt;i class="fa-solid fa-road-spikes">&lt;/i>',
+                    className: 'fa-marker-icon',
+                    iconAnchor: [12.5, 17], // Point of the icon which will correspond to marker's location
+                    });
+                break;
+            case "Treudd":
+                icon = L.divIcon({
+                    html: '&lt;i class="fa-solid fa-circle-nodes">&lt;/i>',
+                    className: 'fa-marker-icon',
+                    iconAnchor: [13.5, 15], // Point of the icon which will correspond to marker's location
+                    });
+                break;
+                case "Röse":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-cubes-stacked">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [12, 17], // Point of the icon which will correspond to marker's location
+                      });
+                    break;
+                case "Bro":
+                icon = L.divIcon({
+                    html: '&lt;i class="fa-solid fa-bridge-water">&lt;/i>',
+                    className: 'fa-marker-icon',
+                    iconAnchor: [14, 12], // Point of the icon which will correspond to marker's location
+                    });
+
+                break;
+                case "Avrättningsplats":
+                case "Offerplats":
+                case "Offerkast":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-skull-crossbones">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [11.5, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Domarring":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-spinner">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [11.5, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Skeppssättning":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-anchor">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [11.5, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Slagfält":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-person-falling-burst">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [13, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Labyrint":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-fingerprint">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [13, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Fyr":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-tower-observation">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [13, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Stadsbefästning":
+                case "Stadsvall/stadsmur":
+                case "Stridsvärn":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-archway">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [13, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Kloster":
+                case "Kyrka/kapell":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-church">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [15.25, 17], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Grav – uppgift om typ saknas":
+                case "Grav markerad av sten/block":
+                case "Grav övrig":
+                case "Gravfält":
+                case "Gravklot":
+                case "Hällgrav/stengrav":
+                case "Hällkista":
+                case "Stenkammargrav":
+                case "Stenkistgrav":
+                case "Blockgrav":
+                case "Dös":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-cross">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [9.75, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+                case "Borg":
+                case "Fästning/skans":
+                case "Fornborg":
+                case "Slott/herresäte":
+                    icon = L.divIcon({
+                        html: '&lt;i class="fa-solid fa-chess-rook">&lt;/i>',
+                        className: 'fa-marker-icon',
+                        iconAnchor: [11.25, 15], // Point of the icon which will correspond to marker's location
+                        });
+                    break;
+            default:
+                icon = L.divIcon({
+                    html: '&lt;i class="fa-solid fa-location-dot">&lt;/i>',
+                    className: 'fa-marker-icon',
+                    iconAnchor: [9.5, 16], // Point of the icon which will correspond to marker's location
+                  });
+                  break;
+        }
+        return icon;
+    }
+}
+
+export default popupModel;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCloseNavPopupOnClickEvent">addCloseNavPopupOnClickEvent</a></li><li><a href="global.html#addHamburgerMenuEvent">addHamburgerMenuEvent</a></li><li><a href="global.html#addLogoutEvent">addLogoutEvent</a></li><li><a href="global.html#addSearchAreaOnMoveEvent">addSearchAreaOnMoveEvent</a></li><li><a href="global.html#connectedCallback">connectedCallback</a></li><li><a href="global.html#createGeoJson">createGeoJson</a></li><li><a href="global.html#createMarkers">createMarkers</a></li><li><a href="global.html#elementModel">elementModel</a></li><li><a href="global.html#getBoundingBoxCoords">getBoundingBoxCoords</a></li><li><a href="global.html#getCenter">getCenter</a></li><li><a href="global.html#getUserData">getUserData</a></li><li><a href="global.html#handleComplexGeoJsonGeometry">handleComplexGeoJsonGeometry</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSearchButton">initSearchButton</a></li><li><a href="global.html#locationModel">locationModel</a></li><li><a href="global.html#mapModel">mapModel</a></li><li><a href="global.html#positioningModel">positioningModel</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#searchButtonClickEvent">searchButtonClickEvent</a></li><li><a href="global.html#switchIcon">switchIcon</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Sep 01 2024 15:50:37 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

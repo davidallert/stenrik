@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/map_component.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/map_component.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * ...
+ */
+"use strict";
+
+import mapEventModel from '../models/v2/map_event_model.js';
+import supabaseModel from '../models/v2/supabase_model.js';
+import popupModel from '../models/v2/popup_model.js';
+import checkIf from '../util/is_mobile.js';
+import positioningModel from '../models/positioning_model.js';
+import loading from '../util/loading.js';
+import elementModel from '../models/v2/element_model.js';
+
+/**
+ * Handles the map and related features.
+ */
+export default class MapComponent extends HTMLElement {
+    constructor() {
+        super();
+
+        this.init = true;
+        this.map = null;
+        this.markers = null;
+        this.addedSites = [];
+    }
+
+    async connectedCallback() {
+        loading.createSpinner(); // Create (init) the loading spinner element.
+        await this.render(); // Render the map.
+        mapEventModel.addLocationTrackingEvent(this.map); // Add the location tracking event to the location button.
+        this.addSearchAreaOnMoveEvent(); // Add an event which displays the search button when the map is moved.
+        this.initSearchButton();
+        mapEventModel.removeSearchButtonOnPopupOpen(this.map); // Remove the search button when a popup is opened.
+        mapEventModel.addSearchButtonOnPopupClose(this.map); // Add it back once it's closed.
+        mapEventModel.addBookmarkEvents(this.map);
+    }
+
+    async render() {
+        this.innerHTML = `
+        &lt;main id="mapOverlay" class="map-overlay">
+            &lt;div id="map" class="map" style="height: 100vh; width: 100%;">&lt;/div>
+            &lt;div id="searchButton" class="search-button hidden">Sök i området&lt;/div>
+            &lt;div id="locationTrackingBtn" class="icon-button fly-to-user-button">&lt;i class="fa-solid fa-location-crosshairs">&lt;/i>&lt;/div>
+            &lt;div class="icon-button compass-div hidden">&lt;i id="compass" class="fa-solid fa-compass fa-rotate-by" style="--fa-rotate-angle: -45deg;"">&lt;/i>&lt;/div>
+        &lt;/main>`;
+
+        this.map = this.initMap(62.334591, 16.063240, 5); // Init the map, centered on Sweden.
+
+        const { result, records } = await supabaseModel.fetchData(); // Fetch the first batch of data.
+
+        if (result) { // Result is a boolean. Records contains an array of data.
+            this.createMarkers(records); // Create markers and popups based on the data.
+            this.init = false; // Only set init to false if the operation is successful.
+        }
+
+    }
+
+    /**
+     * Get the bounding box coordinates for the current viewport.
+     * @returns {Object} Object containing west, east, south and north bounding box coordinates.
+     */
+    getBoundingBoxCoords() {
+        let bounds = this.map.getBounds();
+        let boundingBox = {
+            west: bounds._southWest.lng,
+            east: bounds._northEast.lng,
+            south: bounds._southWest.lat,
+            north: bounds._northEast.lat
+        }
+
+        return boundingBox;
+    }
+
+    /**
+     * Creates markers on the map and popupates their corresponding popups with data.
+     * @param {Array} records An array of record objects, fetched from Supabase.
+     */
+    createMarkers(records) {
+        // Define variables once, slight performance improvement(?)
+        let geometryType; // One of four types: MultiPoint, MultiPolygon, MultiLineString, GeometryCollection.
+        let coordinates; // GeoJSON coordinate data.
+        let longitude;
+        let latitude;
+        let fontAwesomeIcon; // Icon to be displayed as a marker.
+        let popupContent; // All popup content.
+        let siteTitle = ""; // Part of the popup content. Popup header text.
+        let siteZones = ""; // Part of the popup content. Municipality, county, etc.
+        let siteDescText = ""; // Part of the popup content. Description of the site.
+        let siteDescTradition; // Part of the popup content. Tradition or story connected to the site.
+        let siteDescTerrain = ""; // Part of the popup content. Terrain in the area surrounding the site.
+        let siteDescOrientation = ""; // Part of the popup content. How to find the site.
+        let maxWidth = "500"; // The max width of the popup.
+
+        if (checkIf.deviceIsMobile()) {
+            maxWidth = "320"; // Set a smaller max width on mobile devices.
+        }
+        if (records) {
+            for (let site of records) {
+                if (this.init) {
+                    // Create a new marker cluster group the first time the map is initialized.
+                    this.markers = new L.MarkerClusterGroup({
+                        disableClusteringAtZoom: 16,
+                        spiderfyOnMaxZoom: false,
+                        showCoverageOnHover: false,
+                    });
+                    this.init = false; // Make sure only one marker cluster group is created.
+                }
+
+                // Make sure a site is only added once if a user searches the same area multiple times.
+                if (this.addedSites.includes(site.site_id)) {
+                    continue; // Move on to the next record immediately if the site has been added.
+                }
+                this.addedSites.push(site.site_id);
+
+                // Make sure no data remains from a previous iteration.
+                geometryType = "";
+                coordinates = [];
+                longitude = null;
+                latitude = null;
+                fontAwesomeIcon = "";
+
+                fontAwesomeIcon = popupModel.selectIcon(site.site_type); // Select an icon based on the site type (category).
+                // Add content to the popup.
+                popupContent = popupModel.addPopupContent(site, siteTitle, siteZones, siteDescText, siteDescTradition, siteDescTerrain, siteDescOrientation);
+
+                // Clean up.
+                geometryType = site.coordinates.features[0].geometry.type;
+                coordinates = site.coordinates.features[0].geometry.coordinates;
+
+                // Handle the different geometry types.
+                switch (geometryType) {
+                    // MultiPoints are simple to deal with.
+                    // Set lon and lat based on the GeoJSON data and add them to this.markers.
+                    case "MultiPoint":
+                        longitude = coordinates[0][0];
+                        latitude = coordinates[0][1];
+                        this.markers.addLayer(L.marker([latitude, longitude], {icon: fontAwesomeIcon})
+                        .bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth, closeButton: false}));
+                        break;
+                    case "MultiPolygon":
+                        coordinates = coordinates[0][0]
+                        this.handleComplexGeoJsonGeometry(coordinates, site.coordinates, popupContent, fontAwesomeIcon, maxWidth);
+                        break;
+                    case "MultiLineString":
+                        coordinates = coordinates[0]
+                        this.handleComplexGeoJsonGeometry(coordinates, site.coordinates, popupContent, fontAwesomeIcon, maxWidth);
+                        break;
+                    case "GeometryCollection":
+                        let geometries = site.coordinates.features[0].geometry.geometries;
+                        for (let geometry of geometries) {
+                            // Leaflet has built-in support for GeoJSON, including GeometryCollections.
+                            // Because of this, each GeometryCollection only needs to be added once, despite containing several geometries. I.e. if it finds a Polygon, its centroid will be used to position the marker, then all other geometries will be added. Then the loop will break. Same thing with LineString.
+                            if (geometry.type === "Polygon") {
+                                this.handleComplexGeoJsonGeometry(geometry.coordinates[0], geometries, popupContent, fontAwesomeIcon, maxWidth);
+                                break;
+                            } else if (geometry.type === "LineString") {
+                                this.handleComplexGeoJsonGeometry(geometry.coordinates, geometries, popupContent, fontAwesomeIcon, maxWidth);
+                                break;
+                            }
+                        }
+                        break;
+                    default:
+                        continue;
+                };
+
+            }
+        }
+        if (this.markers) {
+            this.map.addLayer(this.markers); // Add to the existing marker cluster group.
+        }
+    }
+
+    /**
+     * Initialize the Leaflet map, setting a default lon, lat and zoom level.
+     * @param {number} latitude 
+     * @param {number} longitude 
+     * @param {number} zoomLevel 
+     * @returns {L.map}
+     */
+    initMap(latitude, longitude, zoomLevel) {
+        const map = L.map('map', {
+            center: [latitude, longitude],
+            zoom: zoomLevel, // Default is 13.
+            zoomControl: false
+        });
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&amp;copy; &lt;a href="http://www.openstreetmap.org/copyright">OpenStreetMap&lt;/a>'
+        }).addTo(map);
+
+        // Find other map "skins" here: https://leaflet-extras.github.io/leaflet-providers/preview/
+
+        return map;
+    }
+
+    /**
+     * Adds an event listener to the Leaflet map, which tracks movement.
+     * When the event is triggered, a search button will appear at the top of the screen.
+     * @param {Object} map The Leaflet map object (this.map in map_view.js).
+     */
+    async addSearchAreaOnMoveEvent() {
+        this.map.on("moveend", (e) => { // Triggers at the end of the movement. Other options are "movestart" and "move".
+            // TODO Make sure the event is only triggered once for a unique set of bounds.
+            const searchButton = document.getElementById("searchButton");
+            if (this.map.getZoom() >= 9) {
+                elementModel.fadeInElement(searchButton); // Fade in the button if a user zooms in close enough.
+            } else if (this.map.getZoom() &lt; 9) {
+                elementModel.fadeElement(searchButton); // Fade the button if a user zooms out too far.
+            }
+        });
+    }
+
+    /**
+     * Get and init the search button. Initially, it is hidden.
+     */
+    initSearchButton() {
+        let searchButton = document.getElementById("searchButton");
+
+        searchButton.style.opacity = "0";
+
+        // Initial centering of the search box.
+        positioningModel.centerElementHorizontally(searchButton);
+
+        // Add continuous centering of the search box if the window is changed/resized.
+        positioningModel.addCenterElementHorizontallyEvent(searchButton);
+
+        searchButton.addEventListener("click", () => {
+            this.searchButtonClickEvent();
+        });
+    }
+
+    /**
+     * Adds a click event to the search button which is created by addSearchAreaOnMoveEvent.
+     * The button fades out and is then removed from the page.
+     * An API call is made, using the current bounding box coordinates.
+     * The records that were found is then turned into markers and added to the map.
+     * @param {L.map} map The Leaflet map object (this.map in map_component.js).
+     */
+    async searchButtonClickEvent() {
+        loading.displaySpinner(); // Display a loading spinner icon.
+        // Fade the search button when clicked, then remove it after a duration of 300ms (Its transition-duration is 0.3s).
+        let searchButton = document.getElementById("searchButton");
+        elementModel.fadeElement(searchButton);
+
+        // Get the coords of the current bounding box via the mapModel.
+        const boundingBox = this.getBoundingBoxCoords();
+
+        // Fetch the data from within the current bounding box.
+        const records = await supabaseModel.fetchBoundingBoxData(boundingBox);
+        if (records) {
+            this.createMarkers(records);
+        }
+        loading.removeSpinner(); // Remove the loading spinner icon.
+    }
+
+    /**
+     * Get the center of the geometry, i.e. the centroid of a polygon or the middle of a line string.
+     * @param {Array} coordinates An array of coordinates. Used to get the center point.
+     * @param {Object} geoJson The raw GeoJSON data. Complatible with Leaflet. Used to create the complex geometry.
+     * @param {string} popupContent All (html) popup content.
+     * @param {string} fontAwesomeIcon A site type specific font awesome icon.
+     * @param {string} maxWidth The max width of the popup. Smaller for mobile.
+     */
+    handleComplexGeoJsonGeometry(coordinates, geoJson, popupContent, fontAwesomeIcon, maxWidth) {
+        let center = this.getCenter(coordinates); // Get the center point/centroid.
+        // Create a single marker, representing the complex geometry.
+        let marker = L.marker([center[0], center[1]], {icon: fontAwesomeIcon, zIndexOffset: 1000});
+        marker.bindPopup(`${popupContent}`, {'maxHeight': '500', 'maxWidth': maxWidth, closeButton: false});
+        // Bind the current data to an event listener.
+        const boundCreateGeoJson = this.createGeoJson.bind(this, this.map, geoJson, popupContent, maxWidth);
+        // Create and display the complete geometry or geometry collection when the marker icon is clicked.
+        marker.addEventListener("click", function handleClick() {
+            boundCreateGeoJson();
+            marker.removeEventListener("click", handleClick); // Use the same reference
+        });
+
+        this.markers.addLayer(marker);
+    }
+
+    /**
+     * Function to calculate the average point from an array of points.
+     * @param {Array} coordinates Array of coordinates.
+     * @returns {Array} An array containing a single point.
+     */
+    getCenter(coordinates) {
+        let x = 0, y = 0, n = coordinates.length;
+        coordinates.forEach(coord => {
+            x += coord[0];
+            y += coord[1];
+        });
+        return [y / n, x / n];
+    }
+
+    /**
+     * Create a new map layer based off of GeoJSON data.
+     * Bind the same popup to all related features created from the data.
+     * This means that, for example, all features in a GeometryCollection will have popups that all look the same.
+     * @param {L.map} map The Leaflet map object.
+     * @param {Object} geoJson Pure geoJSON data.
+     * @param {string} popupContent All (html) popup content.
+     * @param {string} maxWidth The max width of the popup. Smaller for mobile.
+     */
+    createGeoJson(map, geoJson, popupContent, maxWidth) {
+        let icon = L.divIcon({
+            html: '&lt;i class="fa-solid fa-location-dot">&lt;/i>',
+            className: 'fa-geometry-collection-marker-icon',
+            iconAnchor: [9.5, 12], // Point of the icon which will correspond to marker's location
+          });
+            let geoJsonGeometry = geoJson;
+            let layer = L.geoJSON(geoJsonGeometry, { // Leaflet is directly compatible with the pure GeoJSON data.
+                // Built-in Leaflet functionality:
+                onEachFeature: function (feature, layer) {
+                    // Bind popup to each feature
+                    layer.bindPopup(popupContent, { 'maxHeight': '500', 'maxWidth': maxWidth, closeButton: false });
+                    if (layer.feature.geometry.type === "Polygon" || layer.feature.geometry.type === "LineString" || layer.feature.geometry.type === "MultiPolygon" || layer.feature.geometry.type === "MultiLineString") {
+                        layer.setStyle({ color: '#ffffff' }); // Change the color of some geometries to white instead of dark grey. Makes the map feel less cluttered.
+                    } else if (layer.feature.geometry.type === "Point") {
+                        layer.setIcon(icon);
+                    }
+                }
+            });
+
+            layer.addTo(map);
+    }
+
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCloseNavPopupOnClickEvent">addCloseNavPopupOnClickEvent</a></li><li><a href="global.html#addHamburgerMenuEvent">addHamburgerMenuEvent</a></li><li><a href="global.html#addLogoutEvent">addLogoutEvent</a></li><li><a href="global.html#addSearchAreaOnMoveEvent">addSearchAreaOnMoveEvent</a></li><li><a href="global.html#connectedCallback">connectedCallback</a></li><li><a href="global.html#createGeoJson">createGeoJson</a></li><li><a href="global.html#createMarkers">createMarkers</a></li><li><a href="global.html#elementModel">elementModel</a></li><li><a href="global.html#getBoundingBoxCoords">getBoundingBoxCoords</a></li><li><a href="global.html#getCenter">getCenter</a></li><li><a href="global.html#getUserData">getUserData</a></li><li><a href="global.html#handleComplexGeoJsonGeometry">handleComplexGeoJsonGeometry</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSearchButton">initSearchButton</a></li><li><a href="global.html#locationModel">locationModel</a></li><li><a href="global.html#mapModel">mapModel</a></li><li><a href="global.html#positioningModel">positioningModel</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#searchButtonClickEvent">searchButtonClickEvent</a></li><li><a href="global.html#switchIcon">switchIcon</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Sep 01 2024 15:50:37 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

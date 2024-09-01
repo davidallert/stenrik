@@ -1,0 +1,12 @@
+{
+    "source": {
+      "include": ["models/", "components/"],
+      "exclude": ["node_modules", "models/v1/"],
+      "includePattern": ".+\\.js(doc|x)?$",
+      "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+      "destination": "./docs",
+      "recurse": true
+    }
+  }
