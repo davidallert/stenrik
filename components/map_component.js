@@ -234,7 +234,7 @@ export default class MapComponent extends HTMLElement {
      * Adds a click event to the search button which is created by addSearchAreaOnMoveEvent.
      * The button fades out and is then removed from the page.
      * An API call is made, using the current bounding box coordinates.
-     * The records that were found is then turned into markers and added to the map.
+     * The records that were found are then turned into markers and added to the map.
      * @param {L.map} map The Leaflet map object (this.map in map_component.js).
      */
     async searchButtonClickEvent() {
