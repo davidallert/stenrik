@@ -87,7 +87,7 @@ const supabaseModel = {
 
         if (error) {
             console.error('An error occurred.', error);
-            return;
+            return [];
         }
 
         return data;
@@ -96,9 +96,9 @@ const supabaseModel = {
     /**
      * Add the user's favorite sites to an array, so that they can be checked accross the application.
      */
-    collectUserFavoriteSites: () => {
+    collectUserFavoriteSites: async () => {
         supabaseModel.userFavoriteSites = [];
-        const data = supabaseModel.getUserFavoriteSiteData();
+        const data = await supabaseModel.getUserFavoriteSiteData();
         for (let site of data) {
             supabaseModel.userFavoriteSites.push(site.site_id);
         }

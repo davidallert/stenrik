@@ -24,7 +24,7 @@ const authModel = {
         } else if (!error) {
             // console.log(data);
             authModel.accessToken = data.session.access_token; // Set the accessToken.
-            supabaseModel.collectUserFavoriteSites(); // Fetch all favorite sites.
+            await supabaseModel.collectUserFavoriteSites(); // Fetch all favorite sites.
         }
 
     },
@@ -34,6 +34,7 @@ const authModel = {
      */
     logout: async function logout() {
         let { error } = await supabase.auth.signOut();
+        console.error(error);
     },
 
     /**
