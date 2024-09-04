@@ -53,6 +53,8 @@ export default class MapComponent extends HTMLElement {
             this.init = false; // Only set init to false if the operation is successful.
         }
 
+
+
     }
 
     /**

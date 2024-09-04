@@ -8,7 +8,7 @@ const positioningModel = {
      * @param {HTMLElement} element An HTML element.
      */
     centerElementHorizontally: function centerElementHorizontally(element) {
-        const left = (window.innerWidth / 2) - (element.clientWidth / 2);
+        const left = (window.innerWidth / 2) - (element.offsetWidth / 2);
 
         element.style.left = `${left}px`;
     },
@@ -18,6 +18,14 @@ const positioningModel = {
      * @param {HTMLElement} element An HTML element.
      */
     addCenterElementHorizontallyEvent: function addCenterElementHorizontallyEvent(element) {
+        // Initially center the element after ensuring the DOM is fully loaded.
+        window.addEventListener("load", () => {
+            requestAnimationFrame(() => {
+                positioningModel.centerElementHorizontally(element);
+            });
+        });
+
+        // Then add the resize event listener to continuously center it.
         window.addEventListener("resize", (e) => {
             positioningModel.centerElementHorizontally(element);
         });
@@ -28,8 +36,8 @@ const positioningModel = {
      * @param {HTMLElement} element An HTML element.
      */
     centerElement: function centerElement(element) {
-        const left = (window.innerWidth / 2) - (element.clientWidth / 2);
-        const top = (window.innerHeight / 2) - (element.clientHeight / 2);
+        const left = (window.innerWidth / 2) - (element.offsetWidth / 2);
+        const top = (window.innerHeight / 2) - (element.offsetHeight / 2);
 
         element.style.left = `${left}px`;
         element.style.top = `${top}px`;
@@ -40,7 +48,15 @@ const positioningModel = {
      * @param {HTMLElement} element An HTML element.
      */
     addCenterElementEvent: function addCenterElementEvent(element) {
-        window.addEventListener("resize", (e) => {
+        // Initially center the element after ensuring the DOM is fully loaded.
+        window.addEventListener("load", () => {
+            requestAnimationFrame(() => {
+                positioningModel.centerElement(element);
+            });
+        });
+        
+        // Then add the resize event listener to continuously center it.
+        window.addEventListener("resize", () => {
             positioningModel.centerElement(element);
         });
     }

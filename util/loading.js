@@ -19,7 +19,6 @@ const loading = {
         document.body.append(spinner);
 
         positioningModel.addCenterElementEvent(spinner);
-        positioningModel.centerElement(spinner);
     },
 
     /**
