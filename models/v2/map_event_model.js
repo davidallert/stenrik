@@ -83,13 +83,13 @@ const mapEventModel = {
                     compassDiv.style.bottom = "150px";
                 }
 
-                loading.removeSpinner();
-
                 // Fly to the user's position.
                 map.flyTo([position.coords.latitude, position.coords.longitude], zoomLevel, {
                     animate: true,
                     duration: 1
                 });
+
+                loading.removeSpinner();
 
             // Fly to the user's location if the button is clicked again.
             } else if (!init) {
