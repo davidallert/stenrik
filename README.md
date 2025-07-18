@@ -1,3 +1,3 @@
 # Stenrik - en karta över svenska fornminnen
 
-Stenrik är en webbplats som visar upp svenska fornminnen på en karta. Framförallt stenar, därav namnet...
+Stenrik är en webbplats som visar upp svenska fornminnen på en karta.
