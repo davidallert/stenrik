@@ -47,7 +47,6 @@ Stenrik is an interactive map of Swedish ancient monuments and archaeological si
    Add your Supabase project URL and public (anon) key in `config.js`:
 
    ```js
-   // config.js
    export const SUPABASE_URL = "https://your-project.supabase.co";
    export const SUPABASE_ANON_KEY = "your-anon-key";
    ```
